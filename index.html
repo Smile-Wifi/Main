@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Smile Wifi</title>
+
+  <!-- 🔹 Preload important media -->
+  <link rel="preload" as="video" href="media/background/space.mp4" type="video/mp4">
+  <link rel="preload" as="video" href="video/ph.mp4" type="video/mp4">
+  <link rel="preload" as="image" href="media/icons/nest.png" type="image/png">
+  <link rel="icon" href="media/icons/nest.png" type="image/png">
+
+  <!-- 🔹 Meta & PWA settings -->
+  <meta name="theme-color" content="#00d1ff">
+  <meta name="description" content="Smile Wifi — your offline local portal for apps, media, weather, and fun.">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; font-family: Arial, Helvetica, sans-serif; color: #fff; overflow-x: hidden; }
+:root { --accent: #00d1ff; }
+
+/* background */
+#bg-video {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+  filter: brightness(0.55);
+}
+
+/* Welcome Overlay */
+#welcomeOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 99999;
+  text-align: center;
+  transition: opacity 0.5s ease;
+}
+#welcomeOverlay img {
+  width: 160px;
+  height: auto;
+  animation: pulse 2s infinite;
+  cursor: pointer;
+}
+#welcomeOverlay p {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #00d1ff;
+  opacity: 0.9;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+/* navbar / sidenav */
+.navbar { position: fixed; top: 12px; left: 12px; z-index: 1300; }
+.hamburger {
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  border: 0;
+  font-size: 1.6rem;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.side-nav {
+  position: fixed;
+  top: 0;
+  right: -280px;
+  width: 280px;
+  height: 100%;
+  background: rgba(4,4,7,0.95);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: right 0.3s ease;
+  z-index: 1400;
+}
+.side-nav.open { right: 0; }
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 6px;
+  border-radius: 6px;
+  transition: background 0.3s, color 0.3s;
+}
+.nav-link:hover { background: rgba(255,255,255,0.08); color: var(--accent); }
+.nav-icon { width: 20px; height: 20px; object-fit: contain; }
+
+/* layout */
+main { padding-bottom: 120px; }
+
+/* 🎬 Centered Autoplay Video Section */
+.video-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 70px;
+}
+.video-player {
+  position: relative;
+  width: 92%;
+  max-width: 640px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  background: #000;
+}
+.video-player video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  transition: filter 0.5s ease;
+}
+.next-btn {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  border: 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  z-index: 60;
+}
+.next-btn:hover { background: rgba(0,0,0,0.9); }
+
+/* 🔍 Search Section */
+.search-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 12px;
+}
+.logo-img { max-width: 120px; height: auto; display: block; }
+.search-box {
+  width: 88%;
+  max-width: 520px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 0;
+  outline: none;
+  font-size: 16px;
+  text-align: center;
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+}
+
+/* 📱 Icon Slider Section */
+.icon-section { margin-top: 10px; overflow: hidden; }
+.icon-wrapper {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  padding-bottom: 10px;
+}
+.icon-grid {
+  flex: 0 0 100%;
+  width: 100%;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  justify-items: center;
+  scroll-snap-align: start;
+}
+.icon-item { text-align: center; }
+.icon-item a { text-decoration: none; color: inherit; display: block; }
+.icon-item img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+  transition: transform 0.25s ease;
+}
+.icon-item img:active { transform: scale(0.92); }
+.icon-item p { margin-top: 6px; font-size: 13px; color: #fff; }
+
+/* dots */
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.35);
+  border: 0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.dot.active { background: var(--accent); }
+
+/* bottom carousel */
+.carousel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  padding: 10px 12px;
+  background: rgba(0,0,0,0.55);
+  z-index: 1000;
+}
+.carousel-item { cursor: pointer; }
+.carousel-item img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+}
+.carousel-item img:hover, .carousel-item img:active { transform: scale(1.1); }
+
+/* ALL APPS OVERLAY */
+#allAppsOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.95);
+  z-index: 1500;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+#allAppsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 20px;
+  max-width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 20px;
+}
+.all-app-item { text-align: center; }
+.all-app-item a { text-decoration: none; color: inherit; display: block; }
+.all-app-item img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin: 0 auto 8px;
+}
+.all-app-item p { font-size: 12px; color: #fff; margin: 0; }
+.close-overlay {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* 🎥 Local Player Section */
+.local-player {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.player-box {
+  width: 100%;
+  max-width: none;
+  background: none;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
+.player-box video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+.player-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  gap: 10px;
+}
+.player-controls button {
+  background: var(--accent);
+  color: #000;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.player-controls button:hover {
+  background: #fff;
+  color: #000;
+}
+  </style>
+</head>
+
+<body>
+  <!-- Background video -->
+  <video autoplay muted loop playsinline preload="auto" id="bg-video" aria-hidden="true">
+    <source src="media/background/space.mp4" type="video/mp4">
+  </video>
+
+  <!-- Welcome overlay -->
+  <div id="welcomeOverlay" role="button" aria-label="Enable sound and start" tabindex="0">
+    <img src="media/icons/banner.png" alt="Welcome Logo" id="welcomeLogo" loading="lazy">
+    <p>Tap the logo to start</p>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <button id="nav-toggle" class="hamburger" aria-label="Open menu">☰</button>
+    <div id="side-nav" class="side-nav" aria-hidden="true">
+      <a class="nav-link" href="earthquake-alert/login.php"><img src="media/icons/login.png" class="nav-icon" alt="Login"> Earthquake Login</a>
+      <a class="nav-link" href="pages/root/games/index.html"><img src="media/icons/games.png" class="nav-icon" alt="Games"> Games</a>
+      <a class="nav-link" href="https://www.3dlogolab.io/"><img src="media/icons/advertising.png" class="nav-icon" alt="Advertising"> Advertising</a>
+      <a class="nav-link" href="weather.html"><img src="media/icons/weather.png" class="nav-icon" alt="Weather"> Weather</a>
+      <a class="nav-link" href="about.html"><img src="media/icons/about.jpg" class="nav-icon" alt="About"> About</a>
+      <hr style="border:0;border-top:1px solid rgba(255,255,255,0.12);margin:8px 0;">
+      <a class="nav-link" href="fm/admin/login.php"><img src="media/icons/dashboard.png" class="nav-icon" alt="Admin Panel"> Admin Panel</a>
+    </div>
+  </nav>
+
+  <main>
+    <!-- 🎬 Local Video Player -->
+    <section class="local-player">
+      <h2 style="text-align:center;margin:20px 0;color:#00d1ff;"></h2>
+      <div class="player-box">
+        <video
+          id="localVideo"
+          width="100%"
+          playsinline
+          controls
+          preload="metadata"
+          poster="media/icons/nest.png"
+          muted
+        >
+          <source src="video/ph2.mp4" type="video/mp4">
+          Your browser does not support HTML5 video.
+        </video>
+      </div>
+    </section>
+
+    <section class="search-section">
+      <a href="index.html"><img src="media/icons/nest.png" alt="Nest Logo" class="logo-img"></a>
+      <input type="search" class="search-box" placeholder="Search..." aria-label="Search" id="searchInput">
+    </section>
+
+    <!-- App Icons -->
+    <section class="icon-section">
+      <div class="icon-wrapper" id="iconWrapper">
+        <div class="icon-grid">
+          <div class="icon-item"><a href="pages/root/campusDC/index.html"><img loading="lazy" src="media/icons/campusDC.png" alt="CampusDC"><p>CampusDC</p></a></div>
+          <div class="icon-item"><a href="pages/root/smileflix/index.php"><img loading="lazy" src="media/icons/smileflix.png" alt="SmileFlix"><p>SmileFlix</p></a></div>
+          <div class="icon-item"><a href="pages/root/documents/index.html"><img loading="lazy" src="media/icons/wecantilan.png" alt="PublicDoc"><p>PublicDoc</p></a></div>
+          <div class="icon-item"><a href="pages/root/gradio/index.html"><img loading="lazy" src="media/icons/gradio.png" alt="Gradio"><p>Gradio</p></a></div>
+          <div class="icon-item"><a href="pages/root/karaoke/index.php"><img loading="lazy" src="media/icons/videoke.png" alt="Karaoke"><p>Karaoke</p></a></div>
+          <div class="icon-item"><a href="pages/root/musify/index.php"><img loading="lazy" src="media/icons/musify.png" alt="Musify"><p>Musify</p></a></div>
+        </div>
+
+        <div class="icon-grid">
+          <div class="icon-item"><a href="pages/root/reeltalk/index.php"><img loading="lazy" src="media/icons/reeltalk.png" alt="ReelTalk"><p>ReelTalk</p></a></div>
+          <div class="icon-item"><a href="pages/root/sports/index.php"><img loading="lazy" src="media/icons/sports.png" alt="Sports"><p>Sports</p></a></div>
+          <div class="icon-item"><a href="pages/root/jollibee/index.html"><img loading="lazy" src="media/icons/jollibee.png" alt="Jollibee"><p>Jollibee</p></a></div>
+          <div class="icon-item"><a href="pages/root/showtime/index.php"><img loading="lazy" src="media/icons/showtime.png" alt="Showtime"><p>Showtime</p></a></div>
+          <div class="icon-item"><a href="pages/root/weather/index.html"><img loading="lazy" src="media/icons/weather.png" alt="Weather"><p>Weather</p></a></div>
+          <div class="icon-item"><a href="pages/root/dashboard/index.html"><img loading="lazy" src="media/icons/dashboard.png" alt="Dashboard"><p>Dashboard</p></a></div>
+        </div>
+
+        <div class="icon-grid">
+          <div class="icon-item"><a href="pages/root/freedom/index.html"><img loading="lazy" src="media/icons/freedom.png" alt="Freedom"><p>Freedom</p></a></div>
+          <div class="icon-item"><a href="https://en.wikipedia.org/" target="_blank"><img loading="lazy" src="media/icons/wikipedia.png" alt="Wikipedia"><p>Wikipedia</p></a></div>
+          <div class="icon-item"><a href="pages/root/shop/index.html"><img loading="lazy" src="media/icons/shop2.png" alt="LocalBiz"><p>LocalBiz</p></a></div>
+          <div class="icon-item"><a href="pages/root/skits/index.html"><img loading="lazy" src="media/icons/skits.png" alt="Skits"><p>Skits</p></a></div>
+          <div class="icon-item"><a href="pages/root/politics/index.html"><img loading="lazy" src="media/icons/politics.png" alt="Politics"><p>Politics</p></a></div>
+          <div class="icon-item"><a href="pages/root/ebooks/index.html"><img loading="lazy" src="media/icons/ebooks.png" alt="eBooks"><p>eBooks</p></a></div>
+        </div>
+      </div>
+
+      <div class="dots" id="slideDots">
+        <button class="dot active" data-index="0" aria-label="Slide 1"></button>
+        <button class="dot" data-index="1" aria-label="Slide 2"></button>
+        <button class="dot" data-index="2" aria-label="Slide 3"></button>
+      </div>
+    </section>
+
+    <section class="carousel">
+      <div class="carousel-item">
+        <a href="earth.html" target="_blank">
+          <img src="media/GIF/earth.gif" alt="Earth">
+        </a>
+      </div>
+      <div class="carousel-item" id="homeBtn">
+        <img src="media/icons/Home.png" alt="All Apps" title="Show All Apps">
+      </div>
+      <div class="carousel-item">
+        <a href="cribble.html" target="_blank">
+          <img src="media/GIF/Mars.gif" alt="Mars">
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- All Apps Overlay -->
+  <div id="allAppsOverlay">
+    <button class="close-overlay" id="closeOverlay">×</button>
+    <div id="allAppsGrid"></div>
+  </div>
+
+  <script>
+    // ===== ALL APPS OVERLAY =====
+    const allAppsData = [
+      { href: "pages/root/campusDC/index.html", img: "media/icons/campusDC.png", name: "CampusDC" },
+      { href: "pages/root/smileflix/index.php", img: "media/icons/smileflix.png", name: "SmileFlix" },
+      { href: "pages/root/documents/index.html", img: "media/icons/wecantilan.png", name: "PublicDoc" },
+      { href: "pages/root/gradio/index.html", img: "media/icons/gradio.png", name: "Gradio" },
+      { href: "pages/root/karaoke/index.php", img: "media/icons/videoke.png", name: "Karaoke" },
+      { href: "pages/root/musify/index.php", img: "media/icons/musify.png", name: "Musify" },
+      { href: "pages/root/reeltalk/index.php", img: "media/icons/reeltalk.png", name: "ReelTalk" },
+      { href: "pages/root/sports/index.php", img: "media/icons/sports.png", name: "Sports" },
+      { href: "pages/root/jollibee/index.html", img: "media/icons/jollibee.png", name: "Jollibee" },
+      { href: "pages/root/showtime/index.php", img: "media/icons/showtime.png", name: "Showtime" },
+      { href: "pages/root/weather/index.html", img: "media/icons/weather.png", name: "Weather" },
+      { href: "pages/root/dashboard/index.html", img: "media/icons/dashboard.png", name: "Dashboard" },
+      { href: "pages/root/freedom/index.html", img: "media/icons/freedom.png", name: "Freedom" },
+      { href: "https://en.wikipedia.org/", img: "media/icons/wikipedia.png", name: "Wikipedia", external: true },
+      { href: "pages/root/shop/index.html", img: "media/icons/shop2.png", name: "LocalBiz" },
+      { href: "pages/root/skits/index.html", img: "media/icons/skits.png", name: "Skits" },
+      { href: "pages/root/politics/index.html", img: "media/icons/politics.png", name: "Politics" },
+      { href: "pages/root/ebooks/index.html", img: "media/icons/ebooks.png", name: "eBooks" }
+    ];
+
+    function showAllApps() {
+      const grid = document.getElementById('allAppsGrid');
+      grid.innerHTML = allAppsData.map(app => `
+        <div class="all-app-item">
+          <a href="${app.href}" ${app.external ? 'target="_blank"' : ''}>
+            <img src="${app.img}" alt="${app.name}">
+            <p>${app.name}</p>
+          </a>
+        </div>
+      `).join('');
+      document.getElementById('allAppsOverlay').style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function hideAllApps() {
+      document.getElementById('allAppsOverlay').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    // ===== SLIDER =====
+    const iconWrapper = document.getElementById('iconWrapper');
+    const dots = document.querySelectorAll('#slideDots .dot');
+    let currentSlide = 0;
+    let isScrolling = false;
+
+    function updateDots() {
+      dots.forEach((dot, i) => dot.classList.toggle('active', i === currentSlide));
+    }
+
+    function scrollToSlide(index) {
+      if (index < 0 || index >= dots.length) return;
+      const slideWidth = iconWrapper.clientWidth;
+      currentSlide = index;
+      iconWrapper.scrollTo({ left: index * slideWidth, behavior: 'smooth' });
+      updateDots();
+    }
+
+    // Debounce function to limit scroll event frequency
+    function debounce(func, wait) {
+      let timeout;
+      return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+      };
+    }
+
+    dots.forEach((dot, i) => dot.addEventListener('click', () => scrollToSlide(i)));
+
+    iconWrapper.addEventListener('scroll', debounce(() => {
+      if (isScrolling) return;
+      const slideWidth = iconWrapper.clientWidth;
+      const newIndex = Math.round(iconWrapper.scrollLeft / slideWidth);
+      if (newIndex !== currentSlide && newIndex >= 0 && newIndex < dots.length) {
+        currentSlide = newIndex;
+        updateDots();
+      }
+    }, 100));
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      scrollToSlide(currentSlide); // Re-align to current slide
+    });
+
+    // Keyboard navigation for accessibility
+    iconWrapper.setAttribute('tabindex', '0');
+    iconWrapper.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') {
+        scrollToSlide(currentSlide + 1);
+      } else if (e.key === 'ArrowLeft') {
+        scrollToSlide(currentSlide - 1);
+      }
+    });
+
+    // Ensure initial state
+    updateDots();
+
+    // ===== SIDENAV =====
+    const sideNav = document.getElementById('side-nav');
+    document.getElementById('nav-toggle').addEventListener('click', () => {
+      sideNav.classList.toggle('open');
+    });
+
+    // ===== WELCOME OVERLAY with VIDEO + AUDIO autoplay =====
+    const welcomeOverlay = document.getElementById('welcomeOverlay');
+    const localVideo = document.getElementById('localVideo');
+    const introAudio = new Audio('audio/intro.mp3');
+    introAudio.preload = 'auto';
+
+    welcomeOverlay.addEventListener('click', () => {
+      welcomeOverlay.style.opacity = '0';
+      setTimeout(() => welcomeOverlay.style.display = 'none', 500);
+      if (localVideo) {
+        localVideo.muted = false;
+        localVideo.play().catch(err => console.log('Video play blocked:', err));
+      }
+      introAudio.play().catch(err => console.log('Audio play blocked:', err));
+    });
+
+    // ===== ALL APPS BTN =====
+    document.getElementById('homeBtn').addEventListener('click', showAllApps);
+    document.getElementById('closeOverlay').addEventListener('click', hideAllApps);
+
+    // ===== LOCAL VIDEO NEXT/PREV =====
+    const videos = ['video/ph.mp4', 'video/second.mp4', 'video/third.mp4'];
+    let currentVid = 0;
+    document.getElementById('nextVideo').addEventListener('click', () => {
+      currentVid = (currentVid + 1) % videos.length;
+      localVideo.src = videos[currentVid];
+      localVideo.play();
+    });
+    document.getElementById('prevVideo').addEventListener('click', () => {
+      currentVid = (currentVid - 1 + videos.length) % videos.length;
+      localVideo.src = videos[currentVid];
+      localVideo.play();
+    });
+  </script>
+</body>
+</html>
