@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Citizen Charter — Offline (Municipality)</title>
+
+<style>
+:root{
+  --bg:#f8fafc; --card:#fff; --text:#111; --muted:#6b7280;
+  --accent:#0b5fff; --accent-2:#0b8f5f;
+  --radius:12px; --shadow:0 6px 16px rgba(0,0,0,.06);
+}
+[data-theme="dark"]{
+  --bg:#0f172a; --card:#1e293b; --text:#f1f5f9; --muted:#94a3b8;
+  --accent:#3b82f6;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;}
+body{background:var(--bg);color:var(--text);padding:16px;}
+a{text-decoration:none;color:var(--accent);}
+button{cursor:pointer;border:none;border-radius:var(--radius);padding:8px 12px;font-size:14px;transition:0.2s;}
+button.primary{background:var(--accent);color:#fff;}
+button.ghost{background:transparent;border:1px solid var(--accent);color:var(--accent);}
+button:hover{opacity:0.9;}
+.wrap{max-width:1100px;margin:auto;}
+
+/* Header */
+header{display:flex;align-items:center;gap:12px;justify-content:space-between;}
+.logo{width:50px;height:50px;border-radius:50%;overflow:hidden;box-shadow:var(--shadow);}
+.logo img{width:100%;height:100%;object-fit:cover;}
+h1{font-size:18px;}
+.subtitle{font-size:13px;color:var(--muted);}
+.header-title{display:flex;align-items:center;gap:10px;}
+
+/* Hamburger Menu */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;}
+.hamburger div{width:25px;height:3px;background:var(--text);border-radius:2px;}
+
+/* Sidebar */
+.sidebar{
+  position:fixed;top:0;left:-260px;width:240px;height:100%;
+  background:var(--card);box-shadow:var(--shadow);
+  padding:20px;display:flex;flex-direction:column;
+  gap:10px;transition:0.3s;z-index:1000;
+}
+.sidebar.active{left:0;}
+.sidebar a{display:block;padding:10px;border-radius:8px;font-size:15px;color:var(--text);}
+.sidebar a:hover{background:rgba(11,95,255,.1);}
+.overlay{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,.3);backdrop-filter:blur(2px);
+  display:none;z-index:900;
+}
+.overlay.active{display:block;}
+
+/* Controls */
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;}
+
+/* Layout */
+.cols{display:grid;grid-template-columns:280px 1fr;gap:16px;}
+.panel{background:var(--card);padding:14px;border-radius:var(--radius);box-shadow:var(--shadow);}
+nav .item{padding:10px;border-radius:8px;cursor:pointer;font-size:14px;display:flex;justify-content:space-between;align-items:center;}
+nav .item:hover{background:rgba(11,95,255,.08);}
+nav input{width:100%;padding:6px 10px;margin-bottom:8px;border-radius:8px;border:1px solid #ccc;font-size:14px;}
+
+/* Main paper */
+.paper{padding:20px;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);}
+.paper h2{margin:6px 0;}
+.muted{color:var(--muted);font-size:13px;}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px;}
+th,td{padding:8px;border:1px solid #e2e8f0;}
+th{background:rgba(11,95,255,.08);text-align:left;}
+
+/* Floating actions */
+.fab{
+  position:fixed;bottom:18px;right:18px;background:var(--accent);
+  width:48px;height:48px;border-radius:50%;color:#fff;font-size:24px;
+  display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);
+}
+.fab:hover{opacity:.9;}
+
+/* Mobile */
+@media(max-width:880px){
+  .cols{grid-template-columns:1fr;}
+  .logo{width:45px;height:45px;}
+  .hamburger{display:flex;}
+  aside.panel{display:none;}
+}
+
+/* Print */
+@media print{
+  body{background:#fff;}
+  nav,.controls,.fab,.hamburger,.sidebar,.overlay{display:none;}
+  .paper{box-shadow:none;padding:0;}
+}
+</style>
+</head>
+
+<body>
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+  <a href="../../../../../index.html" id="homeBtn">🏠 Home</a>
+  <hr>
+  <a href="#" class="menu-item" data-id="business">📄 Business Permit</a>
+  <a href="#" class="menu-item" data-id="blotter">👮 Police Blotter</a>
+  <a href="#" class="menu-item" data-id="cedula">🪪 Cedula</a>
+  <a href="#" class="menu-item" data-id="building">🏗 Building Permit</a>
+  <a href="#" class="menu-item" data-id="other">🧾 Other Services</a>
+  <hr>
+  <a href="mailto:info@samplelgu.ph">📧 Contact</a>
+</div>
+<div class="overlay" id="overlay"></div>
+
+<div class="wrap">
+  <header>
+    <div class="header-title">
+      <div class="hamburger" id="hamburger">
+        <div></div><div></div><div></div>
+      </div>
+      <div class="logo"><img src="icons/LGU.png" alt="LGU Logo"></div>
+      <div>
+        <h1>Municipality of Cantilan</h1>
+        <div class="subtitle">Citizen's Charter (Offline Template)</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="controls">
+    <button class="primary" id="printBtn">🖨 Print / Save PDF</button>
+    <button class="ghost" id="exportJson">⬇ Export JSON</button>
+    <button class="ghost" id="importJson">⬆ Import JSON</button>
+    <button class="ghost" id="toggleTheme">🌙 Dark Mode</button>
+    <input type="file" id="fileIn" accept="application/json" style="display:none;">
+  </div>
+
+  <div class="cols">
+    <aside class="panel">
+      <input type="text" id="searchBox" placeholder="🔍 Search service...">
+      <nav id="serviceList">
+        <div class="item" data-id="business">Business Permit <span>›</span></div>
+        <div class="item" data-id="blotter">Police Blotter <span>›</span></div>
+        <div class="item" data-id="cedula">Cedula / CTC <span>›</span></div>
+        <div class="item" data-id="building">Building Permit <span>›</span></div>
+        <div class="item" data-id="other">Other Services <span>›</span></div>
+      </nav>
+
+      <hr style="margin:12px 0">
+      <div style="font-weight:700;margin-bottom:4px;">LGU Contact</div>
+      <div class="muted">📍 Brgy. Poblacion, SAMPLE TOWN</div>
+      <div class="muted">🕗 Mon–Fri 8AM–5PM</div>
+      <div class="muted">☎ (02) 1234-5678</div>
+      <div class="muted">✉ info@samplelgu.ph</div>
+    </aside>
+
+    <main class="paper" id="paper">
+      <h2>Citizen's Charter — SERVICE NAME</h2>
+      <div class="muted">Republic of the Philippines • Province • Municipality</div>
+      <hr style="margin:10px 0;">
+
+      <section>
+        <h3>Overview</h3>
+        <p class="muted">Brief description of the service, who may avail, and objective.</p>
+      </section>
+
+      <section>
+        <h3>Requirements</h3>
+        <ul id="reqList">
+          <li>Two valid IDs</li>
+          <li>Application form</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>Steps</h3>
+        <table>
+          <thead><tr><th>Step</th><th>Officer</th><th>Time</th></tr></thead>
+          <tbody id="stepsTable"></tbody>
+        </table>
+      </section>
+
+      <section>
+        <h3>Fees</h3>
+        <table>
+          <thead><tr><th>Type</th><th>Amount</th></tr></thead>
+          <tbody id="feesTable"></tbody>
+        </table>
+      </section>
+
+      <section style="margin-top:20px;">
+        <h3>Feedback & Complaints</h3>
+        <p class="muted">For feedback, contact Mayor’s Office — ✉ complaints@samplelgu.ph | ☎ (02) 1234-5678</p>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- Floating help button -->
+<div class="fab" id="helpBtn" title="Quick Tips">❔</div>
+
+<script>
+// --- Data Templates ---
+const templates = {
+  business:{name:'Business Permit (New/Renewal)',req:['Filled-up form','2 Valid IDs','Proof of address','Old permit (if renewal)'],steps:[['Submit requirements','Clerk','1 day'],['Assessment','Assessor','1-2 days'],['Payment & Issuance','Cashier','Same day']],fees:[['Micro','₱500'],['Small','₱1200'],['Large','₱5000']]},
+  blotter:{name:'Police Blotter / Certification',req:['Complaint form','Valid ID'],steps:[['File complaint','Police desk','Same day'],['Verification','Investigator','3 days']],fees:[['Certificate','₱0']]},
+  cedula:{name:'Community Tax Certificate (Cedula)',req:['Valid ID'],steps:[['Application & Payment','Treasurer','Same day']],fees:[['Standard','₱20']]},
+  building:{name:'Building Permit',req:['Building plan','Land title','Tax clearance'],steps:[['Submit plans','Engineer','5–10 days'],['Inspection','Inspector','1–2 days'],['Issuance','MEO','Same day']],fees:[['Permit Fee','Varies']]},
+  other:{name:'Other Services',req:['Service-specific requirements'],steps:[['Submit documents','Staff','Varies']],fees:[['Depends on service','—']]}
+};
+
+// --- Populate Service ---
+function loadService(id){
+  const t=templates[id]; if(!t) return;
+  document.querySelector('.paper h2').textContent="Citizen's Charter — "+t.name;
+  document.getElementById('reqList').innerHTML=t.req.map(r=>`<li>${r}</li>`).join('');
+  document.getElementById('stepsTable').innerHTML=t.steps.map(s=>`<tr><td>${s[0]}</td><td>${s[1]}</td><td>${s[2]}</td></tr>`).join('');
+  document.getElementById('feesTable').innerHTML=t.fees.map(f=>`<tr><td>${f[0]}</td><td>${f[1]}</td></tr>`).join('');
+}
+
+// --- Event Handlers ---
+document.querySelectorAll('#serviceList .item, .menu-item').forEach(el=>{
+  el.addEventListener('click',()=>{
+    loadService(el.dataset.id);
+    sidebar.classList.remove('active'); overlay.classList.remove('active');
+  });
+});
+document.getElementById('homeBtn').addEventListener('click',()=>{
+  sidebar.classList.remove('active'); overlay.classList.remove('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+// --- Search Filter ---
+document.getElementById('searchBox').addEventListener('input',e=>{
+  const q=e.target.value.toLowerCase();
+  document.querySelectorAll('#serviceList .item').forEach(i=>{
+    i.style.display=i.textContent.toLowerCase().includes(q)?'flex':'none';
+  });
+});
+
+// --- Print / Dark Mode / Import / Export ---
+document.getElementById('printBtn').addEventListener('click',()=>window.print());
+document.getElementById('toggleTheme').addEventListener('click',()=>document.documentElement.toggleAttribute('data-theme','dark'));
+document.getElementById('exportJson').addEventListener('click',()=>{
+  const data={title:document.querySelector('.paper h2').textContent,req:[...document.querySelectorAll('#reqList li')].map(x=>x.textContent),steps:[...document.querySelectorAll('#stepsTable tr')].map(r=>[...r.children].map(td=>td.textContent)),fees:[...document.querySelectorAll('#feesTable tr')].map(r=>[...r.children].map(td=>td.textContent))};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download=data.title.replace(/\W+/g,'_')+'.json';a.click();
+});
+document.getElementById('importJson').addEventListener('click',()=>document.getElementById('fileIn').click());
+document.getElementById('fileIn').addEventListener('change',e=>{
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{const d=JSON.parse(r.result);
+    document.querySelector('.paper h2').textContent=d.title;
+    document.getElementById('reqList').innerHTML=d.req.map(x=>`<li>${x}</li>`).join('');
+    document.getElementById('stepsTable').innerHTML=d.steps.map(s=>`<tr><td>${s[0]}</td><td>${s[1]}</td><td>${s[2]}</td></tr>`).join('');
+    document.getElementById('feesTable').innerHTML=d.fees.map(f=>`<tr><td>${f[0]}</td><td>${f[1]}</td></tr>`).join('');
+  };
+  r.readAsText(f);
+});
+
+// --- Help Tips ---
+document.getElementById('helpBtn').addEventListener('click',()=>{
+  alert("📘 QUICK TIPS:\n\n1️⃣ Click ☰ to open menu.\n2️⃣ Tap a service name to view details.\n3️⃣ Export or import data offline.\n4️⃣ Toggle Dark Mode.\n5️⃣ Print or Save as PDF anytime.");
+});
+
+// --- Sidebar Toggle ---
+const sidebar=document.getElementById('sidebar');
+const overlay=document.getElementById('overlay');
+const hamburger=document.getElementById('hamburger');
+hamburger.addEventListener('click',()=>{
+  sidebar.classList.add('active');
+  overlay.classList.add('active');
+});
+overlay.addEventListener('click',()=>{
+  sidebar.classList.remove('active');
+  overlay.classList.remove('active');
+});
+</script>
+</body>
+</html>
