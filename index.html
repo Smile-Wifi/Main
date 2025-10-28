@@ -7,8 +7,6 @@
 
   <!-- 🔹 Preload important media -->
   <link rel="preload" as="video" href="media/background/space.mp4" type="video/mp4">
-  <link rel="preload" as="video" href="video/ph.mp4" type="video/mp4">
-  <link rel="preload" as="image" href="media/icons/nest.png" type="image/png">
   <link rel="icon" href="media/icons/nest.png" type="image/png">
 
   <!-- 🔹 Meta & PWA settings -->
@@ -20,18 +18,25 @@
 
   <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; font-family: Arial, Helvetica, sans-serif; color: #fff; overflow-x: hidden; }
+html, body {
+  height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #fff;
+  overflow-x: hidden;
+  background: #000;
+}
 :root { --accent: #00d1ff; }
 
-/* background */
+/* background video (static behind everything) */
 #bg-video {
   position: fixed;
-  inset: 0;
+  top: 0; left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   z-index: -2;
   filter: brightness(0.55);
+  pointer-events: none;
 }
 
 /* Welcome Overlay */
@@ -43,7 +48,7 @@ html, body { height: 100%; font-family: Arial, Helvetica, sans-serif; color: #ff
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  z-index: 99999;
+  z-index: 9999;
   text-align: center;
   transition: opacity 0.5s ease;
 }
@@ -56,11 +61,11 @@ html, body { height: 100%; font-family: Arial, Helvetica, sans-serif; color: #ff
 #welcomeOverlay p {
   margin-top: 20px;
   font-size: 18px;
-  color: #00d1ff;
+  color: var(--accent);
   opacity: 0.9;
 }
 @keyframes pulse {
-  0%, 100% { transform: scale(1); }
+  0%,100% { transform: scale(1); }
   50% { transform: scale(1.08); }
 }
 
@@ -103,45 +108,52 @@ html, body { height: 100%; font-family: Arial, Helvetica, sans-serif; color: #ff
 .nav-link:hover { background: rgba(255,255,255,0.08); color: var(--accent); }
 .nav-icon { width: 20px; height: 20px; object-fit: contain; }
 
-/* layout */
-main { padding-bottom: 120px; }
+/* layout spacing */
+main { padding-bottom: 140px; position: relative; z-index: 1; }
 
-/* 🎬 Centered Autoplay Video Section */
-.video-section {
+/* 🎬 Local Video Player */
+.local-player {
+  margin-top: 80px;
+  width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: 70px;
+  align-items: center;
+  flex-direction: column;
+  padding: 0 10px;
 }
-.video-player {
-  position: relative;
-  width: 92%;
-  max-width: 640px;
+
+.player-box {
+  width: 100%;
+  max-width: 720px;
+  background: rgba(0,0,0,0.8);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-  background: #000;
 }
-.video-player video {
+.player-box video {
   width: 100%;
   height: auto;
   display: block;
-  border-radius: 12px;
-  transition: filter 0.5s ease;
+  border: none;
+  outline: none;
 }
-.next-btn {
-  position: absolute;
-  right: 12px;
-  top: 12px;
-  background: rgba(0,0,0,0.7);
-  color: #fff;
-  border: 0;
-  padding: 8px 12px;
+.player-controls {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 10px auto 0;
+  max-width: 720px;
+}
+.player-controls button {
+  background: var(--accent);
+  color: #000;
+  border: none;
+  padding: 8px 16px;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 14px;
-  z-index: 60;
+  font-weight: bold;
 }
-.next-btn:hover { background: rgba(0,0,0,0.9); }
+.player-controls button:hover { background: #fff; color: #000; }
 
 /* 🔍 Search Section */
 .search-section {
@@ -149,7 +161,7 @@ main { padding-bottom: 120px; }
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  margin: 18px 12px;
+  margin: 20px 12px;
 }
 .logo-img { max-width: 120px; height: auto; display: block; }
 .search-box {
@@ -165,7 +177,7 @@ main { padding-bottom: 120px; }
   color: #fff;
 }
 
-/* 📱 Icon Slider Section */
+/* icon slider */
 .icon-section { margin-top: 10px; overflow: hidden; }
 .icon-wrapper {
   display: flex;
@@ -186,251 +198,161 @@ main { padding-bottom: 120px; }
   scroll-snap-align: start;
 }
 .icon-item { text-align: center; }
-.icon-item a { text-decoration: none; color: inherit; display: block; }
 .icon-item img {
-  width: 64px;
-  height: 64px;
-  object-fit: cover;
+  width: 64px; height: 64px;
   border-radius: 12px;
-  display: block;
+  object-fit: cover;
   transition: transform 0.25s ease;
 }
-.icon-item img:active { transform: scale(0.92); }
-.icon-item p { margin-top: 6px; font-size: 13px; color: #fff; }
+.icon-item img:active { transform: scale(0.9); }
+.icon-item p { margin-top: 6px; font-size: 13px; }
 
 /* dots */
 .dots {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 6px;
+  display: flex; justify-content: center; gap: 8px; margin-top: 6px;
 }
 .dot {
-  width: 8px;
-  height: 8px;
+  width: 8px; height: 8px;
   border-radius: 999px;
   background: rgba(255,255,255,0.35);
-  border: 0;
-  cursor: pointer;
-  transition: background 0.2s;
+  border: 0; cursor: pointer;
 }
 .dot.active { background: var(--accent); }
 
 /* bottom carousel */
 .carousel {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  gap: 18px;
+  bottom: 0; left: 0; right: 0;
+  display: flex; justify-content: center; gap: 18px;
   padding: 10px 12px;
   background: rgba(0,0,0,0.55);
   z-index: 1000;
 }
-.carousel-item { cursor: pointer; }
 .carousel-item img {
-  width: 44px;
-  height: 44px;
-  object-fit: contain;
+  width: 44px; height: 44px;
   border-radius: 8px;
+  object-fit: contain;
   transition: transform 0.2s ease;
 }
-.carousel-item img:hover, .carousel-item img:active { transform: scale(1.1); }
+.carousel-item img:hover { transform: scale(1.1); }
 
 /* ALL APPS OVERLAY */
 #allAppsOverlay {
-  position: fixed;
-  inset: 0;
+  position: fixed; inset: 0;
   background: rgba(0,0,0,0.95);
-  z-index: 1500;
-  display: none;
-  justify-content: center;
-  align-items: center;
+  z-index: 1500; display: none;
+  justify-content: center; align-items: center;
   padding: 20px;
 }
 #allAppsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fill,minmax(100px,1fr));
   gap: 20px;
-  max-width: 90vw;
-  max-height: 80vh;
-  overflow-y: auto;
-  padding: 20px;
+  max-width: 90vw; max-height: 80vh;
+  overflow-y: auto; padding: 20px;
 }
-.all-app-item { text-align: center; }
-.all-app-item a { text-decoration: none; color: inherit; display: block; }
-.all-app-item img {
-  width: 64px;
-  height: 64px;
-  object-fit: cover;
-  border-radius: 12px;
-  margin: 0 auto 8px;
-}
-.all-app-item p { font-size: 12px; color: #fff; margin: 0; }
 .close-overlay {
-  position: absolute;
-  top: 20px;
-  right: 20px;
+  position: absolute; top: 20px; right: 20px;
   background: rgba(0,0,0,0.7);
-  color: #fff;
-  border: none;
-  padding: 10px;
-  border-radius: 50%;
-  cursor: pointer;
+  color: #fff; border: none; padding: 10px;
+  border-radius: 50%; cursor: pointer;
   font-size: 18px;
-}
-
-/* 🎥 Local Player Section */
-.local-player {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.player-box {
-  width: 100%;
-  max-width: none;
-  background: none;
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
-  padding: 0;
-}
-
-.player-box video {
-  width: 100%;
-  height: auto;
-  display: block;
-  border: none;
-  border-radius: 0;
-  background: transparent;
-}
-.player-controls {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-  gap: 10px;
-}
-.player-controls button {
-  background: var(--accent);
-  color: #000;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-}
-.player-controls button:hover {
-  background: #fff;
-  color: #000;
 }
   </style>
 </head>
 
 <body>
   <!-- Background video -->
-  <video autoplay muted loop playsinline preload="auto" id="bg-video" aria-hidden="true">
+  <video autoplay muted loop playsinline preload="auto" id="bg-video">
     <source src="media/background/space.mp4" type="video/mp4">
   </video>
 
   <!-- Welcome overlay -->
-  <div id="welcomeOverlay" role="button" aria-label="Enable sound and start" tabindex="0">
-    <img src="media/icons/banner.png" alt="Welcome Logo" id="welcomeLogo" loading="lazy">
+  <div id="welcomeOverlay">
+    <img src="media/icons/banner.png" alt="Welcome Logo" id="welcomeLogo">
     <p>Tap the logo to start</p>
   </div>
 
   <!-- Navbar -->
   <nav class="navbar">
-    <button id="nav-toggle" class="hamburger" aria-label="Open menu">☰</button>
-    <div id="side-nav" class="side-nav" aria-hidden="true">
-      <a class="nav-link" href="earthquake-alert/login.php"><img src="media/icons/login.png" class="nav-icon" alt="Login"> Earthquake Login</a>
-      <a class="nav-link" href="pages/root/games/index.html"><img src="media/icons/games.png" class="nav-icon" alt="Games"> Games</a>
-      <a class="nav-link" href="https://www.3dlogolab.io/"><img src="media/icons/advertising.png" class="nav-icon" alt="Advertising"> Advertising</a>
-      <a class="nav-link" href="weather.html"><img src="media/icons/weather.png" class="nav-icon" alt="Weather"> Weather</a>
-      <a class="nav-link" href="about.html"><img src="media/icons/about.jpg" class="nav-icon" alt="About"> About</a>
+    <button id="nav-toggle" class="hamburger">☰</button>
+    <div id="side-nav" class="side-nav">
+      <a class="nav-link" href="earthquake-alert/login.php"><img src="media/icons/login.png" class="nav-icon"> Earthquake Login</a>
+      <a class="nav-link" href="pages/root/games/index.html"><img src="media/icons/games.png" class="nav-icon"> Games</a>
+      <a class="nav-link" href="https://www.3dlogolab.io/"><img src="media/icons/advertising.png" class="nav-icon"> Advertising</a>
+      <a class="nav-link" href="weather.html"><img src="media/icons/weather.png" class="nav-icon"> Weather</a>
+      <a class="nav-link" href="about.html"><img src="media/icons/about.jpg" class="nav-icon"> About</a>
       <hr style="border:0;border-top:1px solid rgba(255,255,255,0.12);margin:8px 0;">
-      <a class="nav-link" href="fm/admin/login.php"><img src="media/icons/dashboard.png" class="nav-icon" alt="Admin Panel"> Admin Panel</a>
+      <a class="nav-link" href="fm/admin/login.php"><img src="media/icons/dashboard.png" class="nav-icon"> Admin Panel</a>
     </div>
   </nav>
 
   <main>
     <!-- 🎬 Local Video Player -->
     <section class="local-player">
-      <h2 style="text-align:center;margin:20px 0;color:#00d1ff;"></h2>
       <div class="player-box">
-        <video
-          id="localVideo"
-          width="100%"
-          playsinline
-          controls
-          preload="metadata"
-          poster="media/icons/nest.png"
-          muted
-        >
+        <video id="localVideo" playsinline controls preload="metadata" poster="media/icons/nest.png" muted>
           <source src="media/video-player/smile-ads.mp4" type="video/mp4">
-          Your browser does not support HTML5 video.
         </video>
+      </div>
+      <div class="player-controls">
+        <button id="prevVideo">⏮ Prev</button>
+        <button id="nextVideo">Next ⏭</button>
       </div>
     </section>
 
+    <!-- 🔍 Search -->
     <section class="search-section">
       <a href="index.html"><img src="media/icons/nest.png" alt="Nest Logo" class="logo-img"></a>
-      <input type="search" class="search-box" placeholder="Search..." aria-label="Search" id="searchInput">
+      <input type="search" class="search-box" placeholder="Search..." id="searchInput">
     </section>
 
-    <!-- App Icons -->
+        <!-- App Icons -->
     <section class="icon-section">
       <div class="icon-wrapper" id="iconWrapper">
         <div class="icon-grid">
-          <div class="icon-item"><a href="pages/root/campusDC/index.html"><img loading="lazy" src="media/icons/campusDC.png" alt="CampusDC"><p>CampusDC</p></a></div>
-          <div class="icon-item"><a href="pages/root/smileflix/index.php"><img loading="lazy" src="media/icons/smileflix.png" alt="SmileFlix"><p>SmileFlix</p></a></div>
-          <div class="icon-item"><a href="pages/root/documents/index.html"><img loading="lazy" src="media/icons/wecantilan.png" alt="PublicDoc"><p>PublicDoc</p></a></div>
-          <div class="icon-item"><a href="pages/root/gradio/index.html"><img loading="lazy" src="media/icons/gradio.png" alt="Gradio"><p>Gradio</p></a></div>
-          <div class="icon-item"><a href="pages/root/karaoke/index.php"><img loading="lazy" src="media/icons/videoke.png" alt="Karaoke"><p>Karaoke</p></a></div>
-          <div class="icon-item"><a href="pages/root/musify/index.php"><img loading="lazy" src="media/icons/musify.png" alt="Musify"><p>Musify</p></a></div>
+          <div class="icon-item"><a href="pages/root/campusDC/index.html"><img loading="lazy" src="media/icons/CampusDC.png" alt="CampusDC"><p>CampusDC</p></a></div>
+          <div class="icon-item"><a href="pages/root/smileflix/index.php"><img loading="lazy" src="media/icons/Smileflix.png" alt="SmileFlix"><p>SmileFlix</p></a></div>
+          <div class="icon-item"><a href="pages/root/documents/index.html"><img loading="lazy" src="media/icons/Wecantilan.png" alt="PublicDoc"><p>PublicDoc</p></a></div>
+          <div class="icon-item"><a href="pages/root/gradio/index.html"><img loading="lazy" src="media/icons/Gradio.png" alt="Gradio"><p>Gradio</p></a></div>
+          <div class="icon-item"><a href="pages/root/karaoke/index.php"><img loading="lazy" src="media/icons/Videoke.png" alt="Karaoke"><p>Karaoke</p></a></div>
+          <div class="icon-item"><a href="pages/root/musify/index.php"><img loading="lazy" src="media/icons/Musify.png" alt="Musify"><p>Musify</p></a></div>
         </div>
 
         <div class="icon-grid">
-          <div class="icon-item"><a href="pages/root/reeltalk/index.php"><img loading="lazy" src="media/icons/reeltalk.png" alt="ReelTalk"><p>ReelTalk</p></a></div>
-          <div class="icon-item"><a href="pages/root/sports/index.php"><img loading="lazy" src="media/icons/sports.png" alt="Sports"><p>Sports</p></a></div>
-          <div class="icon-item"><a href="pages/root/jollibee/index.html"><img loading="lazy" src="media/icons/jollibee.png" alt="Jollibee"><p>Jollibee</p></a></div>
-          <div class="icon-item"><a href="pages/root/showtime/index.php"><img loading="lazy" src="media/icons/showtime.png" alt="Showtime"><p>Showtime</p></a></div>
-          <div class="icon-item"><a href="pages/root/weather/index.html"><img loading="lazy" src="media/icons/weather.png" alt="Weather"><p>Weather</p></a></div>
-          <div class="icon-item"><a href="pages/root/dashboard/index.html"><img loading="lazy" src="media/icons/dashboard.png" alt="Dashboard"><p>Dashboard</p></a></div>
+          <div class="icon-item"><a href="pages/root/reeltalk/index.php"><img loading="lazy" src="media/icons/Reeltalk.png" alt="ReelTalk"><p>ReelTalk</p></a></div>
+          <div class="icon-item"><a href="pages/root/sports/index.php"><img loading="lazy" src="media/icons/Sports.png" alt="Sports"><p>Sports</p></a></div>
+          <div class="icon-item"><a href="pages/root/jollibee/index.html"><img loading="lazy" src="media/icons/Jollibee.png" alt="Jollibee"><p>Jollibee</p></a></div>
+          <div class="icon-item"><a href="pages/root/showtime/index.php"><img loading="lazy" src="media/icons/Showtime.png" alt="Showtime"><p>Showtime</p></a></div>
+          <div class="icon-item"><a href="pages/root/weather/index.html"><img loading="lazy" src="media/icons/Weather.png" alt="Weather"><p>Weather</p></a></div>
+          <div class="icon-item"><a href="pages/root/dashboard/index.html"><img loading="lazy" src="media/icons/Dashboard.png" alt="Dashboard"><p>Dashboard</p></a></div>
         </div>
 
         <div class="icon-grid">
-          <div class="icon-item"><a href="pages/root/freedom/index.html"><img loading="lazy" src="media/icons/freedom.png" alt="Freedom"><p>Freedom</p></a></div>
-          <div class="icon-item"><a href="https://en.wikipedia.org/" target="_blank"><img loading="lazy" src="media/icons/wikipedia.png" alt="Wikipedia"><p>Wikipedia</p></a></div>
-          <div class="icon-item"><a href="pages/root/shop/index.html"><img loading="lazy" src="media/icons/shop2.png" alt="LocalBiz"><p>LocalBiz</p></a></div>
-          <div class="icon-item"><a href="pages/root/skits/index.html"><img loading="lazy" src="media/icons/skits.png" alt="Skits"><p>Skits</p></a></div>
-          <div class="icon-item"><a href="pages/root/politics/index.html"><img loading="lazy" src="media/icons/politics.png" alt="Politics"><p>Politics</p></a></div>
-          <div class="icon-item"><a href="pages/root/ebooks/index.html"><img loading="lazy" src="media/icons/ebooks.png" alt="eBooks"><p>eBooks</p></a></div>
+          <div class="icon-item"><a href="pages/root/freedom/index.html"><img loading="lazy" src="media/icons/Freedom.png" alt="Freedom"><p>Freedom</p></a></div>
+          <div class="icon-item"><a href="https://en.wikipedia.org/" target="_blank"><img loading="lazy" src="media/icons/Wikipedia.png" alt="Wikipedia"><p>Wikipedia</p></a></div>
+          <div class="icon-item"><a href="pages/root/shop/index.html"><img loading="lazy" src="media/icons/Shop2.png" alt="LocalBiz"><p>LocalBiz</p></a></div>
+          <div class="icon-item"><a href="pages/root/skits/index.html"><img loading="lazy" src="media/icons/Skits.png" alt="Skits"><p>Skits</p></a></div>
+          <div class="icon-item"><a href="pages/root/politics/index.html"><img loading="lazy" src="media/icons/Politics.png" alt="Politics"><p>Politics</p></a></div>
+          <div class="icon-item"><a href="pages/root/ebooks/index.html"><img loading="lazy" src="media/icons/Ebooks.png" alt="eBooks"><p>eBooks</p></a></div>
         </div>
       </div>
-
+	  
       <div class="dots" id="slideDots">
-        <button class="dot active" data-index="0" aria-label="Slide 1"></button>
-        <button class="dot" data-index="1" aria-label="Slide 2"></button>
-        <button class="dot" data-index="2" aria-label="Slide 3"></button>
+        <button class="dot active" data-index="0"></button>
       </div>
     </section>
 
+    <!-- Bottom Carousel -->
     <section class="carousel">
       <div class="carousel-item">
-        <a href="earth.html" target="_blank">
-          <img src="media/GIF/earth.gif" alt="Earth">
-        </a>
+        <a href="earth.html"><img src="media/GIF/earth.gif" alt="Earth"></a>
       </div>
       <div class="carousel-item" id="homeBtn">
-        <img src="media/icons/Home.png" alt="All Apps" title="Show All Apps">
+        <img src="media/icons/Home.png" alt="All Apps">
       </div>
       <div class="carousel-item">
-        <a href="cribble.html" target="_blank">
-          <img src="media/GIF/Mars.gif" alt="Mars">
-        </a>
+        <a href="cribble.html"><img src="media/GIF/Mars.gif" alt="Mars"></a>
       </div>
     </section>
   </main>
