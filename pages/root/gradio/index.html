@@ -145,15 +145,27 @@
     <button class="close-btn" id="closeBtn">×</button>
   </div>
   <ul class="nav-list">
-    <li class="nav-item"><a href="https://smile-wifi.github.io/Main" class="nav-link active" data-view="home"><span class="nav-icon">Home</span> Home</a></li>
-    <li class="nav-item"><a href="#" class="nav-link" data-view="refresh"><span class="nav-icon">Refresh</span> Refresh</a></li>
-    <li class="nav-item"><a href="#" class="nav-link" data-view="settings"><span class="nav-icon">Settings</span> Settings</a></li>
+    <!-- ✅ Fixed Home link: internal + external -->
+    <li class="nav-item">
+      <a href="https://smile-wifi.github.io/Main" target="_blank" class="nav-link active" data-view="home">
+        <span class="nav-icon">🏠</span> Home
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="#" class="nav-link" data-view="refresh">
+        <span class="nav-icon">🔄</span> Refresh
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="#" class="nav-link" data-view="settings">
+        <span class="nav-icon">⚙️</span> Settings
+      </a>
+    </li>
   </ul>
 </nav>
 
 <!-- MAIN -->
 <main class="main-content" id="mainContent">
-  <!-- HOME VIEW -->
   <div class="view active" id="homeView">
     <div class="player-card">
       <div class="now-playing">
@@ -162,8 +174,8 @@
       </div>
       <div class="play-btn" id="playBtn">Play</div>
       <div class="controls-row">
-        <button class="ctrl-btn" id="prevBtn" title="Previous">Previous</button>
-        <button class="ctrl-btn" id="nextBtn" title="Next">Next</button>
+        <button class="ctrl-btn" id="prevBtn">Previous</button>
+        <button class="ctrl-btn" id="nextBtn">Next</button>
         <div class="volume-container">
           <input id="volume" type="range" min="0" max="1" step="0.01" value="0.9">
         </div>
@@ -187,7 +199,6 @@
     </div>
   </div>
 
-  <!-- REFRESH VIEW -->
   <div class="view" id="refreshView">
     <div class="player-card" style="text-align:center">
       <div class="loading-spinner"></div>
@@ -196,15 +207,14 @@
     </div>
   </div>
 
-  <!-- SETTINGS VIEW -->
   <div class="view" id="settingsView">
     <div class="panel">
       <h3>Repository Config</h3>
       <div class="input-grid">
-        <input id="gh_owner" placeholder="Owner (e.g. gradiocantilan-IT)" value="gradiocantilan-IT">
+        <input id="gh_owner" placeholder="Owner" value="gradiocantilan-IT">
         <input id="gh_repo" placeholder="Repo name" value="mp3-player-files">
         <input id="gh_path" placeholder="Folder path (optional)">
-        <input id="gh_branch" placeholder="Branch (default: main)" value="main">
+        <input id="gh_branch" placeholder="Branch" value="main">
         <input id="gh_token" placeholder="GitHub token (private repos)">
         <div class="btn-group">
           <button class="btn-sm" id="btnReload">Fetch Now</button>
@@ -212,7 +222,6 @@
         </div>
       </div>
     </div>
-
     <div class="status-box">
       <div class="status-label">Last fetched:</div>
       <div id="lastFetched" class="status-value">—</div>
@@ -227,7 +236,6 @@
 <video id="videoPlayer" style="display:none;width:100%;height:auto" controls playsinline></video>
 
 <script>
-/* FM MP3 Player with Side Panel */
 (() => {
   const config = {
     owner: localStorage.getItem('gh_owner') || 'gradiocantilan-IT',
@@ -238,15 +246,12 @@
     pollInterval: 60 * 1000,
   };
 
-  // UI Elements
   const sidebar = document.getElementById('sidebar');
   const hamburger = document.getElementById('hamburger');
   const closeBtn = document.getElementById('closeBtn');
   const mainContent = document.getElementById('mainContent');
   const navLinks = document.querySelectorAll('.nav-link');
   const views = document.querySelectorAll('.view');
-
-  const statusBadge = { textContent: () => {} }; // Minimal fallback
   const fileListEl = document.getElementById('fileList');
   const fileCountEl = document.getElementById('fileCount');
   const nowTitle = document.getElementById('nowTitle');
@@ -268,201 +273,97 @@
   const btnSaveConfig = document.getElementById('btnSaveConfig');
   const lastFetched = document.getElementById('lastFetched');
   const cacheStatus = document.getElementById('cacheStatus');
+  const player = document.getElementById('player');
 
-  const audio = document.getElementById('player');
-  const video = document.getElementById('videoPlayer');
+  let playlist = [];
+  let current = 0;
+  let timer;
 
-  let files = [], currentIndex = -1, playing = false, pollTimer = null;
+  // Sidebar toggle
+  hamburger.addEventListener('click',()=>{sidebar.classList.toggle('open');hamburger.classList.toggle('open');mainContent.classList.toggle('shifted')});
+  closeBtn.addEventListener('click',()=>{sidebar.classList.remove('open');hamburger.classList.remove('open');mainContent.classList.remove('shifted')});
 
-  const audioExt = ['mp3','m4a','wav','ogg','aac','flac'];
-  const videoExt = ['mp4','webm','mov','mkv'];
-
-  // Sidebar Navigation
-  function openSidebar() {
-    sidebar.classList.add('open');
-    hamburger.classList.add('open');
-    setTimeout(() => mainContent.classList.add('shifted'), 100);
-  }
-  function closeSidebar() {
-    sidebar.classList.remove('open');
-    hamburger.classList.remove('open');
-    mainContent.classList.remove('shifted');
-  }
-  hamburger.onclick = () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
-  closeBtn.onclick = closeSidebar;
-
-  navLinks.forEach(link => {
-    link.onclick = (e) => {
-      e.preventDefault();
-      const viewId = link.dataset.view + 'View';
-      views.forEach(v => v.classList.remove('active'));
-      document.getElementById(viewId).classList.add('active');
-      navLinks.forEach(l => l.classList.remove('active'));
+  // View switching
+  navLinks.forEach(link=>{
+    link.addEventListener('click',e=>{
+      const view = link.dataset.view;
+      navLinks.forEach(l=>l.classList.remove('active'));
       link.classList.add('active');
-      if (link.dataset.view === 'refresh') refreshFiles(true);
-      closeSidebar();
-    };
+      views.forEach(v=>v.classList.remove('active'));
+      if(document.getElementById(view+'View')) document.getElementById(view+'View').classList.add('active');
+      sidebar.classList.remove('open');
+      hamburger.classList.remove('open');
+      mainContent.classList.remove('shifted');
+    });
   });
 
-  // Load config
-  function loadConfigToUI(){
-    gh_owner.value = config.owner; gh_repo.value = config.repo;
-    gh_path.value = config.path; gh_branch.value = config.branch; gh_token.value = config.token;
-  }
-  loadConfigToUI();
+  // Audio handling
+  playBtn.addEventListener('click',()=>{
+    if(!playlist.length) return;
+    if(player.paused){player.play();playBtn.classList.add('playing');playBtn.textContent='Pause';}
+    else{player.pause();playBtn.classList.remove('playing');playBtn.textContent='Play';}
+  });
+  nextBtn.addEventListener('click',()=>{if(playlist.length){current=(current+1)%playlist.length;loadTrack(current);player.play()}});
+  prevBtn.addEventListener('click',()=>{if(playlist.length){current=(current-1+playlist.length)%playlist.length;loadTrack(current);player.play()}});
+  volume.addEventListener('input',()=>{player.volume=volume.value});
 
-  function githubContentsUrl() {
-    let url = `https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}/contents`;
-    if (config.path) url += '/' + config.path.replace(/^\/+|\/+$/g,'');
-    url += `?ref=${encodeURIComponent(config.branch)}`;
-    return url;
-  }
+  player.addEventListener('timeupdate',()=>{
+    if(!player.duration)return;
+    const percent=(player.currentTime/player.duration)*100;
+    progressFill.style.width=percent+'%';
+    timeLeft.textContent=formatTime(player.currentTime);
+    timeRight.textContent=formatTime(player.duration);
+  });
+  progressBar.addEventListener('click',e=>{
+    const w=progressBar.clientWidth;
+    const x=e.offsetX;
+    player.currentTime=(x/w)*player.duration;
+  });
+  player.addEventListener('ended',()=>{current=(current+1)%playlist.length;loadTrack(current);player.play()});
 
-  function githubRawUrl(path) {
-    return `https://raw.githubusercontent.com/${config.owner}/${config.repo}/${config.branch}/${path}`;
-  }
+  function formatTime(sec){const m=Math.floor(sec/60),s=Math.floor(sec%60);return `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;}
 
-  function detectType(name){
-    const ext = (name.split('.').pop() || '').toLowerCase();
-    if (audioExt.includes(ext)) return 'audio';
-    if (videoExt.includes(ext)) return 'video';
-    return 'other';
-  }
-
-  async function fetchGitHubFiles() {
-    try {
-      const res = await fetch(githubContentsUrl(), {
-        headers: config.token ? { Authorization: 'token ' + config.token } : {}
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      const items = Array.isArray(data) ? data : [data];
-      const media = items.filter(i => i.type === 'file' && ['audio','video'].includes(detectType(i.name)))
-        .map(i => ({ name: i.name, path: i.path, size: i.size, download_url: i.download_url || githubRawUrl(i.path), type: detectType(i.name) }));
-      return { media };
-    } catch (err) {
-      return { error: true };
-    }
+  function loadTrack(index){
+    const file=playlist[index];
+    if(!file)return;
+    player.src=file.download_url;
+    nowTitle.textContent=file.name;
+    nowMeta.textContent=`Track ${index+1} / ${playlist.length}`;
+    [...fileListEl.children].forEach((item,i)=>item.classList.toggle('active',i===index));
   }
 
-  function renderPlaylist() {
-    fileListEl.innerHTML = '';
-    const list = files.filter(f => f.type !== 'other');
-    fileCountEl.textContent = list.length;
-    if (!list.length) {
-      fileListEl.innerHTML = '<div class="empty">No tracks found in repo.</div>';
-      return;
-    }
-    list.forEach((f, i) => {
-      const item = document.createElement('div');
-      item.className = 'track-item' + (i === currentIndex ? ' active' : '');
-      item.innerHTML = `
-        <div class="track-icon">${f.type === 'audio' ? '♪' : 'Video'}</div>
-        <div class="track-info">
-          <div class="track-name">${escapeHtml(f.name)}</div>
-          <div class="track-meta">${f.type} • ${(f.size/1024).toFixed(1)} KB</div>
-        </div>
-        <div class="track-num">${String(i+1).padStart(2,'0')}</div>
-      `;
-      item.onclick = () => playIndex(i);
-      fileListEl.appendChild(item);
-    });
-  }
-
-  function escapeHtml(s){ return (s+'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-
-  function playIndex(i){
-    if (!files.length) return;
-    currentIndex = i;
-    const f = files[i];
-    nowTitle.textContent = f.name;
-    nowMeta.textContent = `${config.owner}/${config.repo}`;
-    if (f.type === 'video') {
-      audio.pause(); audio.src = ''; video.style.display = 'block'; video.src = f.download_url; video.play();
-    } else {
-      video.pause(); video.style.display = 'none'; video.src = ''; audio.src = f.download_url; audio.play();
-    }
-    playing = true; playBtn.classList.add('playing'); playBtn.textContent = 'Pause';
-    localStorage.setItem('fm_last_play', JSON.stringify({ ...config, index: i }));
+  async function fetchFiles(){
+    fileListEl.innerHTML='<div class="empty">Fetching from GitHub...</div>';
+    const url=`https://api.github.com/repos/${config.owner}/${config.repo}/contents/${config.path}?ref=${config.branch}`;
+    const headers=config.token?{Authorization:`token ${config.token}`}:{};
+    const res=await fetch(url,{headers});
+    const data=await res.json();
+    playlist=data.filter(f=>f.name.match(/\.(mp3|wav|ogg|m4a)$/i));
+    if(playlist.length===0){fileListEl.innerHTML='<div class="empty">No audio files found</div>';return}
     renderPlaylist();
   }
 
-  function togglePlay(){
-    if (video.style.display === 'block') { video.paused ? video.play() : video.pause(); }
-    else { audio.paused ? audio.play() : audio.pause(); }
-    playing = !audio.paused && !video.paused;
-    playBtn.classList.toggle('playing', playing);
-    playBtn.textContent = playing ? 'Pause' : 'Play';
-  }
-
-  function nextTrack(){ playIndex((currentIndex + 1) % files.length); }
-  function prevTrack(){ playIndex((currentIndex - 1 + files.length) % files.length); }
-
-  function formatTime(s){ return isFinite(s) ? `${Math.floor(s/60)}`.padStart(2,'0') + ':' + `${Math.floor(s%60)}`.padStart(2,'0') : 'LIVE'; }
-
-  function attachPlayerEvents(){
-    [audio, video].forEach(p => {
-      p.addEventListener('timeupdate', () => {
-        const pct = (p.currentTime / Math.max(1, p.duration || 1)) * 100;
-        progressFill.style.width = pct + '%';
-        timeLeft.textContent = formatTime(p.currentTime);
-        timeRight.textContent = formatTime(p.duration);
-      });
-      p.addEventListener('ended', nextTrack);
+  function renderPlaylist(){
+    fileListEl.innerHTML='';
+    playlist.forEach((file,i)=>{
+      const el=document.createElement('div');
+      el.className='track-item';
+      el.innerHTML=`<div class="track-icon">${i+1}</div><div class="track-info"><div class="track-name">${file.name}</div></div>`;
+      el.addEventListener('click',()=>{current=i;loadTrack(current);player.play();playBtn.classList.add('playing');playBtn.textContent='Pause';});
+      fileListEl.appendChild(el);
     });
-    volume.oninput = () => { audio.volume = video.volume = volume.value; localStorage.setItem('fm_vol', volume.value); };
-    playBtn.onclick = togglePlay; nextBtn.onclick = nextTrack; prevBtn.onclick = prevTrack;
-    progressBar.onclick = e => {
-      const pct = (e.offsetX / progressBar.clientWidth);
-      (video.style.display === 'block' ? video : audio).currentTime = pct * (video.duration || audio.duration);
-    };
-    document.onkeydown = e => {
-      if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
-      if (e.code === 'ArrowRight') nextTrack();
-      if (e.code === 'ArrowLeft') prevTrack();
-    };
+    fileCountEl.textContent=playlist.length;
+    loadTrack(current);
   }
 
-  async function refreshFiles(silent = false){
-    if (!silent) document.querySelector('[data-view="refresh"]')?.click();
-    Object.assign(config, {
-      owner: gh_owner.value.trim(), repo: gh_repo.value.trim(),
-      path: gh_path.value.trim(), branch: gh_branch.value.trim(), token: gh_token.value.trim()
-    });
-    const result = await fetchGitHubFiles();
-    if (result.error && localStorage.getItem('fm_cached_files')) {
-      files = JSON.parse(localStorage.getItem('fm_cached_files'));
-      cacheStatus.textContent = 'Cached';
-    } else if (result.media) {
-      files = result.media.sort((a,b) => a.name.localeCompare(b.name));
-      localStorage.setItem('fm_cached_files', JSON.stringify(files));
-      lastFetched.textContent = new Date().toLocaleString();
-      cacheStatus.textContent = 'Live';
-    }
-    renderPlaylist();
-    setTimeout(() => document.querySelector('[data-view="home"]')?.click(), 800);
-  }
+  btnReload.addEventListener('click',fetchFiles);
+  btnSaveConfig.addEventListener('click',()=>{
+    ['owner','repo','path','branch','token'].forEach(k=>localStorage.setItem('gh_'+k,eval('gh_'+k).value));
+    alert('Saved configuration!');
+  });
 
-  btnReload.onclick = () => refreshFiles(true);
-  btnSaveConfig.onclick = () => {
-    ['owner','repo','path','branch','token'].forEach(k => localStorage.setItem('gh_'+k, window['gh_'+k].value.trim()));
-    refreshFiles(true);
-  };
-
-  function boot(){
-    loadConfigToUI(); attachPlayerEvents(); volume.value = localStorage.getItem('fm_vol') || 0.9; audio.volume = video.volume = volume.value;
-    refreshFiles().then(() => {
-      const last = JSON.parse(localStorage.getItem('fm_last_play') || 'null');
-      if (last && last.owner === config.owner && last.repo === config.repo) currentIndex = last.index || 0;
-    });
-    pollTimer = setInterval(refreshFiles, config.pollInterval);
-    document.getElementById('pollIntervalLabel').textContent = (config.pollInterval/1000) + 's';
-  }
-
-  boot();
-  window.fm = { refresh: refreshFiles, playIndex, nextTrack, prevTrack, files, config };
+  fetchFiles();
 })();
 </script>
 </body>
 </html>
-
