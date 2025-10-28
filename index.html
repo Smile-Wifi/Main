@@ -109,7 +109,7 @@ html, body {
 .nav-icon { width: 20px; height: 20px; object-fit: contain; }
 
 /* layout spacing */
-main { padding-bottom: 140px; position: relative; z-index: 1; }
+main { padding-bottom: 100px; position: relative; z-index: 1; }
 
 /* 🎬 Local Video Player */
 .local-player {
@@ -137,23 +137,6 @@ main { padding-bottom: 140px; position: relative; z-index: 1; }
   border: none;
   outline: none;
 }
-.player-controls {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  margin: 10px auto 0;
-  max-width: 720px;
-}
-.player-controls button {
-  background: var(--accent);
-  color: #000;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-}
-.player-controls button:hover { background: #fff; color: #000; }
 
 /* 🔍 Search Section */
 .search-section {
@@ -163,7 +146,24 @@ main { padding-bottom: 140px; position: relative; z-index: 1; }
   gap: 10px;
   margin: 20px 12px;
 }
-.logo-img { max-width: 120px; height: auto; display: block; }
+.logo-img {
+  max-width: 120px;
+  height: auto;
+  display: inline;
+  margin-bottom: 4px;
+}
+.search-section a {
+  text-align: center;
+  text-decoration: none;
+}
+.search-section a p {
+  font-size: 12px;
+  color: var(--accent);
+  opacity: 0.9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .search-box {
   width: 88%;
   max-width: 520px;
@@ -221,15 +221,15 @@ main { padding-bottom: 140px; position: relative; z-index: 1; }
 
 /* bottom carousel */
 .carousel {
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
+  position: absolute;
+  bottom: 2px; left: 0; right: 0;
   display: flex; justify-content: center; gap: 18px;
   padding: 10px 12px;
   background: rgba(0,0,0,0.55);
   z-index: 1000;
 }
 .carousel-item img {
-  width: 44px; height: 44px;
+  width: 100px; height: 80px;
   border-radius: 8px;
   object-fit: contain;
   transition: transform 0.2s ease;
@@ -295,26 +295,26 @@ main { padding-bottom: 140px; position: relative; z-index: 1; }
           <source src="media/video-player/smile-ads.mp4" type="video/mp4">
         </video>
       </div>
-      <div class="player-controls">
-        <button id="prevVideo">⏮ Prev</button>
-        <button id="nextVideo">Next ⏭</button>
-      </div>
+      <div class="player-controls"></div>
     </section>
 
     <!-- 🔍 Search -->
     <section class="search-section">
-      <a href="index.html"><img src="media/icons/nest.png" alt="Nest Logo" class="logo-img"></a>
+      <a href="index.html">
+        <img src="media/icons/crible.png" alt="Nest Logo" class="logo-img">
+        <p>Cached response on Intranet based bandwidth linked ecosystem</p>
+      </a>
       <input type="search" class="search-box" placeholder="Search..." id="searchInput">
     </section>
 
-        <!-- App Icons -->
+     <!-- App Icons -->
     <section class="icon-section">
       <div class="icon-wrapper" id="iconWrapper">
         <div class="icon-grid">
-          <div class="icon-item"><a href="pages/root/campusDC/index.html"><img loading="lazy" src="media/icons/CampusDC.png" alt="CampusDC"><p>CampusDC</p></a></div>
-          <div class="icon-item"><a href="pages/root/smileflix/index.php"><img loading="lazy" src="media/icons/smileflex.png" alt="SmileFlix"><p>SmileFlix</p></a></div>
+          <div class="icon-item"><a href="pages/root/campusDC/index.html"><img loading="lazy" src="media/icons/campusDC.png" alt="CampusDC"><p>CampusDC</p></a></div>
+          <div class="icon-item"><a href="pages/root/smileflix/index.php"><img loading="lazy" src="media/icons/smileflix.png" alt="SmileFlix"><p>SmileFlix</p></a></div>
           <div class="icon-item"><a href="pages/root/documents/index.html"><img loading="lazy" src="media/icons/wecantilan.png" alt="PublicDoc"><p>PublicDoc</p></a></div>
-          <div class="icon-item"><a href="pages/root/gradio/index.html"><img loading="lazy" src="media/icons/GRADIO.png" alt="Gradio"><p>Gradio</p></a></div>
+          <div class="icon-item"><a href="pages/root/gradio/index.html"><img loading="lazy" src="media/icons/gradio.png" alt="Gradio"><p>Gradio</p></a></div>
           <div class="icon-item"><a href="pages/root/karaoke/index.php"><img loading="lazy" src="media/icons/videoke.png" alt="Karaoke"><p>Karaoke</p></a></div>
           <div class="icon-item"><a href="pages/root/musify/index.php"><img loading="lazy" src="media/icons/musify.png" alt="Musify"><p>Musify</p></a></div>
         </div>
@@ -343,7 +343,7 @@ main { padding-bottom: 140px; position: relative; z-index: 1; }
       </div>
     </section>
 
-    <!-- Bottom Carousel -->
+ <!-- Bottom Carousel -->
     <section class="carousel">
       <div class="carousel-item">
         <a href="earth.html"><img src="media/GIF/earth.gif" alt="Earth"></a>
@@ -362,8 +362,7 @@ main { padding-bottom: 140px; position: relative; z-index: 1; }
     <button class="close-overlay" id="closeOverlay">×</button>
     <div id="allAppsGrid"></div>
   </div>
-
-  <script>
+ <script>
     // ===== ALL APPS OVERLAY =====
     const allAppsData = [
       { href: "pages/root/campusDC/index.html", img: "media/icons/campusDC.png", name: "CampusDC" },
