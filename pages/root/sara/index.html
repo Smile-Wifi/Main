@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saint Michael College Cantilan Incorporated</title>
+    
+    <!-- Bootstrap CSS CDN with fallback -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Fallback Bootstrap styles for offline use */
+        :root {
+            --bs-primary: #0d6efd;
+            --bs-secondary: #6c757d;
+            --bs-success: #198754;
+            --bs-info: #0dcaf0;
+            --bs-warning: #ffc107;
+            --bs-danger: #dc3545;
+            --bs-light: #f8f9fa;
+            --bs-dark: #212529;
+            --bs-font-sans-serif: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+        }
+        
+        body {
+            font-family: var(--bs-font-sans-serif);
+            line-height: 1.5;
+            color: #212529;
+            background-color: #fff;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .hero-section h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .section-title {
+            color: #2a5298;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .card {
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            background-color: #2a5298;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .btn-primary {
+            background-color: #2a5298;
+            border-color: #2a5298;
+        }
+        
+        .btn-primary:hover {
+            background-color: #1e3c72;
+            border-color: #1e3c72;
+        }
+        
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .event-card {
+            border-left: 4px solid #2a5298;
+            background-color: #f8f9fa;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+        }
+        
+        .event-date {
+            background-color: #2a5298;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+        
+        .teacher-dashboard {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .admin-panel {
+            display: none;
+        }
+        
+        .admin-panel.active {
+            display: block;
+        }
+        
+        .cms-editor {
+            min-height: 200px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .announcement-item {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+        }
+        
+        .program-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer {
+            background-color: #2a5298;
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .offline-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #dc3545;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            display: none;
+            z-index: 9999;
+        }
+        
+        .offline-indicator.active {
+            display: block;
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-section {
+                padding: 50px 0;
+            }
+            
+            .navbar-brand {
+                font-size: 1rem;
+            }
+        }
+        
+        /* PWA Install Prompt */
+        .install-prompt {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #2a5298;
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: none;
+            z-index: 9999;
+        }
+        
+        .install-prompt.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Offline Indicator -->
+    <div id="offlineIndicator" class="offline-indicator">
+        You're offline - Content may be limited
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#home">St. Michael College Cantilan</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#programs">Programs</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#announcements">Announcements</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#events">Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#gallery">Gallery</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#teacher-login">Teacher Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="container">
+            <h1>Saint Michael College Cantilan Incorporated</h1>
+            <p class="lead">Excellence in Education, Faith in Service</p>
+            <p>Empowering students to achieve academic excellence and become responsible leaders in our community.</p>
+        </div>
+    </section>
+
+    <!-- School Programs Section -->
+    <section id="programs" class="py-5">
+        <div class="container">
+            <h2 class="section-title">Academic Programs</h2>
+            <div id="programsContainer">
+                <!-- Programs will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Announcements Section -->
+    <section id="announcements" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title">Latest Announcements</h2>
+            <div id="announcementsContainer">
+                <!-- Announcements will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Monthly Events Section -->
+    <section id="events" class="py-5">
+        <div class="container">
+            <h2 class="section-title">Monthly Events</h2>
+            <div id="eventsContainer">
+                <!-- Events will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title">School Gallery</h2>
+            <div class="row" id="galleryContainer">
+                <!-- Gallery items will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Teacher Login Section -->
+    <section id="teacher-login" class="py-5">
+        <div class="container">
+            <div id="loginSection">
+                <h2 class="section-title">Teacher Dashboard Login</h2>
+                <div class="login-form">
+                    <form id="teacherLoginForm">
+                        <div class="mb-3">
+                            <label for="teacherId" class="form-label">Teacher ID</label>
+                            <input type="text" class="form-control" id="teacherId" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Admin Dashboard -->
+            <div id="adminDashboard" class="admin-panel teacher-dashboard">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Teacher Dashboard - CMS</h2>
+                    <button id="logoutBtn" class="btn btn-danger">Logout</button>
+                </div>
+                
+                <!-- CMS Tabs -->
+                <ul class="nav nav-tabs mb-3" id="cmsTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="programs-tab" data-bs-toggle="tab" data-bs-target="#programs-tab-pane">Programs</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="announcements-tab" data-bs-toggle="tab" data-bs-target="#announcements-tab-pane">Announcements</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="events-tab" data-bs-toggle="tab" data-bs-target="#events-tab-pane">Events</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="gallery-tab" data-bs-toggle="tab" data-bs-target="#gallery-tab-pane">Gallery</button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="cmsTabContent">
+                    <!-- Programs Tab -->
+                    <div class="tab-pane fade show active" id="programs-tab-pane">
+                        <h3>Manage Programs</h3>
+                        <form id="programForm">
+                            <div class="mb-3">
+                                <label class="form-label">Program Name</label>
+                                <input type="text" class="form-control" id="programName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" id="programDescription" rows="3" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Duration</label>
+                                <input type="text" class="form-control" id="programDuration" placeholder="e.g., 4 years">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Program</button>
+                        </form>
+                        <div id="programsList" class="mt-4"></div>
+                    </div>
+
+                    <!-- Announcements Tab -->
+                    <div class="tab-pane fade" id="announcements-tab-pane">
+                        <h3>Manage Announcements</h3>
+                        <form id="announcementForm">
+                            <div class="mb-3">
+                                <label class="form-label">Title</label>
+                                <input type="text" class="form-control" id="announcementTitle" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Content</label>
+                                <textarea class="form-control" id="announcementContent" rows="4" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Priority</label>
+                                <select class="form-control" id="announcementPriority">
+                                    <option value="normal">Normal</option>
+                                    <option value="high">High</option>
+                                    <option value="urgent">Urgent</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Announcement</button>
+                        </form>
+                        <div id="announcementsList" class="mt-4"></div>
+                    </div>
+
+                    <!-- Events Tab -->
+                    <div class="tab-pane fade" id="events-tab-pane">
+                        <h3>Manage Events</h3>
+                        <form id="eventForm">
+                            <div class="mb-3">
+                                <label class="form-label">Event Name</label>
+                                <input type="text" class="form-control" id="eventName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Date</label>
+                                <input type="date" class="form-control" id="eventDate" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Time</label>
+                                <input type="time" class="form-control" id="eventTime" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Location</label>
+                                <input type="text" class="form-control" id="eventLocation" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" id="eventDescription" rows="3" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Event</button>
+                        </form>
+                        <div id="eventsList" class="mt-4"></div>
+                    </div>
+
+                    <!-- Gallery Tab -->
+                    <div class="tab-pane fade" id="gallery-tab-pane">
+                        <h3>Manage Gallery</h3>
+                        <form id="galleryForm">
+                            <div class="mb-3">
+                                <label class="form-label">Image Title</label>
+                                <input type="text" class="form-control" id="imageTitle" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Image URL</label>
+                                <input type="url" class="form-control" id="imageUrl" placeholder="Enter image URL or use camera">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Or Take Photo</label>
+                                <input type="file" class="form-control" id="imageFile" accept="image/*" capture="environment">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" id="imageDescription" rows="2"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Image</button>
+                        </form>
+                        <div id="galleryList" class="mt-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Contact Information</h5>
+                    <p>Address: Cantilan, Surigao del Sur</p>
+                    <p>Phone: (086) 123-4567</p>
+                    <p>Email: info@smccantilan.edu.ph</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#programs" class="text-white">Academic Programs</a></li>
+                        <li><a href="#announcements" class="text-white">Announcements</a></li>
+                        <li><a href="#events" class="text-white">Events</a></li>
+                        <li><a href="#gallery" class="text-white">Gallery</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Follow Us</h5>
+                    <p>Stay connected with Saint Michael College Cantilan</p>
+                    <p>&copy; 2024 Saint Michael College Cantilan Incorporated. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- PWA Install Prompt -->
+    <div id="installPrompt" class="install-prompt">
+        <p>Install our app for offline access!</p>
+        <button id="installBtn" class="btn btn-light btn-sm">Install</button>
+        <button id="dismissInstall" class="btn btn-sm btn-link text-white">Dismiss</button>
+    </div>
+
+    <!-- Bootstrap JS Bundle with fallback -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Offline-first School Website CMS
+        class SchoolCMS {
+            constructor() {
+                this.isOnline = navigator.onLine;
+                this.currentUser = null;
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.checkOnlineStatus();
+                this.loadAllData();
+                this.setupPWA();
+                this.setupServiceWorker();
+            }
+
+            setupEventListeners() {
+                // Online/offline detection
+                window.addEventListener('online', () => this.handleOnline());
+                window.addEventListener('offline', () => this.handleOffline());
+
+                // Login form
+                document.getElementById('teacherLoginForm').addEventListener('submit', (e) => this.handleLogin(e));
+
+                // Logout
+                document.getElementById('logoutBtn').addEventListener('click', () => this.handleLogout());
+
+                // CMS Forms
+                document.getElementById('programForm').addEventListener('submit', (e) => this.handleProgramSubmit(e));
+                document.getElementById('announcementForm').addEventListener('submit', (e) => this.handleAnnouncementSubmit(e));
+                document.getElementById('eventForm').addEventListener('submit', (e) => this.handleEventSubmit(e));
+                document.getElementById('galleryForm').addEventListener('submit', (e) => this.handleGallerySubmit(e));
+
+                // Install prompt
+                document.getElementById('installBtn').addEventListener('click', () => this.handleInstall());
+                document.getElementById('dismissInstall').addEventListener('click', () => this.dismissInstall());
+            }
+
+            checkOnlineStatus() {
+                const indicator = document.getElementById('offlineIndicator');
+                if (!this.isOnline) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+            }
+
+            handleOnline() {
+                this.isOnline = true;
+                this.checkOnlineStatus();
+                this.syncData();
+            }
+
+            handleOffline() {
+                this.isOnline = false;
+                this.checkOnlineStatus();
+            }
+
+            setupPWA() {
+                // PWA Manifest
+                const manifest = {
+                    name: 'St. Michael College Cantilan',
+                    short_name: 'SMCC',
+                    description: 'School website with CMS for teachers',
+                    start_url: '/',
+                    display: 'standalone',
+                    background_color: '#ffffff',
+                    theme_color: '#2a5298',
+                    icons: [
+                        {
+                            src: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" fill="%232a5298"/><text x="256" y="300" font-family="Arial" font-size="200" fill="white" text-anchor="middle">SMCC</text></svg>',
+                            sizes: '512x512',
+                            type: 'image/svg+xml'
+                        }
+                    ]
+                };
+
+                const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+                const manifestUrl = URL.createObjectURL(manifestBlob);
+                
+                let manifestLink = document.querySelector('link[rel="manifest"]');
+                if (!manifestLink) {
+                    manifestLink = document.createElement('link');
+                    manifestLink.rel = 'manifest';
+                    document.head.appendChild(manifestLink);
+                }
+                manifestLink.href = manifestUrl;
+
+                // Install prompt
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    e.preventDefault();
+                    this.deferredPrompt = e;
+                    document.getElementById('installPrompt').classList.add('active');
+                });
+            }
+
+            setupServiceWorker() {
+                if ('serviceWorker' in navigator) {
+                    const sw = `
+                        self.addEventListener('install', (event) => {
+                            event.waitUntil(
+                                caches.open('smcc-v1').then((cache) => {
+                                    return cache.addAll([
+                                        '/',
+                                        '/index.html'
+                                    ]);
+                                })
+                            );
+                        });
+
+                        self.addEventListener('fetch', (event) => {
+                            event.respondWith(
+                                caches.match(event.request).then((response) => {
+                                    return response || fetch(event.request);
+                                })
+                            );
+                        });
+                    `;
+                    
+                    const swBlob = new Blob([sw], { type: 'application/javascript' });
+                    const swUrl = URL.createObjectURL(swBlob);
+                    
+                    navigator.serviceWorker.register(swUrl);
+                }
+            }
+
+            handleLogin(e) {
+                e.preventDefault();
+                const teacherId = document.getElementById('teacherId').value;
+                const password = document.getElementById('password').value;
+
+                // Simple authentication (in production, use proper authentication)
+                if (teacherId && password) {
+                    this.currentUser = { id: teacherId, name: 'Teacher' };
+                    localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+                    this.showAdminDashboard();
+                } else {
+                    alert('Please enter valid credentials');
+                }
+            }
+
+            handleLogout() {
+                this.currentUser = null;
+                localStorage.removeItem('currentUser');
+                document.getElementById('loginSection').style.display = 'block';
+                document.getElementById('adminDashboard').classList.remove('active');
+            }
+
+            showAdminDashboard() {
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('adminDashboard').classList.add('active');
+                this.loadCMSData();
+            }
+
+            // Data Management
+            loadAllData() {
+                this.loadPrograms();
+                this.loadAnnouncements();
+                this.loadEvents();
+                this.loadGallery();
+            }
+
+            loadPrograms() {
+                const programs = JSON.parse(localStorage.getItem('programs') || '[]');
+                const container = document.getElementById('programsContainer');
+                container.innerHTML = '';
+                
+                programs.forEach(program => {
+                    const programCard = document.createElement('div');
+                    programCard.className = 'col-md-6 col-lg-4';
+                    programCard.innerHTML = `
+                        <div class="program-card">
+                            <h4>${program.name}</h4>
+                            <p>${program.description}</p>
+                            <small><strong>Duration:</strong> ${program.duration}</small>
+                        </div>
+                    `;
+                    container.appendChild(programCard);
+                });
+
+                if (programs.length === 0) {
+                    // Default programs
+                    const defaultPrograms = [
+                        {
+                            name: "Bachelor of Elementary Education",
+                            description: "Prepare future educators with comprehensive teaching methodologies and child development principles.",
+                            duration: "4 years"
+                        },
+                        {
+                            name: "Bachelor of Secondary Education",
+                            description: "Develop skilled secondary school teachers with specialization in various academic subjects.",
+                            duration: "4 years"
+                        },
+                        {
+                            name: "Bachelor of Science in Business Administration",
+                            description: "Build strong foundation in business principles, management, and entrepreneurship.",
+                            duration: "4 years"
+                        },
+                        {
+                            name: "Senior High School Program",
+                            description: "Academic and Technical-Vocational tracks for holistic student development.",
+                            duration: "2 years"
+                        }
+                    ];
+                    
+                    localStorage.setItem('programs', JSON.stringify(defaultPrograms));
+                    this.loadPrograms();
+                }
+            }
+
+            loadAnnouncements() {
+                const announcements = JSON.parse(localStorage.getItem('announcements') || '[]');
+                const container = document.getElementById('announcementsContainer');
+                container.innerHTML = '';
+                
+                announcements.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5).forEach(announcement => {
+                    const announcementItem = document.createElement('div');
+                    announcementItem.className = 'announcement-item';
+                    
+                    const priorityClass = announcement.priority === 'urgent' ? 'bg-danger text-white' : 
+                                        announcement.priority === 'high' ? 'bg-warning' : '';
+                    
+                    announcementItem.innerHTML = `
+                        <h5>${announcement.title}</h5>
+                        <p>${announcement.content}</p>
+                        <small class="${priorityClass} p-1 rounded">Priority: ${announcement.priority}</small>
+                        <small class="float-end">${new Date(announcement.date).toLocaleDateString()}</small>
+                    `;
+                    container.appendChild(announcementItem);
+                });
+
+                if (announcements.length === 0) {
+                    const defaultAnnouncements = [
+                        {
+                            title: "Welcome to New Academic Year",
+                            content: "We welcome all students to the new academic year 2024-2025. Classes start on June 15, 2024.",
+                            priority: "normal",
+                            date: new Date().toISOString()
+                        },
+                        {
+                            title: "Enrollment Period Extended",
+                            content: "Enrollment period has been extended until June 30, 2024. Please complete your registration requirements.",
+                            priority: "high",
+                            date: new Date().toISOString()
+                        }
+                    ];
+                    
+                    localStorage.setItem('announcements', JSON.stringify(defaultAnnouncements));
+                    this.loadAnnouncements();
+                }
+            }
+
+            loadEvents() {
+                const events = JSON.parse(localStorage.getItem('events') || '[]');
+                const container = document.getElementById('eventsContainer');
+                container.innerHTML = '';
+                
+                const today = new Date();
+                const upcomingEvents = events.filter(event => new Date(event.date) >= today)
+                    .sort((a, b) => new Date(a.date) - new Date(b.date))
+                    .slice(0, 6);
+                
+                upcomingEvents.forEach(event => {
+                    const eventCard = document.createElement('div');
+                    eventCard.className = 'event-card';
+                    eventCard.innerHTML = `
+                        <div class="d-flex align-items-start">
+                            <div class="event-date">
+                                ${new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                            </div>
+                            <div class="flex-grow-1">
+                                <h5>${event.name}</h5>
+                                <p><strong>Time:</strong> ${event.time}</p>
+                                <p><strong>Location:</strong> ${event.location}</p>
+                                <p>${event.description}</p>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(eventCard);
+                });
+
+                if (events.length === 0) {
+                    const defaultEvents = [
+                        {
+                            name: "Foundation Day Celebration",
+                            date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                            time: "8:00 AM",
+                            location: "School Gymnasium",
+                            description: "Annual foundation day celebration with cultural presentations and competitions."
+                        },
+                        {
+                            name: "Parent-Teacher Conference",
+                            date: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                            time: "1:00 PM",
+                            location: "Various Classrooms",
+                            description: "Meeting between parents and teachers to discuss student progress."
+                        }
+                    ];
+                    
+                    localStorage.setItem('events', JSON.stringify(defaultEvents));
+                    this.loadEvents();
+                }
+            }
+
+            loadGallery() {
+                const gallery = JSON.parse(localStorage.getItem('gallery') || '[]');
+                const container = document.getElementById('galleryContainer');
+                container.innerHTML = '';
+                
+                gallery.slice(0, 8).forEach(item => {
+                    const galleryItem = document.createElement('div');
+                    galleryItem.className = 'col-md-3 col-sm-6';
+                    galleryItem.innerHTML = `
+                        <div class="gallery-item">
+                            <img src="${item.url || 'https://via.placeholder.com/300x200?text=School+Photo'}" 
+                                 alt="${item.title}" class="img-fluid">
+                            <div class="p-2">
+                                <h6>${item.title}</h6>
+                                <small>${item.description}</small>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(galleryItem);
+                });
+
+                if (gallery.length === 0) {
+                    const defaultGallery = [
+                        {
+                            title: "School Building",
+                            url: "https://via.placeholder.com/300x200?text=School+Building",
+                            description: "Main academic building"
+                        },
+                        {
+                            title: "Graduation Day",
+                            url: "https://via.placeholder.com/300x200?text=Graduation",
+                            description: "Class of 2024 graduation ceremony"
+                        },
+                        {
+                            title: "Science Laboratory",
+                            url: "https://via.placeholder.com/300x200?text=Science+Lab",
+                            description: "Modern science laboratory facilities"
+                        },
+                        {
+                            title: "School Library",
+                            url: "https://via.placeholder.com/300x200?text=Library",
+                            description: "Well-equipped library with extensive collection"
+                        }
+                    ];
+                    
+                    localStorage.setItem('gallery', JSON.stringify(defaultGallery));
+                    this.loadGallery();
+                }
+            }
+
+            // CMS Handlers
+            handleProgramSubmit(e) {
+                e.preventDefault();
+                const programs = JSON.parse(localStorage.getItem('programs') || '[]');
+                const program = {
+                    name: document.getElementById('programName').value,
+                    description: document.getElementById('programDescription').value,
+                    duration: document.getElementById('programDuration').value
+                };
+                
+                programs.push(program);
+                localStorage.setItem('programs', JSON.stringify(programs));
+                
+                document.getElementById('programForm').reset();
+                this.loadPrograms();
+                this.loadCMSData();
+                alert('Program added successfully!');
+            }
+
+            handleAnnouncementSubmit(e) {
+                e.preventDefault();
+                const announcements = JSON.parse(localStorage.getItem('announcements') || '[]');
+                const announcement = {
+                    title: document.getElementById('announcementTitle').value,
+                    content: document.getElementById('announcementContent').value,
+                    priority: document.getElementById('announcementPriority').value,
+                    date: new Date().toISOString()
+                };
+                
+                announcements.push(announcement);
+                localStorage.setItem('announcements', JSON.stringify(announcements));
+                
+                document.getElementById('announcementForm').reset();
+                this.loadAnnouncements();
+                this.loadCMSData();
+                alert('Announcement added successfully!');
+            }
+
+            handleEventSubmit(e) {
+                e.preventDefault();
+                const events = JSON.parse(localStorage.getItem('events') || '[]');
+                const event = {
+                    name: document.getElementById('eventName').value,
+                    date: document.getElementById('eventDate').value,
+                    time: document.getElementById('eventTime').value,
+                    location: document.getElementById('eventLocation').value,
+                    description: document.getElementById('eventDescription').value
+                };
+                
+                events.push(event);
+                localStorage.setItem('events', JSON.stringify(events));
+                
+                document.getElementById('eventForm').reset();
+                this.loadEvents();
+                this.loadCMSData();
+                alert('Event added successfully!');
+            }
+
+            handleGallerySubmit(e) {
+                e.preventDefault();
+                const gallery = JSON.parse(localStorage.getItem('gallery') || '[]');
+                const imageUrl = document.getElementById('imageUrl').value;
+                const imageFile = document.getElementById('imageFile').files[0];
+                
+                if (imageFile) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const item = {
+                            title: document.getElementById('imageTitle').value,
+                            url: e.target.result,
+                            description: document.getElementById('imageDescription').value
+                        };
+                        
+                        gallery.push(item);
+                        localStorage.setItem('gallery', JSON.stringify(gallery));
+                        
+                        document.getElementById('galleryForm').reset();
+                        this.loadGallery();
+                        this.loadCMSData();
+                        alert('Image added successfully!');
+                    };
+                    reader.readAsDataURL(imageFile);
+                } else if (imageUrl) {
+                    const item = {
+                        title: document.getElementById('imageTitle').value,
+                        url: imageUrl,
+                        description: document.getElementById('imageDescription').value
+                    };
+                    
+                    gallery.push(item);
+                    localStorage.setItem('gallery', JSON.stringify(gallery));
+                    
+                    document.getElementById('galleryForm').reset();
+                    this.loadGallery();
+                    this.loadCMSData();
+                    alert('Image added successfully!');
+                } else {
+                    alert('Please provide an image URL or take a photo');
+                }
+            }
+
+            loadCMSData() {
+                if (!this.currentUser) return;
+
+                // Load programs list
+                const programs = JSON.parse(localStorage.getItem('programs') || '[]');
+                const programsList = document.getElementById('programsList');
+                programsList.innerHTML = '<h4>Current Programs</h4>';
+                programs.forEach((program, index) => {
+                    programsList.innerHTML += `
+                        <div class="card mb-2">
+                            <div class="card-body">
+                                <h6>${program.name}</h6>
+                                <p>${program.description}</p>
+                                <button class="btn btn-sm btn-danger" onclick="schoolCMS.deleteItem('programs', ${index})">Delete</button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                // Load announcements list
+                const announcements = JSON.parse(localStorage.getItem('announcements') || '[]');
+                const announcementsList = document.getElementById('announcementsList');
+                announcementsList.innerHTML = '<h4>Current Announcements</h4>';
+                announcements.slice(-10).reverse().forEach((announcement, index) => {
+                    announcementsList.innerHTML += `
+                        <div class="card mb-2">
+                            <div class="card-body">
+                                <h6>${announcement.title}</h6>
+                                <p>${announcement.content}</p>
+                                <small>Priority: ${announcement.priority}</small>
+                                <button class="btn btn-sm btn-danger" onclick="schoolCMS.deleteItem('announcements', ${announcements.length - 1 - index})">Delete</button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                // Load events list
+                const events = JSON.parse(localStorage.getItem('events') || '[]');
+                const eventsList = document.getElementById('eventsList');
+                eventsList.innerHTML = '<h4>Current Events</h4>';
+                events.forEach((event, index) => {
+                    eventsList.innerHTML += `
+                        <div class="card mb-2">
+                            <div class="card-body">
+                                <h6>${event.name}</h6>
+                                <p><strong>Date:</strong> ${event.date} at ${event.time}</p>
+                                <p><strong>Location:</strong> ${event.location}</p>
+                                <p>${event.description}</p>
+                                <button class="btn btn-sm btn-danger" onclick="schoolCMS.deleteItem('events', ${index})">Delete</button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                // Load gallery list
+                const gallery = JSON.parse(localStorage.getItem('gallery') || '[]');
+                const galleryList = document.getElementById('galleryList');
+                galleryList.innerHTML = '<h4>Current Gallery</h4>';
+                gallery.forEach((item, index) => {
+                    galleryList.innerHTML += `
+                        <div class="card mb-2">
+                            <div class="card-body">
+                                <h6>${item.title}</h6>
+                                <img src="${item.url}" alt="${item.title}" style="max-width: 100px; max-height: 100px; object-fit: cover;">
+                                <p>${item.description}</p>
+                                <button class="btn btn-sm btn-danger" onclick="schoolCMS.deleteItem('gallery', ${index})">Delete</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            deleteItem(type, index) {
+                if (confirm('Are you sure you want to delete this item?')) {
+                    const items = JSON.parse(localStorage.getItem(type) || '[]');
+                    items.splice(index, 1);
+                    localStorage.setItem(type, JSON.stringify(items));
+                    
+                    this.loadAllData();
+                    this.loadCMSData();
+                    alert('Item deleted successfully!');
+                }
+            }
+
+            syncData() {
+                // In a real application, this would sync with a server
+                console.log('Syncing data with server...');
+            }
+
+            handleInstall() {
+                if (this.deferredPrompt) {
+                    this.deferredPrompt.prompt();
+                    this.deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('User accepted the install prompt');
+                        }
+                        this.deferredPrompt = null;
+                        document.getElementById('installPrompt').classList.remove('active');
+                    });
+                }
+            }
+
+            dismissInstall() {
+                document.getElementById('installPrompt').classList.remove('active');
+            }
+        }
+
+        // Initialize the CMS
+        const schoolCMS = new SchoolCMS();
+
+        // Check for saved user session
+        window.addEventListener('load', () => {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                schoolCMS.currentUser = JSON.parse(savedUser);
+                schoolCMS.showAdminDashboard();
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
