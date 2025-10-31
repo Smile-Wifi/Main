@@ -1,0 +1,17 @@
+# Normalize all text files to LF (Unix style) — ideal for web hosting
+* text=auto eol=lf
+
+# Always treat these as binary files (no line ending changes)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.mp4 binary
+*.mp3 binary
+*.ico binary
+
+# Keep Service Workers and PWA files as text
+*.js text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.json text eol=lf
