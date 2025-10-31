@@ -1,30 +1,29 @@
-const CACHE_NAME = "reeltalk-cache-v1";
-const urlsToCache = [
-  "/",
-  "/index.html",
-  "/media/logo/reeltalk.png",
-  "/media/audio/intro.mp3"
-];
+const CACHE_NAME = "reeltalk-v2"; // bump version when new mp4s added
 
-// Install
-self.addEventListener("install", e=>{
-  e.waitUntil(
-    caches.open(CACHE_NAME).then(cache=>{
-      return cache.addAll(urlsToCache);
+self.addEventListener("install", event => {
+  event.waitUntil(caches.open(CACHE_NAME));
+});
+
+self.addEventListener("fetch", event => {
+  event.respondWith(
+    caches.match(event.request).then(response => {
+      const fetchPromise = fetch(event.request).then(networkResponse => {
+        if (networkResponse && networkResponse.ok) {
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, networkResponse.clone());
+          });
+        }
+        return networkResponse;
+      });
+      return response || fetchPromise;
     })
   );
 });
 
-// Fetch handler
-self.addEventListener("fetch", e=>{
-  e.respondWith(
-    caches.match(e.request).then(response=>{
-      return response || fetch(e.request).then(fetchRes=>{
-        return caches.open(CACHE_NAME).then(cache=>{
-          cache.put(e.request, fetchRes.clone());
-          return fetchRes;
-        });
-      }).catch(()=>response);
-    })
+self.addEventListener("activate", event => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+    )
   );
 });
