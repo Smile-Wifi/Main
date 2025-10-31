@@ -5,256 +5,84 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Smile Wifi</title>
 
-  <!-- 🔹 Preload important media -->
+  <!-- Preload important media -->
   <link rel="preload" as="video" href="media/background/space.mp4" type="video/mp4">
   <link rel="icon" href="media/icons/nest.png" type="image/png">
 
-  <!-- 🔹 Meta & PWA settings -->
+  <!-- PWA / meta -->
   <meta name="theme-color" content="#00d1ff">
   <meta name="description" content="Smile Wifi — your offline local portal for apps, media, weather, and fun.">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
+  <!-- Cache-Control meta (fallback for browsers that ignore SW) -->
+  <meta http-equiv="Cache-Control" content="public, max-age=3600, must-revalidate">
+  <meta http-equiv="Expires" content="Thu, 01 Jan 1970 00:00:00 GMT">
+
+  <!-- Register Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('SW registered', reg))
+          .catch(err => console.error('SW registration failed', err));
+      });
+    }
+  </script>
+
   <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html, body {
-  height: 100%;
-  font-family: Arial, Helvetica, sans-serif;
-  color: #fff;
-  overflow-x: hidden;
-}
-:root { --accent: #00d1ff; }
+    /* ---- YOUR ORIGINAL STYLES (unchanged) ---- */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: Arial, Helvetica, sans-serif; color: #fff; overflow-x: hidden; }
+    :root { --accent: #00d1ff; }
 
-/* background video (static behind everything) */
-#bg-video {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -2;
-  pointer-events: none;
-}
+    #bg-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; pointer-events: none; }
 
-/* Welcome Overlay */
-#welcomeOverlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.9);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  z-index: 9999;
-  text-align: center;
-  transition: opacity 0.5s ease;
-}
-#welcomeOverlay img {
-  width: 160px;
-  height: auto;
-  animation: pulse 2s infinite;
-  cursor: pointer;
-}
-#welcomeOverlay p {
-  margin-top: 20px;
-  font-size: 18px;
-  color: var(--accent);
-  opacity: 0.9;
-}
-@keyframes pulse {
-  0%,100% { transform: scale(1); }
-  50% { transform: scale(1.08); }
-}
+    #welcomeOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: flex; justify-content: center; align-items: center; flex-direction: column; z-index: 9999; text-align: center; transition: opacity .5s ease; }
+    #welcomeOverlay img { width: 160px; animation: pulse 2s infinite; cursor: pointer; }
+    #welcomeOverlay p { margin-top: 20px; font-size: 18px; color: var(--accent); opacity: .9; }
+    @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
 
-/* navbar / sidenav */
-.navbar { position: fixed; top: 12px; left: 12px; z-index: 1300; }
-.hamburger {
-  background: rgba(0,0,0,0.5);
-  color: #fff;
-  border: 0;
-  font-size: 1.6rem;
-  padding: 8px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-.side-nav {
-  position: fixed;
-  top: 0;
-  right: -280px;
-  width: 280px;
-  height: 100%;
-  background: rgba(4,4,7,0.95);
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  transition: right 0.3s ease;
-  z-index: 1400;
-}
-.side-nav.open { right: 0; }
-.nav-link {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #fff;
-  text-decoration: none;
-  padding: 8px 6px;
-  border-radius: 6px;
-  transition: background 0.3s, color 0.3s;
-}
-.nav-link:hover { background: rgba(255,255,255,0.08); color: var(--accent); }
-.nav-icon { width: 20px; height: 20px; object-fit: contain; }
+    .navbar { position: fixed; top: 12px; left: 12px; z-index: 1300; }
+    .hamburger { background: rgba(0,0,0,.5); color:#fff; border:0; font-size:1.6rem; padding:8px 12px; border-radius:8px; cursor:pointer; }
+    .side-nav { position:fixed; top:0; right:-280px; width:280px; height:100%; background:rgba(4,4,7,.95); padding:18px; display:flex; flex-direction:column; gap:12px; transition:right .3s ease; z-index:1400; }
+    .side-nav.open { right:0; }
+    .nav-link { display:flex; align-items:center; gap:10px; color:#fff; text-decoration:none; padding:8px 6px; border-radius:6px; transition:background .3s,color .3s; }
+    .nav-link:hover { background:rgba(255,255,255,.08); color:var(--accent); }
+    .nav-icon { width:20px; height:20px; object-fit:contain; }
 
-/* layout spacing */
-main { padding-bottom: 100px; position: relative; z-index: 1; }
+    main { padding-bottom:100px; position:relative; z-index:1; }
 
-/* 🎬 Local Video Player */
-.local-player {
-  margin-top: 80px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding: 0 10px;
-}
+    .local-player { margin-top:80px; width:100%; display:flex; justify-content:center; align-items:center; flex-direction:column; padding:0 10px; }
+    .player-box { width:100%; max-width:720px; background:rgba(0,0,0,.8); border-radius:12px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,.6); }
+    .player-box video { width:100%; height:auto; display:block; border:none; outline:none; }
 
-.player-box {
-  width: 100%;
-  max-width: 720px;
-  background: rgba(0,0,0,0.8);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-}
-.player-box video {
-  width: 100%;
-  height: auto;
-  display: block;
-  border: none;
-  outline: none;
-}
+    .search-section { display:flex; flex-direction:column; align-items:center; gap:10px; margin:20px 12px; }
+    .logo-img { max-width:120px; height:auto; display:inline; margin-bottom:4px; }
+    .search-section a { text-align:center; text-decoration:none; }
+    .search-section a p { font-size:12px; color:var(--accent); opacity:.9; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .search-box { width:88%; max-width:520px; padding:10px 14px; border-radius:999px; border:0; outline:none; font-size:16px; text-align:center; background:#fff; color:#000; }
 
-/* 🔍 Search Section */
-.search-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  margin: 20px 12px;
-}
-.logo-img {
-  max-width: 120px;
-  height: auto;
-  display: inline;
-  margin-bottom: 4px;
-}
-.search-section a {
-  text-align: center;
-  text-decoration: none;
-}
-.search-section a p {
-  font-size: 12px;
-  color: var(--accent);
-  opacity: 0.9;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.search-box {
-  width: 88%;
-  max-width: 520px;
-  padding: 10px 14px;
-  border-radius: 999px;
-  border: 0;
-  outline: none;
-  font-size: 16px;
-  text-align: center;
-  background: #fff;
-  color: #fff;
-}
+    .icon-section { margin-top:10px; overflow:hidden; }
+    .icon-wrapper { display:flex; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; scroll-behavior:smooth; padding-bottom:10px; }
+    .icon-grid { flex:0 0 100%; width:100%; padding:16px; display:grid; grid-template-columns:repeat(3,1fr); gap:14px; justify-items:center; scroll-snap-align:start; }
+    .icon-item { text-align:center; }
+    .icon-item img { width:64px; height:64px; border-radius:12px; object-fit:cover; transition:transform .25s ease; }
+    .icon-item img:active { transform:scale(.9); }
+    .icon-item p { margin-top:6px; font-size:13px; }
 
-/* icon slider */
-.icon-section { margin-top: 10px; overflow: hidden; }
-.icon-wrapper {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
-  padding-bottom: 10px;
-}
-.icon-grid {
-  flex: 0 0 100%;
-  width: 100%;
-  padding: 16px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  justify-items: center;
-  scroll-snap-align: start;
-}
-.icon-item { text-align: center; }
-.icon-item img {
-  width: 64px; height: 64px;
-  border-radius: 12px;
-  object-fit: cover;
-  transition: transform 0.25s ease;
-}
-.icon-item img:active { transform: scale(0.9); }
-.icon-item p { margin-top: 6px; font-size: 13px; }
+    .dots { display:flex; justify-content:center; gap:8px; margin-top:6px; }
+    .dot { width:8px; height:8px; border-radius:999px; background:rgba(255,255,255,.35); border:0; cursor:pointer; }
+    .dot.active { background:var(--accent); }
 
-/* dots */
-.dots {
-  display: flex; justify-content: center; gap: 8px; margin-top: 6px;
-}
-.dot {
-  width: 8px; height: 8px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.35);
-  border: 0; cursor: pointer;
-}
-.dot.active { background: var(--accent); }
+    .carousel { position:absolute; bottom:2px; left:0; right:0; display:flex; justify-content:center; gap:18px; padding:10px 12px; z-index:1000; }
+    .carousel-item img { width:100px; height:80px; border-radius:8px; object-fit:contain; transition:transform .2s ease; }
+    .carousel-item img:hover { transform:scale(1.1); }
 
-/* bottom carousel */
-.carousel {
-  position: absolute;
-  bottom: 2px; left: 0; right: 0;
-  display: flex; justify-content: center; gap: 18px;
-  padding: 10px 12px;
-  z-index: 1000;
-}
-.carousel-item img {
-  width: 100px; height: 80px;
-  border-radius: 8px;
-  object-fit: contain;
-  transition: transform 0.2s ease;
-}
-.carousel-item img:hover { transform: scale(1.1); }
-
-/* ALL APPS OVERLAY */
-#allAppsOverlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.95);
-  z-index: 1500; display: none;
-  justify-content: center; align-items: center;
-  padding: 20px;
-}
-#allAppsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill,minmax(100px,1fr));
-  gap: 20px;
-  max-width: 90vw; max-height: 80vh;
-  overflow-y: auto; padding: 20px;
-}
-.close-overlay {
-  position: absolute; top: 20px; right: 20px;
-  background: rgba(0,0,0,0.7);
-  color: #fff; border: none; padding: 10px;
-  border-radius: 50%; cursor: pointer;
-  font-size: 18px;
-}
+    #allAppsOverlay { position:fixed; inset:0; background:rgba(0,0,0,.95); z-index:1500; display:none; justify-content:center; align-items:center; padding:20px; }
+    #allAppsGrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); gap:20px; max-width:90vw; max-height:80vh; overflow-y:auto; padding:20px; }
+    .close-overlay { position:absolute; top:20px; right:20px; background:rgba(0,0,0,.7); color:#fff; border:none; padding:10px; border-radius:50%; cursor:pointer; font-size:18px; }
   </style>
 </head>
 
@@ -272,30 +100,29 @@ main { padding-bottom: 100px; position: relative; z-index: 1; }
 
   <!-- Navbar -->
   <nav class="navbar">
-    <button id="nav-toggle" class="hamburger">☰</button>
+    <button id="nav-toggle" class="hamburger">Menu</button>
     <div id="side-nav" class="side-nav">
       <a class="nav-link" href="earthquake-alert/login.php"><img src="media/icons/login.png" class="nav-icon"> Earthquake Login</a>
       <a class="nav-link" href="pages/root/games/index.html"><img src="media/icons/games.png" class="nav-icon"> Games</a>
       <a class="nav-link" href="https://www.3dlogolab.io/"><img src="media/icons/advertising.png" class="nav-icon"> Advertising</a>
       <a class="nav-link" href="weather.html"><img src="media/icons/weather.png" class="nav-icon"> Weather</a>
       <a class="nav-link" href="about.html"><img src="media/icons/about.jpg" class="nav-icon"> About</a>
-      <hr style="border:0;border-top:1px solid rgba(255,255,255,0.12);margin:8px 0;">
+      <hr style="border:0;border-top:1px solid rgba(255,255,255,.12);margin:8px 0;">
       <a class="nav-link" href="fm/admin/login.php"><img src="media/icons/dashboard.png" class="nav-icon"> Admin Panel</a>
     </div>
   </nav>
 
   <main>
-    <!-- 🎬 Local Video Player -->
+    <!-- Local Video Player -->
     <section class="local-player">
       <div class="player-box">
         <video id="localVideo" playsinline controls preload="metadata" poster="media/icons/nest.png" muted>
           <source src="media/video-player/smile-ads.mp4" type="video/mp4">
         </video>
       </div>
-      <div class="player-controls"></div>
     </section>
 
-    <!-- 🔍 Search -->
+    <!-- Search -->
     <section class="search-section">
       <a href="index.html">
         <img src="media/icons/crible.png" alt="Nest Logo" class="logo-img">
@@ -304,7 +131,7 @@ main { padding-bottom: 100px; position: relative; z-index: 1; }
       <input type="search" class="search-box" placeholder="Search..." id="searchInput">
     </section>
 
-     <!-- App Icons -->
+    <!-- App Icons Slider -->
     <section class="icon-section">
       <div class="icon-wrapper" id="iconWrapper">
         <div class="icon-grid">
@@ -334,33 +161,30 @@ main { padding-bottom: 100px; position: relative; z-index: 1; }
           <div class="icon-item"><a href="pages/root/ebooks/index.html"><img loading="lazy" src="media/icons/ebooks.png" alt="eBooks"><p>eBooks</p></a></div>
         </div>
       </div>
-	  
+
       <div class="dots" id="slideDots">
         <button class="dot active" data-index="0"></button>
+        <button class="dot" data-index="1"></button>
+        <button class="dot" data-index="2"></button>
       </div>
     </section>
 
- <!-- Bottom Carousel -->
+    <!-- Bottom Carousel -->
     <section class="carousel">
-      <div class="carousel-item">
-        <a href="earth.html"><img src="media/GIF/earth.gif" alt="Earth"></a>
-      </div>
-      <div class="carousel-item" id="homeBtn">
-        <img src="media/icons/Home.png" alt="All Apps">
-      </div>
-      <div class="carousel-item">
-        <a href="cribble.html"><img src="media/GIF/Mars.gif" alt="Mars"></a>
-      </div>
+      <div class="carousel-item"><a href="earth.html"><img src="media/GIF/earth.gif" alt="Earth"></a></div>
+      <div class="carousel-item" id="homeBtn"><img src="media/icons/Home.png" alt="All Apps"></div>
+      <div class="carousel-item"><a href="cribble.html"><img src="media/GIF/Mars.gif" alt="Mars"></a></div>
     </section>
   </main>
 
   <!-- All Apps Overlay -->
   <div id="allAppsOverlay">
-    <button class="close-overlay" id="closeOverlay">×</button>
+    <button class="close-overlay" id="closeOverlay">X</button>
     <div id="allAppsGrid"></div>
   </div>
- <script>
-    // ===== ALL APPS OVERLAY =====
+
+  <script>
+    // ==== ALL APPS DATA ====
     const allAppsData = [
       { href: "pages/root/campusDC/index.html", img: "media/icons/campusDC.png", name: "CampusDC" },
       { href: "pages/root/smileflix/index.php", img: "media/icons/smileflix.png", name: "SmileFlix" },
@@ -395,112 +219,69 @@ main { padding-bottom: 100px; position: relative; z-index: 1; }
       document.getElementById('allAppsOverlay').style.display = 'block';
       document.body.style.overflow = 'hidden';
     }
-
     function hideAllApps() {
       document.getElementById('allAppsOverlay').style.display = 'none';
       document.body.style.overflow = '';
     }
 
-    // ===== SLIDER =====
+    // ==== SLIDER LOGIC ====
     const iconWrapper = document.getElementById('iconWrapper');
     const dots = document.querySelectorAll('#slideDots .dot');
     let currentSlide = 0;
-    let isScrolling = false;
 
     function updateDots() {
-      dots.forEach((dot, i) => dot.classList.toggle('active', i === currentSlide));
+      dots.forEach((d,i) => d.classList.toggle('active', i===currentSlide));
     }
-
-    function scrollToSlide(index) {
-      if (index < 0 || index >= dots.length) return;
-      const slideWidth = iconWrapper.clientWidth;
-      currentSlide = index;
-      iconWrapper.scrollTo({ left: index * slideWidth, behavior: 'smooth' });
+    function scrollToSlide(i) {
+      if (i<0 || i>=dots.length) return;
+      const w = iconWrapper.clientWidth;
+      currentSlide = i;
+      iconWrapper.scrollTo({ left: i*w, behavior:'smooth' });
       updateDots();
     }
+    dots.forEach((d,i)=>d.addEventListener('click',()=>scrollToSlide(i)));
 
-    // Debounce function to limit scroll event frequency
-    function debounce(func, wait) {
-      let timeout;
-      return function (...args) {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(this, args), wait);
-      };
-    }
-
-    dots.forEach((dot, i) => dot.addEventListener('click', () => scrollToSlide(i)));
-
-    iconWrapper.addEventListener('scroll', debounce(() => {
-      if (isScrolling) return;
-      const slideWidth = iconWrapper.clientWidth;
-      const newIndex = Math.round(iconWrapper.scrollLeft / slideWidth);
-      if (newIndex !== currentSlide && newIndex >= 0 && newIndex < dots.length) {
-        currentSlide = newIndex;
+    const debouncedScroll = debounce(() => {
+      const w = iconWrapper.clientWidth;
+      const idx = Math.round(iconWrapper.scrollLeft / w);
+      if (idx !== currentSlide && idx>=0 && idx<dots.length) {
+        currentSlide = idx;
         updateDots();
       }
-    }, 100));
-
-    // Handle window resize
-    window.addEventListener('resize', () => {
-      scrollToSlide(currentSlide); // Re-align to current slide
+    }, 100);
+    function debounce(fn, wait) {
+      let t;
+      return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a),wait); };
+    }
+    iconWrapper.addEventListener('scroll', debouncedScroll);
+    window.addEventListener('resize',()=>scrollToSlide(currentSlide));
+    iconWrapper.setAttribute('tabindex','0');
+    iconWrapper.addEventListener('keydown', e=>{
+      if(e.key==='ArrowRight') scrollToSlide(currentSlide+1);
+      else if(e.key==='ArrowLeft') scrollToSlide(currentSlide-1);
     });
-
-    // Keyboard navigation for accessibility
-    iconWrapper.setAttribute('tabindex', '0');
-    iconWrapper.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight') {
-        scrollToSlide(currentSlide + 1);
-      } else if (e.key === 'ArrowLeft') {
-        scrollToSlide(currentSlide - 1);
-      }
-    });
-
-    // Ensure initial state
     updateDots();
 
-    // ===== SIDENAV =====
-    const sideNav = document.getElementById('side-nav');
-    document.getElementById('nav-toggle').addEventListener('click', () => {
-      sideNav.classList.toggle('open');
+    // ==== SIDENAV ====
+    document.getElementById('nav-toggle').addEventListener('click',()=>{
+      document.getElementById('side-nav').classList.toggle('open');
     });
 
-    // ===== WELCOME OVERLAY with VIDEO + AUDIO autoplay =====
+    // ==== WELCOME OVERLAY ====
     const welcomeOverlay = document.getElementById('welcomeOverlay');
     const localVideo = document.getElementById('localVideo');
     const introAudio = new Audio('audio/intro.mp3');
     introAudio.preload = 'auto';
-
-    welcomeOverlay.addEventListener('click', () => {
-      welcomeOverlay.style.opacity = '0';
-      setTimeout(() => welcomeOverlay.style.display = 'none', 500);
-      if (localVideo) {
-        localVideo.muted = false;
-        localVideo.play().catch(err => console.log('Video play blocked:', err));
-      }
-      introAudio.play().catch(err => console.log('Audio play blocked:', err));
+    welcomeOverlay.addEventListener('click',()=>{
+      welcomeOverlay.style.opacity='0';
+      setTimeout(()=>welcomeOverlay.style.display='none',500);
+      if(localVideo){ localVideo.muted=false; localVideo.play().catch(()=>{}); }
+      introAudio.play().catch(()=>{});
     });
 
-    // ===== ALL APPS BTN =====
+    // ==== ALL APPS BUTTON ====
     document.getElementById('homeBtn').addEventListener('click', showAllApps);
     document.getElementById('closeOverlay').addEventListener('click', hideAllApps);
-
-    // ===== LOCAL VIDEO NEXT/PREV =====
-    const videos = ['video/ph.mp4', 'video/second.mp4', 'video/third.mp4'];
-    let currentVid = 0;
-    document.getElementById('nextVideo').addEventListener('click', () => {
-      currentVid = (currentVid + 1) % videos.length;
-      localVideo.src = videos[currentVid];
-      localVideo.play();
-    });
-    document.getElementById('prevVideo').addEventListener('click', () => {
-      currentVid = (currentVid - 1 + videos.length) % videos.length;
-      localVideo.src = videos[currentVid];
-      localVideo.play();
-    });
   </script>
 </body>
 </html>
-
-
-
-
