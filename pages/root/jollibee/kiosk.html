@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LocalBiz Cantilan — Offline Directory</title>
+<style>
+:root {
+  --bg:#0a0f1a;--card:#0f172a;--accent:#06b6d4;--muted:#94a3b8;--radius:14px;
+}
+body.light {
+  --bg:#f8fafc;--card:#fff;--accent:#0284c7;--muted:#475569;color:#1e293b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body {
+  font-family:'Poppins',system-ui,Roboto,Arial,sans-serif;
+  background:var(--bg);color:#e6eef6;
+  overflow-x:hidden;
+  transition:background .3s,color .3s;
+}
+body.light{color:#1e293b;}
+.topbar {
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;background:rgba(255,255,255,0.03);
+  border-bottom:1px solid rgba(255,255,255,0.05);
+  position:sticky;top:0;z-index:10;
+}
+.hamburger {
+  width:44px;height:44px;border-radius:10px;
+  background:rgba(255,255,255,0.03);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+}
+.brand {font-weight:700;font-size:18px;color:#b8f3ff;}
+.app {
+  display:flex;min-height:calc(100vh - 64px);
+  padding:16px;gap:16px;
+}
+.panel {
+  width:260px;background:rgba(255,255,255,0.03);
+  border-radius:var(--radius);padding:16px;
+}
+.search,.select {
+  width:100%;padding:10px;border-radius:10px;
+  border:1px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.02);
+  color:inherit;margin-bottom:10px;
+}
+.list {
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:14px;
+}
+.card {
+  background:var(--card);border-radius:12px;padding:12px;text-align:center;
+  transition:transform .2s,box-shadow .2s;
+}
+.card:hover {transform:translateY(-3px);box-shadow:0 8px 18px rgba(0,0,0,0.45);}
+.card img {width:80px;height:80px;border-radius:12px;object-fit:cover;margin-bottom:8px;}
+.btn {
+  padding:8px 10px;border-radius:10px;border:none;
+  background:var(--accent);color:#042;font-weight:600;cursor:pointer;
+  width:90%;margin-top:8px;
+}
+.drawer {
+  position:fixed;left:-320px;top:0;height:100%;
+  width:280px;background:#071526;
+  box-shadow:8px 0 30px rgba(0,0,0,0.6);
+  padding:18px;z-index:100;
+  transition:left .25s ease;
+  display:flex;flex-direction:column;gap:12px;
+}
+.drawer.open {left:0;}
+.btnlink {
+  display:flex;align-items:center;gap:10px;
+  padding:12px;border-radius:10px;
+  background:rgba(255,255,255,0.03);
+  color:#e6eef6;text-decoration:none;cursor:pointer;
+}
+.btnlink:hover {background:rgba(255,255,255,0.08);}
+.overlay {
+  position:fixed;inset:0;background:rgba(0,0,0,0.5);
+  display:none;z-index:90;
+}
+.modal-backdrop {
+  position:fixed;inset:0;background:rgba(0,0,0,0.5);
+  display:none;align-items:center;justify-content:center;z-index:110;
+}
+.modal {
+  background:var(--card);padding:18px;border-radius:12px;
+  max-width:460px;width:94%;
+}
+.light .modal {background:#fff;}
+.inquiry-form input,.inquiry-form textarea {
+  width:100%;margin-top:8px;padding:8px;border-radius:8px;
+  border:none;background:rgba(255,255,255,0.08);color:inherit;
+}
+.inquiry-form button {
+  margin-top:12px;padding:10px;width:100%;
+  background:var(--accent);color:#042;font-weight:600;border:none;border-radius:10px;
+}
+.toggle {cursor:pointer;padding:6px 10px;border-radius:8px;background:rgba(255,255,255,0.08);}
+
+/* --- Mobile Responsive --- */
+@media (max-width:768px){
+  .app{flex-direction:column;padding:10px;}
+  .panel{
+    width:100%;
+    order:2;
+    padding:12px;
+    background:rgba(255,255,255,0.02);
+  }
+  .list{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));}
+  .topbar{padding:10px 14px;}
+  .brand{font-size:16px;}
+  .hamburger{width:38px;height:38px;}
+  .drawer{width:240px;}
+}
+@media (max-width:480px){
+  .list{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));}
+  .card img{width:70px;height:70px;}
+  .btn{font-size:14px;padding:6px 8px;}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <div class="hamburger" id="hamb">
+      <svg width="22" height="14" viewBox="0 0 24 14">
+        <rect width="24" height="2" rx="1" fill="white"/>
+        <rect y="6" width="24" height="2" rx="1" fill="white"/>
+        <rect y="12" width="24" height="2" rx="1" fill="white"/>
+      </svg>
+    </div>
+    <div class="brand">LocalBiz — Cantilan</div>
+  </div>
+  <div class="toggle" id="modeToggle">🌙</div>
+</div>
+
+<div class="app">
+  <aside class="panel">
+    <input id="q" class="search" placeholder="Search business or service">
+    <select id="category" class="select">
+      <option value="all">All categories</option>
+      <option value="Cafe">Cafe</option>
+      <option value="Grocery">Grocery</option>
+      <option value="Salon">Salon</option>
+      <option value="Hardware">Hardware</option>
+      <option value="Clinic">Clinic</option>
+      <option value="Hotel">Hotel</option>
+    </select>
+    <button class="btn" id="exportBtn">Export Selected</button>
+  </aside>
+
+  <main class="main">
+    <div id="results" class="list"></div>
+  </main>
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="drawer" id="drawer">
+  <a href="#" class="btnlink">🏠 Home</a>
+  <a href="#" class="btnlink" id="inqBtn">📩 Inquiry</a>
+  <a href="#" class="btnlink" id="aboutBtn">ℹ️ About</a>
+  <a href="#" class="btnlink" id="mapBtn">🗺️ Map</a>
+  <a href="#" class="btnlink" id="helpBtn">❓ Help</a>
+</div>
+
+<div class="modal-backdrop" id="modalWrap">
+  <div class="modal">
+    <h3 id="mTitle">Business</h3>
+    <p id="mCategory" class="muted"></p>
+    <img id="mapPreview" src="" alt="map preview" style="width:100%;border-radius:8px;margin:10px 0;display:none;">
+    <p id="mDesc"></p>
+    <p id="mAddress" class="muted"></p>
+    <button id="selectBtn" class="btn">Select</button>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="inquiryModal">
+  <div class="modal">
+    <h3>Send Inquiry</h3>
+    <form class="inquiry-form" id="inqForm">
+      <input type="text" id="inqName" placeholder="Your Name" required>
+      <input type="email" id="inqEmail" placeholder="Your Email" required>
+      <textarea id="inqMsg" rows="4" placeholder="Your Message" required></textarea>
+      <button type="submit">Send</button>
+    </form>
+  </div>
+</div>
+
+<script>
+const businesses=[
+  {id:1,name:'Cindys Grill',category:'Cafe',desc:'Cozy café serving fresh brews.',address:'Cantilan, Surigao del Sur',logo:'assets/cindys.png',map:'assets/maps/cindys.png'},
+  {id:2,name:'7-Eleven Cantilan',category:'Grocery',desc:'Convenient essentials store.',address:'Cantilan, Surigao del Sur',logo:'assets/7-11.png',map:'assets/maps/7-11.png'},
+  {id:3,name:'CherryMar Drugstore',category:'Drugstore',desc:'Trusted pharmacy and wellness shop.',address:'Cantilan, Surigao del Sur',logo:'assets/drugstore.png',map:'assets/maps/drugstore.png'},
+  {id:4,name:'Arrezas Enterprises',category:'Hardware',desc:'Tools and construction supplies.',address:'Cantilan, Surigao del Sur',logo:'assets/hardware.png',map:'assets/maps/hardware.png'},
+  {id:5,name:'San Pedro Country Farm Hotel',category:'Hotel',desc:'Peaceful lodging and events.',address:'Cantilan, Surigao del Sur',logo:'assets/hotel.png',map:'assets/maps/hotel.png'},
+  {id:6,name:'GJ Pejero Dental Clinic',category:'Clinic',desc:'Professional dental care.',address:'Cantilan, Surigao del Sur',logo:'assets/dental.png',map:'assets/maps/dental.png'}
+];
+let selected=JSON.parse(localStorage.getItem('localbiz.sel')||'[]');
+const results=document.getElementById('results');
+function render(q='',cat='all'){
+  const search=q.toLowerCase();
+  results.innerHTML='';
+  businesses.filter(b=>{
+    return(cat==='all'||b.category===cat)&&(!search||(b.name+b.desc).toLowerCase().includes(search));
+  }).forEach(b=>{
+    const el=document.createElement('div');
+    el.className='card';
+    el.innerHTML=`<img src="${b.logo}" alt="${b.name}"><h4>${b.name}</h4><p>${b.category}</p><button class="btn">${selected.includes(b.id)?'Selected':'Select'}</button>`;
+    el.querySelector('img').onclick=()=>openModal(b);
+    el.querySelector('.btn').onclick=()=>toggle(b.id);
+    results.appendChild(el);
+  });
+}
+function toggle(id){
+  if(selected.includes(id))selected=selected.filter(x=>x!==id);else selected.push(id);
+  localStorage.setItem('localbiz.sel',JSON.stringify(selected));
+  render(document.getElementById('q').value,document.getElementById('category').value);
+}
+function openModal(b){
+  document.getElementById('mTitle').textContent=b.name;
+  document.getElementById('mCategory').textContent=b.category;
+  document.getElementById('mDesc').textContent=b.desc;
+  document.getElementById('mAddress').textContent=b.address;
+  const map=document.getElementById('mapPreview');
+  map.src=b.map; map.style.display='block';
+  document.getElementById('selectBtn').onclick=()=>{toggle(b.id);modalWrap.style.display='none';};
+  modalWrap.style.display='flex';
+}
+document.getElementById('q').oninput=e=>render(e.target.value,document.getElementById('category').value);
+document.getElementById('category').onchange=e=>render(document.getElementById('q').value,e.target.value);
+const drawer=document.getElementById('drawer'),overlay=document.getElementById('overlay');
+document.getElementById('hamb').onclick=()=>{drawer.classList.add('open');overlay.style.display='block';};
+overlay.onclick=()=>{drawer.classList.remove('open');overlay.style.display='none';};
+modalWrap.onclick=e=>{if(e.target===modalWrap)modalWrap.style.display='none';};
+const inquiryModal=document.getElementById('inquiryModal');
+document.getElementById('inqBtn').onclick=()=>{drawer.classList.remove('open');overlay.style.display='none';inquiryModal.style.display='flex';};
+inquiryModal.onclick=e=>{if(e.target===inquiryModal)inquiryModal.style.display='none';};
+document.getElementById('aboutBtn').onclick=()=>{alert('LocalBiz Cantilan — Offline Business Directory v1.0');drawer.classList.remove('open');overlay.style.display='none';};
+document.getElementById('mapBtn').onclick=()=>{alert('Offline Map: Open store details for preview');drawer.classList.remove('open');overlay.style.display='none';};
+document.getElementById('helpBtn').onclick=()=>{alert('Need help? Email support@localbizcantilan.com');drawer.classList.remove('open');overlay.style.display='none';};
+document.getElementById('inqForm').onsubmit=e=>{e.preventDefault();alert('Inquiry sent successfully!');inquiryModal.style.display='none';e.target.reset();};
+document.getElementById('exportBtn').onclick=()=>{
+  const lines=selected.map(id=>{const b=businesses.find(x=>x.id===id);return b?`${b.name} - ${b.category} - ${b.address}`:'';}).join('\n');
+  const blob=new Blob([lines||'No businesses selected'],{type:'text/plain'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='selected_businesses.txt';a.click();
+};
+document.getElementById('modeToggle').onclick=()=>{
+  document.body.classList.toggle('light');
+  document.getElementById('modeToggle').textContent=document.body.classList.contains('light')?'🌙':'☀️';
+};
+render();
+</script>
+</body>
+</html>
