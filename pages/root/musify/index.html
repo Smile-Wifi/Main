@@ -1,133 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Musify — Install App</title>
-<link rel="manifest" href="manifest.json" />
-<style>
-  html,body {
-    margin:0; padding:0;
-    width:100%; height:100%;
-    font-family:system-ui, sans-serif;
-    background: linear-gradient(135deg,#000000,#1a1a1a,#ff0050);
-    background-size:300% 300%;
-    animation:bgmove 8s infinite alternate;
-    color:#fff;
-    display:flex; align-items:center; justify-content:center;
-  }
-  @keyframes bgmove {
-    0%{background-position:0 50%;}
-    100%{background-position:100% 50%;}
-  }
-  .container {
-    text-align:center;
-    padding:20px;
-  }
-  .logo {
-    width:100px; height:100px;
-    border-radius:20px;
-    background:#fff;
-    display:flex; align-items:center; justify-content:center;
-    margin:0 auto 20px;
-  }
-  .logo img { width:80px; }
-  h1 {
-    margin:10px 0;
-    font-size:24px;
-    background:linear-gradient(to right,#ff0050,#ffcc00);
-    -webkit-background-clip:text;
-    color:transparent;
-  }
-  p {
-    max-width:280px;
-    margin:10px auto 20px;
-    opacity:0.85;
-    line-height:1.4;
-  }
-  button {
-    display:block;
-    width:200px;
-    margin:10px auto;
-    padding:12px 24px;
-    font-size:16px;
-    border:none;
-    border-radius:30px;
-    cursor:pointer;
-    transition:all 0.3s;
-  }
-  #installApp {
-    background:#ff0050;
-    color:#fff;
-    box-shadow:0 0 15px rgba(255,0,80,0.5);
-  }
-  #installApp:hover {
-    transform:scale(1.05);
-    box-shadow:0 0 25px rgba(255,0,80,0.8);
-  }
-  #alreadyApp {
-    background:#333;
-    color:#fff;
-  }
-</style>
-</head>
-<body>
-<div class="container" id="gateContainer">
-  <div class="logo"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046127.png" alt="Musify"></div>
-  <h1>Install Musify App</h1>
-  <p>To continue, please install the Musify PWA app. This keeps your access private, secure, and offline-ready.</p>
-  <button id="installApp">📲 Install Now</button>
-  <button id="alreadyApp">I already have the app</button>
-</div>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Musify Auto Installer</title>
 
-<script>
-const MAIN_APP_URL = 'https://smile-wifi.github.io/Main/';
-let deferredPrompt;
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3046/3046127.png" />
 
-/* 🧠 Detect if Musify is installed */
-function isStandalone() {
-  return (window.matchMedia('(display-mode: standalone)').matches) || (window.navigator.standalone === true);
-}
-
-/* 🚀 If app already installed, open immediately */
-if (isStandalone()) {
-  window.location.href = MAIN_APP_URL;
-}
-
-/* 📲 Catch install prompt */
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-});
-
-/* 🔘 Buttons */
-document.getElementById('installApp').onclick = async () => {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      console.log('✅ App installed');
-      window.location.href = MAIN_APP_URL;
-    } else {
-      alert('Please install the app to continue.');
+  <style>
+    * {
+      box-sizing: border-box;
     }
-  } else {
-    alert('To install, tap Share → Add to Home Screen on your browser.');
-  }
-};
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(180deg, #000 0%, #111 100%);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-family: "Segoe UI", sans-serif;
+    }
+    h1 {
+      font-size: 2.2em;
+      margin-bottom: 10px;
+    }
+    p {
+      color: #bbb;
+      max-width: 300px;
+      line-height: 1.5;
+    }
+    button {
+      background: #1db954;
+      color: #fff;
+      border: none;
+      padding: 15px 30px;
+      font-size: 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 25px;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #17a34a;
+      transform: scale(1.05);
+    }
+    #status {
+      margin-top: 20px;
+      color: #aaa;
+      font-size: 14px;
+    }
+  </style>
+</head>
 
-document.getElementById('alreadyApp').onclick = () => {
-  alert('Open the Musify App to continue.');
-};
+<body>
+  <h1>🎧 Install Musify</h1>
+  <p>Install the Musify PWA app to continue to the full experience.</p>
+  <button id="installBtn" hidden>📲 Install App</button>
+  <div id="status">Loading...</div>
 
-/* 🧩 Optional: register SW (cache/offline support) */
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js')
-      .then(() => console.log('Service Worker active'))
-      .catch(err => console.warn('SW failed', err));
-  });
-}
-</script>
+  <script>
+    const installBtn = document.getElementById('installBtn');
+    const status = document.getElementById('status');
+    let deferredPrompt;
+    const redirectLink = "https://smile-wifi.github.io/Main/";
+
+    // Detect already installed app
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      status.textContent = "✅ App already installed! Redirecting...";
+      setTimeout(() => (window.location.href = redirectLink), 2000);
+    }
+
+    // Handle install prompt
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.hidden = false;
+      status.textContent = "Ready to install Musify.";
+    });
+
+    installBtn.addEventListener('click', async () => {
+      installBtn.hidden = true;
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          status.textContent = "✅ App installed! Redirecting...";
+          setTimeout(() => (window.location.href = redirectLink), 2500);
+        } else {
+          status.textContent = "❌ Installation cancelled.";
+          installBtn.hidden = false;
+        }
+        deferredPrompt = null;
+      }
+    });
+
+    // Detect install event
+    window.addEventListener('appinstalled', () => {
+      status.textContent = "✅ Musify installed! Opening app...";
+      setTimeout(() => (window.location.href = redirectLink), 2000);
+    });
+
+    // Register Service Worker
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("sw.js")
+        .then(() => console.log("✅ Service Worker registered"))
+        .catch((err) => console.error("SW error:", err));
+    }
+  </script>
 </body>
 </html>
