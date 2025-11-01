@@ -1,7 +1,7 @@
 {
-  "name": "TikTok Style Feed",
-  "short_name": "TikTokFeed",
-  "start_url": "./",
+  "name": "Musify Auto",
+  "short_name": "Musify",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
