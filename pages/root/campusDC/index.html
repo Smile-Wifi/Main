@@ -18,7 +18,7 @@
     *{box-sizing:border-box}
    body {
   margin: 0;
-  padding-top: 40px; /* 👈 adds blank space at the top */
+  padding-top: 40px; /* adds blank space at the top */
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   background: linear-gradient(-45deg, var(--bg1), var(--bg2), var(--bg3), #dfeaff);
   background-size: 400% 400%;
@@ -167,7 +167,7 @@
     </div>
   </header>
 
-  <div class="banner">📶 You’re using the <strong>Smile Wifi learning portal</strong> — all links work locally!</div>
+  <div class="banner">You’re using the <strong>Smile Wifi learning portal</strong> — all links work locally!</div>
 
   <main class="container" role="main">
     <section class="welcome">
@@ -191,7 +191,7 @@
     </section>
 
     <section>
-      <h2 style="margin:0 0 12px;text-align:center;">🏫 Participating Schools</h2>
+      <h2 style="margin:0 0 12px;text-align:center;">Participating Schools</h2>
       <div class="grid" id="schools">
 
         <!-- School 1 -->
@@ -249,14 +249,21 @@
     </section>
   </main>
 
-  <!-- Replaced Footer with Carousel -->
-  <section class="carousel">
+  <!-- Fixed Carousel – Home button now matches the others -->
+  <section class="carousel" aria-label="Quick navigation">
     <div class="carousel-item"><a href="earth.html"><img src="GIF/earth.gif" alt="Earth"></a></div>
-     <a href="https://smile-wifi.github.io/Main"><img src="GIF/Home.png" alt="All Apps"></a>
+
+    <!-- Home button – wrapped, local, accessible -->
+    <div class="carousel-item">
+      <a href="https://smile-wifi.github.io/Main" title="Back to Home" aria-label="Back to Home">
+        <img src="GIF/Home.png" alt="Home">
+      </a>
+    </div>
+
     <div class="carousel-item"><a href="cribble.html"><img src="GIF/mars.gif" alt="Mars"></a></div>
   </section>
 
-  <button id="topBtn">↑</button>
+  <button id="topBtn" aria-label="Back to top">↑</button>
 
   <script>
     // random motivational quotes
