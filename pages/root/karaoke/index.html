@@ -7,27 +7,141 @@
 <style>
 :root{--yellow:#fdd835;--bg:#0d0d0d;--panel:#1b1b1b;--text:#fff;--accent:#ff4081}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--text);font-family:Arial,sans-serif;display:flex;flex-direction:column;align-items:center;min-height:100vh}
-header{width:100%;background:#111;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:2000}
-header h1{flex:1;text-align:center;font-size:1.4rem;color:var(--yellow)}
-#menuBtn{background:none;border:none;color:#fff;font-size:28px;cursor:pointer}
-#sidePanel{position:fixed;top:60px;left:-250px;width:250px;height:100%;background:var(--panel);padding:15px;transition:left .3s;z-index:1800}
-#sidePanel a{display:block;padding:12px;color:#fff;text-decoration:none;border-bottom:1px solid #333;font-size:16px}
-#sidePanel a:hover{background:var(--accent);color:#fff}
-#overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);display:none;z-index:1500}
-main{flex:1;width:100%;display:flex;flex-direction:column;align-items:center;padding:20px;text-align:center}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,sans-serif;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  min-height:100vh;
+}
+header{
+  width:100%;
+  background:#111;
+  padding:12px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:2000;
+}
+header h1{
+  flex:1;
+  text-align:center;
+  font-size:1.4rem;
+  color:var(--yellow);
+}
+#menuBtn{
+  background:none;
+  border:none;
+  color:#fff;
+  font-size:28px;
+  cursor:pointer;
+}
+#sidePanel{
+  position:fixed;
+  top:60px;
+  left:-250px;
+  width:250px;
+  height:100%;
+  background:var(--panel);
+  padding:15px;
+  transition:left .3s;
+  z-index:1800;
+}
+#sidePanel a{
+  display:block;
+  padding:12px;
+  color:#fff;
+  text-decoration:none;
+  border-bottom:1px solid #333;
+  font-size:16px;
+}
+#sidePanel a:hover{
+  background:var(--accent);
+  color:#fff;
+}
+#overlay{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,.5);
+  display:none;
+  z-index:1500;
+}
+main{
+  flex:1;
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:20px;
+  text-align:center;
+}
 .notice{color:#90caf9;margin-bottom:10px}
 .search-box{width:100%;max-width:600px;margin-bottom:15px}
-.search-box input{width:100%;padding:10px 14px;border-radius:8px;border:none;font-size:1rem;outline:none}
+.search-box input{
+  width:100%;
+  padding:10px 14px;
+  border-radius:8px;
+  border:none;
+  font-size:1rem;
+  outline:none;
+}
 .player-container{width:100%;max-width:720px;margin-bottom:20px}
 video{width:100%;border-radius:10px;background:#000}
-.song-list{width:100%;max-width:600px;background:#1b1b1b;border-radius:10px;padding:10px;overflow-y:auto;max-height:350px}
-.song{padding:10px 12px;border-bottom:1px solid #333;cursor:pointer;transition:background .2s}
+.song-list{
+  width:100%;
+  max-width:600px;
+  background:#1b1b1b;
+  border-radius:10px;
+  padding:10px;
+  overflow-y:auto;
+  max-height:350px;
+}
+.song{
+  padding:10px 12px;
+  border-bottom:1px solid #333;
+  cursor:pointer;
+  transition:background .2s;
+}
 .song:last-child{border-bottom:none}
 .song:hover{background:#333}
 .song.active{background:var(--yellow);color:#000;font-weight:bold}
-footer{background:#111;width:100%;text-align:center;padding:10px;color:#777;font-size:.85rem}
-#loading{color:#aaa;font-style:italic}
+
+/* Footer GIF Landscape */
+footer {
+  background:#111;
+  width:100%;
+  padding:12px 0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:60px;
+  border-top:2px solid #222;
+}
+footer img {
+  width:70px;
+  height:70px;
+  object-fit:cover;
+  border-radius:50%;
+  cursor:pointer;
+  transition:transform .3s ease;
+}
+footer img:hover {
+  transform:scale(1.2);
+}
+footer small {
+  color:#888;
+  display:block;
+  text-align:center;
+  margin-top:6px;
+  font-size:.8rem;
+}
 </style>
 </head>
 <body>
@@ -57,17 +171,20 @@ footer{background:#111;width:100%;text-align:center;padding:10px;color:#777;font
   </div>
 </main>
 
-<footer>© <span id="year"></span> Smile Wi-Fi Karaoke</footer>
+<!-- Footer GIF Landscape -->
+<footer>
+  <a href="earth.html"><img src="GIF/earth.gif" alt="Earth"></a>
+  <a href="https://smile-wifi.github.io/Main"><img src="GIF/Home.png" alt="Home"></a>
+  <a href="mars.html"><img src="GIF/mars.gif" alt="Mars"></a>
+</footer>
 
 <script>
 // ---- Config -------------------------------------------------
 const REPO_OWNER = 'Smile-Wifi';
 const REPO_NAME  = 'karaoke-auto';
-const BRANCH     = 'main';               // change if you use "master"
+const BRANCH     = 'main';               
 const RAW_BASE   = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}`;
 // -------------------------------------------------------------
-
-document.getElementById('year').textContent = new Date().getFullYear();
 
 const player     = document.getElementById('player');
 const songList   = document.getElementById('songList');
@@ -89,7 +206,6 @@ async function loadMP4sFromGitHub() {
     if (!resp.ok) throw new Error(`GitHub API ${resp.status}`);
     const data = await resp.json();
 
-    // Collect every .mp4 path
     songs = data.tree
       .filter(item => item.type === 'blob' && item.path.toLowerCase().endsWith('.mp4'))
       .map(item => item.path)
@@ -125,7 +241,7 @@ function renderSongs() {
 }
 
 function cleanName(path) {
-  const name = path.split('/').pop();               // file name only
+  const name = path.split('/').pop();
   return decodeURIComponent(name)
     .replace(/\.mp4$/i, '')
     .replace(/_/g, ' ')
