@@ -10,7 +10,7 @@ const PRECACHE = [
   '/media/icons/banner.png',
   '/media/icons/nest.png',
   '/media/icons/crible.png',
-  '/media/video-player/smile-ads.mp4',
+  '/media/video-player/ad3.mp4',
   '/audio/intro.mp3',
   // Add more critical files here if you want
 ];
@@ -56,4 +56,5 @@ self.addEventListener('activate', e => {
       keys.filter(k => !expected.includes(k)).map(k => caches.delete(k))
     ))
   );
+
 });
