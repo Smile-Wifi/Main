@@ -43,7 +43,7 @@
     #welcomeOverlay p { margin-top: 20px; font-size: 18px; color: var(--accent); opacity: .9; }
     @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
 
-    .navbar { position: fixed; top: 12px; left: 12px; z-index: 1300; }
+    .navbar { position: fixed; top: 12px; left: -20px; z-index: 1300;padding: 20px; }
     .hamburger { background: rgba(0,0,0,.5); color:#fff; border:0; font-size:1.6rem; padding:8px 12px; border-radius:8px; cursor:pointer; }
     .side-nav { position:fixed; top:0; right:-280px; width:280px; height:100%; background:rgba(4,4,7,.95); padding:18px; display:flex; flex-direction:column; gap:12px; transition:right .3s ease; z-index:1400; }
     .side-nav.open { right:0; }
@@ -405,4 +405,3 @@
   </script>
 </body>
 </html>
-
