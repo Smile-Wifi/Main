@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Saint Michael College, Cantilan, Inc.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --primary: #003082;
+            --secondary: #f5f7fa;
+            --accent: #ff9d00;
+            --text: #222;
+            --light: #fff;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background: var(--secondary);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        img {
+            max-width: 100%;
+            display: block;
+        }
+        header {
+            background: var(--primary);
+            color: var(--light);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            padding: 40px 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: auto;
+        }
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: 0.5px;
+        }
+        .logo img {
+            height: 50px;
+        }
+        #nav-links {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+        }
+        #nav-links a {
+            color: var(--light);
+            transition: 0.3s;
+        }
+        #nav-links a:hover {
+            color: var(--accent);
+        }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--light);
+            border-radius: 2px;
+        }
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+            #nav-links {
+                position: absolute;
+                top: 100%;
+                right: 0;
+                background: var(--primary);
+                flex-direction: column;
+                width: 200px;
+                padding: 1rem;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+            }
+            #nav-links.open {
+                transform: translateX(0);
+            }
+        }
+        .hero {
+            background: url("bg.jpg") center/cover no-repeat;
+            height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--light);
+            position: relative;
+        }
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .btn {
+            background: var(--accent);
+            color: var(--light);
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: #e08c00;
+        }
+        section {
+            padding: 3rem 0;
+        }
+        h2 {
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--primary);
+        }
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        .card {
+            background: var(--light);
+            border-radius: 6px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            transition: 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+        }
+        .card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        #announcements ul {
+            list-style: none;
+        }
+        #announcements li {
+            background: var(--light);
+            margin-bottom: 1rem;
+            padding: 1rem 1.25rem;
+            border-left: 4px solid var(--accent);
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .date {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        .quicklink {
+            display: inline-block;
+            margin: 0.5rem 0.5rem 0 0;
+            background: var(--primary);
+            color: var(--light);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .quicklink:hover {
+            background: var(--accent);
+        }
+        /* Single-line landscape footer */
+        footer {
+            background: var(--primary);
+            color: var(--light);
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+        .footer-line {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .footer-line img {
+            height: 30px;
+            transition: transform 0.3s;
+        }
+        .footer-line img:hover {
+            transform: scale(1.15);
+        }
+        .txt-center {
+            text-align: center;
+        }
+        .mt-1 {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="container">
+            <nav aria-label="Primary">
+                <div class="logo">
+                    <img src="smcci.png" alt="SMC Logo">
+                    <span>SMC Cantilan</span>
+                </div>
+                <ul id="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#announcements">Announcements</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <div class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Welcome to Saint Michael College</h1>
+            <p>Shaping Future Leaders in Cantilan.</p>
+            <a href="#announcements" class="btn">See Announcements</a>
+        </div>
+    </section>
+
+    <!-- ANNOUNCEMENTS -->
+    <section id="announcements">
+        <div class="container">
+            <h2>📢 School Announcements</h2>
+            <ul id="announcement-list"></ul>
+            <div class="txt-center mt-1">
+                <button class="btn" id="add-announcement-btn">+ Add New</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services">
+        <div class="container">
+            <h2>Student Quick Links</h2>
+            <div class="cards">
+                <div class="card">
+                    <h3>Enrollment</h3>
+                    <p>Register online, upload requirements, and view assessment.</p>
+                    <a class="quicklink" href="enrollment.html">Enroll Now</a>
+                </div>
+                <div class="card">
+                    <h3>Grades &amp; TOR</h3>
+                    <p>Check your grades, request TOR, and track completion.</p>
+                    <a class="quicklink" href="student-portal.html">Student Portal</a>
+                </div>
+                <div class="card">
+                    <h3>Library</h3>
+                    <p>Search the catalogue, reserve books, and see due dates.</p>
+                    <a class="quicklink" href="library.html">Library System</a>
+                </div>
+                <div class="card">
+                    <h3>Scholarships</h3>
+                    <p>Apply for merit &amp; need-based scholarships.</p>
+                   <a class="quicklink" href="scholarships.html">Scholarship Desk</a>
+                </div>
+                <div class="card">
+                    <h3>Calendar</h3>
+                    <p>Semestral calendar of activities, exams, and holidays.</p>
+                   <a class="quicklink" href="calendar.html">Academic Calendar</a>
+                </div>
+                <div class="card">
+                    <h3>Support</h3>
+                    <p>IT help-desk, lost ID replacement, and inquiry form.</p>
+                    <a class="quicklink" href="support.html">Get Help</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- FOOTER SINGLE LINE -->
+    <footer>
+        <div class="container footer-line">
+            <a href="earth.html"><img src="GIF/earth.gif" alt="Earth"></a>
+            <a href="https://smile-wifi.github.io/Main"><img src="GIF/Home.png" alt="Home"></a>
+            <a href="mars.html"><img src="GIF/mars.gif" alt="Mars"></a>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        /* Mobile nav toggle */
+        const hamburger = document.getElementById('hamburger');
+        const navLinks  = document.getElementById('nav-links');
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+            const expanded = navLinks.classList.contains('open');
+            hamburger.setAttribute('aria-expanded', expanded);
+        });
+
+        /* Dynamic year */
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        /* Announcement CRUD */
+        const annList = document.getElementById('announcement-list');
+        const addBtn  = document.getElementById('add-announcement-btn');
+
+        let announcements = JSON.parse(localStorage.getItem('smcAnnouncements')) || [
+            {id: 1, text: "Enrollment for 2nd Semester AY 2024-25 is now open.", date: "2025-11-04"},
+            {id: 2, text: "Mid-term exams scheduled on Nov 18-22.", date: "2025-11-01"},
+            {id: 3, text: "Foundation Week celebration on Dec 8-12.", date: "2025-10-28"}
+        ];
+
+        function renderAnnouncements() {
+            annList.innerHTML = '';
+            announcements.forEach(ann => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${ann.text}</span>
+                    <span class="date">${ann.date} <button onclick="deleteAnn(${ann.id})" style="margin-left:8px;background:none;border:none;color:#d33;cursor:pointer;font-weight:bold;">✖</button></span>
+                `;
+                annList.appendChild(li);
+            });
+        }
+        renderAnnouncements();
+
+        function deleteAnn(id) {
+            announcements = announcements.filter(a => a.id !== id);
+            saveAndRender();
+        }
+
+        addBtn.addEventListener('click', () => {
+            const text = prompt("New announcement:");
+            if (!text) return;
+            const newAnn = {
+                id: Date.now(),
+                text,
+                date: new Date().toISOString().slice(0,10)
+            };
+            announcements.unshift(newAnn);
+            saveAndRender();
+        });
+
+        function saveAndRender() {
+            localStorage.setItem('smcAnnouncements', JSON.stringify(announcements));
+            renderAnnouncements();
+        }
+    </script>
+</body>
+</html>

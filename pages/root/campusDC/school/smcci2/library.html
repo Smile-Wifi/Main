@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Library – Saint Michael College</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --primary: #003082;
+            --secondary: #f5f7fa;
+            --accent: #ff9d00;
+            --text: #222;
+            --light: #fff;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background: var(--secondary);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: var(--primary);
+            color: var(--light);
+            padding: 1rem 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: auto;
+        }
+        h1, h2 {
+            color: var(--primary);
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        nav a {
+            color: var(--accent);
+        }
+        main {
+            flex: 1;
+            padding: 2rem 0;
+        }
+        form label {
+            display: block;
+            margin: 0.75rem 0 0.25rem;
+            font-weight: 600;
+        }
+        form input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .btn {
+            background: var(--accent);
+            color: var(--light);
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.3s;
+            margin-top: 1rem;
+        }
+        .btn:hover {
+            background: #e08c00;
+        }
+        footer {
+            background: var(--primary);
+            color: var(--light);
+            text-align: center;
+            padding: 1rem 0;
+            font-size: 0.85rem;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Library System</h1>
+            <nav><a href="index.html">← Back to Home</a></nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- LOGIN SECTION -->
+        <section id="loginSec">
+            <h2>Student Login Required</h2>
+            <form id="libLoginForm">
+                <label>Student ID
+                    <input type="text" id="sid" required placeholder="e.g. 2021-001234">
+                </label>
+                <label>PIN / Password
+                    <input type="password" id="pin" required>
+                </label>
+                <button type="submit" class="btn">Login</button>
+                <p style="color:crimson;margin-top:0.5rem" id="errMsg"></p>
+            </form>
+        </section>
+
+        <!-- LIBRARY DASHBOARD (hidden until login) -->
+        <section id="libDash" class="hidden">
+            <h2>Search the Catalogue</h2>
+            <form>
+                <input type="text" placeholder="Title, author, ISBN…">
+                <button class="btn">Search</button>
+            </form>
+
+            <h2>Your Account</h2>
+            <ul>
+                <li>Checked-out books: 2</li>
+                <li>Due date: 2025-11-25</li>
+                <li>Outstanding fines: ₱0.00</li>
+            </ul>
+            <p>To reserve, renew, or suggest a book, please visit the circulation desk.</p>
+
+            <button class="btn" onclick="logout()">Logout</button>
+        </section>
+    </main>
+
+    <footer>© <span id="year"></span> Saint Michael College, Cantilan, Inc.</footer>
+
+    <script>
+        const loginSec = document.getElementById('loginSec');
+        const libDash  = document.getElementById('libDash');
+        const form     = document.getElementById('libLoginForm');
+        const errMsg   = document.getElementById('errMsg');
+
+        // --- DEMO credentials ---
+        const VALID_ID  = 'demo';
+        const VALID_PIN = 'demo123';
+
+        // --- Check session on load ---
+        if (sessionStorage.getItem('libLoggedIn') === 'true') {
+            showDashboard();
+        }
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            const sid = document.getElementById('sid').value.trim();
+            const pin = document.getElementById('pin').value.trim();
+
+            if (sid === VALID_ID && pin === VALID_PIN) {
+                sessionStorage.setItem('libLoggedIn', 'true');
+                errMsg.textContent = '';
+                showDashboard();
+            } else {
+                errMsg.textContent = 'Invalid ID or password.';
+            }
+        });
+
+        function showDashboard() {
+            loginSec.classList.add('hidden');
+            libDash.classList.remove('hidden');
+        }
+
+        function logout() {
+            sessionStorage.removeItem('libLoggedIn');
+            loginSec.classList.remove('hidden');
+            libDash.classList.add('hidden');
+            form.reset();
+        }
+
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
