@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PH Emergency Response - LGU Contact Directory</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0f0f12 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+			padding: 40px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .emergency-strip {
+            background: #ff4757;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+        }
+
+        .emergency-strip h2 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .emergency-strip .hotline {
+            font-size: 2.2rem;
+            font-weight: bold;
+            background: white;
+            color: #ff4757;
+            padding: 5px 15px;
+            border-radius: 25px;
+            display: inline-block;
+            margin: 5px;
+        }
+
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .search-box {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .location-btn {
+            background: #2ed573;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .location-btn:hover {
+            background: #26d063;
+            transform: translateY(-2px);
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .filter-tab {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .filter-tab.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .contact-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        }
+
+        .contact-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .agency-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .pnp { background: #3742fa; }
+        .bfp { background: #ff6348; }
+        .redcross { background: #e74c3c; }
+        .coastguard { background: #2ed573; }
+        .hospital { background: #3498db; }
+        .mdrrmo { background: #f39c12; }
+
+        .agency-info h3 {
+            color: #2c3e50;
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .agency-info .location {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .contact-details {
+            margin-top: 20px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            background: #e9ecef;
+        }
+
+        .contact-item i {
+            width: 20px;
+            color: #667eea;
+            text-align: center;
+        }
+
+        .contact-item a {
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .contact-item a:hover {
+            color: #667eea;
+        }
+
+        .emergency-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .emergency-btn:hover {
+            background: #ff3742;
+            transform: scale(1.02);
+        }
+
+        .location-status {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+            display: none;
+        }
+
+        .location-status.show {
+            display: block;
+        }
+
+        .nearby-contacts {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ffeaa7;
+            display: none;
+        }
+
+        .nearby-contacts.show {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .emergency-strip h2 {
+                font-size: 1.5rem;
+            }
+
+            .emergency-strip .hotline {
+                font-size: 1.8rem;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            .contacts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-card {
+                padding: 20px;
+            }
+
+            .filter-tabs {
+                justify-content: center;
+            }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: white;
+            font-size: 1.2rem;
+            margin: 20px 0;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1></i>Smile Emergency Hub</h1>
+            <p>Municipality of Cantilan</p>
+        </div>
+
+        <div class="emergency-strip">
+            <h2><i class="fas fa-exclamation-triangle"></i> NATIONAL EMERGENCY HOTLINE</h2>
+            <div class="hotline">911</div>
+            <p>For Police, Fire, Medical & Rescue Emergencies</p>
+        </div>
+
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search by agency, location, or service...">
+                <button class="location-btn" id="locationBtn">
+                    <i class="fas fa-location-arrow"></i>
+                    Find Nearby Services
+                </button>
+            </div>
+
+            <div class="filter-tabs">
+                <div class="filter-tab active" data-filter="all">All Services</div>
+                <div class="filter-tab" data-filter="pnp">Police (PNP)</div>
+                <div class="filter-tab" data-filter="bfp">Fire (BFP)</div>
+                <div class="filter-tab" data-filter="hospital">Hospitals</div>
+                <div class="filter-tab" data-filter="redcross">Red Cross</div>
+                <div class="filter-tab" data-filter="coastguard">Coast Guard</div>
+                <div class="filter-tab" data-filter="mdrrmo">Disaster Response</div>
+            </div>
+
+            <div class="location-status" id="locationStatus">
+                <i class="fas fa-info-circle"></i> <span id="locationText"></span>
+            </div>
+
+            <div class="nearby-contacts" id="nearbyContacts">
+                <h4><i class="fas fa-map-marker-alt"></i> Nearby Emergency Services</h4>
+                <div id="nearbyList"></div>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <div>Finding your location...</div>
+        </div>
+
+        <div class="contacts-grid" id="contactsGrid">
+            <!-- Contact cards will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Emergency contacts database
+        const emergencyContacts = [
+            {
+                id: 1,
+                agency: "Philippine National Police",
+                type: "pnp",
+                location: "National Capital Region (NCR)",
+                icon: "fas fa-shield-alt",
+                iconClass: "pnp",
+                contacts: {
+                    emergency: "117",
+                    hotline: "(02) 8722-0650",
+                    mobile: "0917-847-5757"
+                },
+                latitude: 14.5995,
+                longitude: 120.9842
+            },
+            {
+                id: 2,
+                agency: "Bureau of Fire Protection",
+                type: "bfp",
+                location: "National Capital Region (NCR)",
+                icon: "fas fa-fire-extinguisher",
+                iconClass: "bfp",
+                contacts: {
+                    hotline: "(02) 8426-0219",
+                    alternate: "(02) 8426-0246",
+                    trunkline: "(02) 8426-3812"
+                },
+                latitude: 14.5995,
+                longitude: 120.9842
+            },
+            {
+                id: 3,
+                agency: "Philippine Red Cross",
+                type: "redcross",
+                location: "National Office, Manila",
+                icon: "fas fa-plus",
+                iconClass: "redcross",
+                contacts: {
+                    emergency: "143",
+                    hotline: "(02) 8527-8385",
+                    radioRoom: "132",
+                    staff: "134"
+                },
+                latitude: 14.5995,
+                longitude: 120.9842
+            },
+            {
+                id: 4,
+                agency: "Philippine Coast Guard",
+                type: "coastguard",
+                location: "National Headquarters, Manila",
+                icon: "fas fa-anchor",
+                iconClass: "coastguard",
+                contacts: {
+                    hotline: "(02) 8527-3877",
+                    operations: "(02) 8527-8481",
+                    text: "0917-724-3682"
+                },
+                latitude: 14.5995,
+                longitude: 120.9842
+            },
+            {
+                id: 5,
+                agency: "Metro Manila Development Authority",
+                type: "mdrrmo",
+                location: "Metro Manila",
+                icon: "fas fa-traffic-light",
+                iconClass: "mdrrmo",
+                contacts: {
+                    hotline: "136",
+                    rescue: "(02) 8882-4151 loc. 337",
+                    emergency: "(02) 8882-4151 loc. 1096"
+                },
+                latitude: 14.5995,
+                longitude: 120.9842
+            },
+            {
+                id: 6,
+                agency: "Quezon City Police District",
+                type: "pnp",
+                location: "Quezon City",
+                icon: "fas fa-shield-alt",
+                iconClass: "pnp",
+                contacts: {
+                    emergency: "117",
+                    hotline: "(02) 8922-8888",
+                    mobile: "0998-598-4926"
+                },
+                latitude: 14.6500,
+                longitude: 121.0500
+            },
+            {
+                id: 7,
+                agency: "Manila Police District",
+                type: "pnp",
+                location: "City of Manila",
+                icon: "fas fa-shield-alt",
+                iconClass: "pnp",
+                contacts: {
+                    emergency: "117",
+                    hotline: "(02) 8524-2892",
+                    mobile: "0998-598-4962"
+                },
+                latitude: 14.5995,
+                longitude: 120.9842
+            },
+            {
+                id: 8,
+                agency: "Cebu City Police Office",
+                type: "pnp",
+                location: "Cebu City",
+                icon: "fas fa-shield-alt",
+                iconClass: "pnp",
+                contacts: {
+                    emergency: "117",
+                    hotline: "(032) 254-9393",
+                    mobile: "0998-598-4932"
+                },
+                latitude: 10.3157,
+                longitude: 123.8854
+            },
+            {
+                id: 9,
+                agency: "Davao City Police Office",
+                type: "pnp",
+                location: "Davao City",
+                icon: "fas fa-shield-alt",
+                iconClass: "pnp",
+                contacts: {
+                    emergency: "117",
+                    hotline: "(082) 227-5411",
+                    mobile: "0998-598-4934"
+                },
+                latitude: 7.1907,
+                longitude: 125.4553
+            },
+            {
+                id: 10,
+                agency: "Philippine General Hospital",
+                type: "hospital",
+                location: "Manila",
+                icon: "fas fa-hospital",
+                iconClass: "hospital",
+                contacts: {
+                    emergency: "(02) 8554-8400",
+                    trunkline: "(02) 8554-8399",
+                    hotline: "155-200"
+                },
+                latitude: 14.5794,
+                longitude: 120.9896
+            },
+            {
+                id: 11,
+                agency: "East Avenue Medical Center",
+                type: "hospital",
+                location: "Quezon City",
+                icon: "fas fa-hospital",
+                iconClass: "hospital",
+                contacts: {
+                    emergency: "(02) 8928-0611",
+                    trunkline: "(02) 8928-0601",
+                    hotline: "155-200"
+                },
+                latitude: 14.6511,
+                longitude: 121.0494
+            },
+            {
+                id: 12,
+                agency: "National Disaster Risk Reduction Management Council",
+                type: "mdrrmo",
+                location: "Quezon City",
+                icon: "fas fa-exclamation-triangle",
+                iconClass: "mdrrmo",
+                contacts: {
+                    hotline: "(02) 8911-1406",
+                    operations: "(02) 8911-1401",
+                    emergency: "911"
+                },
+                latitude: 14.6500,
+                longitude: 121.0500
+            }
+        ];
+
+        let currentFilter = 'all';
+        let userLocation = null;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            renderContacts();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Search functionality
+            document.getElementById('searchInput').addEventListener('input', handleSearch);
+
+            // Filter tabs
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.addEventListener('click', handleFilter);
+            });
+
+            // Location button
+            document.getElementById('locationBtn').addEventListener('click', getUserLocation);
+        }
+
+        function renderContacts(contactsToRender = emergencyContacts) {
+            const grid = document.getElementById('contactsGrid');
+            
+            if (contactsToRender.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; color: white; padding: 40px;">
+                        <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.7;"></i>
+                        <h3>No contacts found</h3>
+                        <p>Try adjusting your search or filter criteria</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = contactsToRender.map(contact => `
+                <div class="contact-card" data-type="${contact.type}" data-location="${contact.location.toLowerCase()}">
+                    <div class="card-header">
+                        <div class="agency-icon ${contact.iconClass}">
+                            <i class="${contact.icon}"></i>
+                        </div>
+                        <div class="agency-info">
+                            <h3>${contact.agency}</h3>
+                            <div class="location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                ${contact.location}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contact-details">
+                        ${Object.entries(contact.contacts).map(([type, number]) => `
+                            <div class="contact-item">
+                                <i class="fas fa-phone"></i>
+                                <a href="tel:${number.replace(/[^0-9+]/g, '')}" class="contact-link">
+                                    <strong>${type.charAt(0).toUpperCase() + type.slice(1)}:</strong> ${number}
+                                </a>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="emergency-btn" onclick="makeEmergencyCall('${Object.values(contact.contacts)[0].replace(/[^0-9+]/g, '')}')">
+                        <i class="fas fa-phone-alt"></i>
+                        CALL EMERGENCY
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function handleSearch() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = emergencyContacts.filter(contact => 
+                contact.agency.toLowerCase().includes(searchTerm) ||
+                contact.location.toLowerCase().includes(searchTerm) ||
+                contact.type.toLowerCase().includes(searchTerm)
+            );
+            
+            const finalFiltered = currentFilter === 'all' ? filtered : 
+                filtered.filter(contact => contact.type === currentFilter);
+            
+            renderContacts(finalFiltered);
+        }
+
+        function handleFilter(e) {
+            document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
+            e.target.classList.add('active');
+            currentFilter = e.target.dataset.filter;
+            
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = emergencyContacts.filter(contact => {
+                const matchesSearch = searchTerm === '' || 
+                    contact.agency.toLowerCase().includes(searchTerm) ||
+                    contact.location.toLowerCase().includes(searchTerm);
+                const matchesFilter = currentFilter === 'all' || contact.type === currentFilter;
+                return matchesSearch && matchesFilter;
+            });
+            
+            renderContacts(filtered);
+        }
+
+        function getUserLocation() {
+            const loading = document.getElementById('loading');
+            const locationStatus = document.getElementById('locationStatus');
+            const nearbyContacts = document.getElementById('nearbyContacts');
+            
+            loading.classList.add('show');
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        userLocation = {
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude
+                        };
+                        
+                        loading.classList.remove('show');
+                        locationStatus.classList.add('show');
+                        document.getElementById('locationText').textContent = 
+                            `Location found: ${userLocation.latitude.toFixed(4)}, ${userLocation.longitude.toFixed(4)}`;
+                        
+                        findNearbyContacts();
+                    },
+                    (error) => {
+                        loading.classList.remove('show');
+                        locationStatus.classList.add('show');
+                        locationStatus.className = 'location-status show';
+                        locationStatus.style.background = '#f8d7da';
+                        locationStatus.style.color = '#721c24';
+                        locationStatus.style.borderColor = '#f5c6cb';
+                        document.getElementById('locationText').textContent = 
+                            'Unable to get your location. Please enable location services.';
+                    }
+                );
+            } else {
+                loading.classList.remove('show');
+                locationStatus.classList.add('show');
+                locationStatus.style.background = '#f8d7da';
+                locationStatus.style.color = '#721c24';
+                locationStatus.style.borderColor = '#f5c6cb';
+                document.getElementById('locationText').textContent = 
+                    'Geolocation is not supported by your browser.';
+            }
+        }
+
+        function findNearbyContacts() {
+            if (!userLocation) return;
+            
+            const nearbyContacts = document.getElementById('nearbyContacts');
+            const nearbyList = document.getElementById('nearbyList');
+            
+            // Calculate distances and sort by proximity
+            const contactsWithDistance = emergencyContacts.map(contact => ({
+                ...contact,
+                distance: calculateDistance(
+                    userLocation.latitude,
+                    userLocation.longitude,
+                    contact.latitude,
+                    contact.longitude
+                )
+            })).sort((a, b) => a.distance - b.distance);
+            
+            // Show top 3 nearest contacts
+            const nearest = contactsWithDistance.slice(0, 3);
+            
+            nearbyList.innerHTML = nearest.map(contact => `
+                <div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.8); border-radius: 8px;">
+                    <strong>${contact.agency}</strong><br>
+                    <small>${contact.location} (${contact.distance.toFixed(1)} km away)</small><br>
+                    <a href="tel:${Object.values(contact.contacts)[0].replace(/[^0-9+]/g, '')}" 
+                       style="color: #667eea; text-decoration: none;">
+                        <i class="fas fa-phone"></i> ${Object.values(contact.contacts)[0]}
+                    </a>
+                </div>
+            `).join('');
+            
+            nearbyContacts.classList.add('show');
+        }
+
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Earth's radius in km
+            const dLat = toRad(lat2 - lat1);
+            const dLon = toRad(lon2 - lon1);
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+                    Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        function toRad(value) {
+            return value * Math.PI / 180;
+        }
+
+        function makeEmergencyCall(number) {
+            if (confirm(`Call emergency number ${number}?`)) {
+                window.location.href = `tel:${number}`;
+            }
+        }
+
+        // Add some animation on scroll
+        window.addEventListener('scroll', function() {
+            const cards = document.querySelectorAll('.contact-card');
+            cards.forEach(card => {
+                const cardTop = card.getBoundingClientRect().top;
+                const cardVisible = 150;
+                
+                if (cardTop < window.innerHeight - cardVisible) {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        // Initialize card animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.contact-card');
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'all 0.6s ease';
+            });
+        });
+    </script>
+</body>
+</html>
