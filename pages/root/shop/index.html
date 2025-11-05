@@ -3,1077 +3,999 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saint Michael College Cantilan Incorporated</title>
-    
-    <!-- Bootstrap CSS CDN with fallback -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>LocalBiz Hub - Connect with Local Businesses</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* Fallback Bootstrap styles for offline use */
-        :root {
-            --bs-primary: #0d6efd;
-            --bs-secondary: #6c757d;
-            --bs-success: #198754;
-            --bs-info: #0dcaf0;
-            --bs-warning: #ffc107;
-            --bs-danger: #dc3545;
-            --bs-light: #f8f9fa;
-            --bs-dark: #212529;
-            --bs-font-sans-serif: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        
+
         body {
-            font-family: var(--bs-font-sans-serif);
-            line-height: 1.5;
-            color: #212529;
-            background-color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
         }
-        
-        .navbar {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
-        
-        .navbar-brand {
-            font-weight: bold;
-            font-size: 1.25rem;
-        }
-        
-        .hero-section {
+
+        /* Header Styles */
+        header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 80px 0;
-            text-align: center;
-        }
-        
-        .hero-section h1 {
-            font-size: 3rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-        }
-        
-        .section-title {
-            color: #2a5298;
-            font-weight: bold;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-        
-        .card {
-            border: none;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-            margin-bottom: 1.5rem;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .card-header {
-            background-color: #2a5298;
-            color: white;
-            font-weight: bold;
-        }
-        
-        .btn-primary {
-            background-color: #2a5298;
-            border-color: #2a5298;
-        }
-        
-        .btn-primary:hover {
-            background-color: #1e3c72;
-            border-color: #1e3c72;
-        }
-        
-        .gallery-item {
-            position: relative;
-            overflow: hidden;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-        }
-        
-        .gallery-item img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-        
-        .gallery-item:hover img {
-            transform: scale(1.1);
-        }
-        
-        .event-card {
-            border-left: 4px solid #2a5298;
-            background-color: #f8f9fa;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border-radius: 4px;
-        }
-        
-        .event-date {
-            background-color: #2a5298;
-            color: white;
-            padding: 0.5rem;
-            border-radius: 4px;
-            text-align: center;
-            font-weight: bold;
-            margin-right: 1rem;
-        }
-        
-        .teacher-dashboard {
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            padding: 2rem;
-            margin-top: 2rem;
-        }
-        
-        .login-form {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 2rem;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        
-        .admin-panel {
-            display: none;
-        }
-        
-        .admin-panel.active {
-            display: block;
-        }
-        
-        .cms-editor {
-            min-height: 200px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-        
-        .announcement-item {
-            background-color: #e3f2fd;
-            border-left: 4px solid #2196f3;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border-radius: 4px;
-        }
-        
-        .program-card {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            padding: 2rem;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-        }
-        
-        .footer {
-            background-color: #2a5298;
-            color: white;
-            padding: 2rem 0;
-            margin-top: 3rem;
-        }
-        
-        .offline-indicator {
+            padding: 1rem 0;
             position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #dc3545;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #453030;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #667eea;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
             color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 120px 0 80px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 1rem 3rem 1rem 1rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 2rem;
+            padding: 2rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        /* Business Grid */
+        .business-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .business-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .business-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .business-image {
+            height: 200px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .business-info {
+            padding: 1.5rem;
+        }
+
+        .business-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .business-category {
+            color: #667eea;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .business-description {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .business-contact {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .contact-btn {
             padding: 0.5rem 1rem;
-            border-radius: 4px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .contact-btn.phone {
+            background: #e8f5e8;
+            color: #28a745;
+        }
+
+        .contact-btn.email {
+            background: #e3f2fd;
+            color: #007bff;
+        }
+
+        /* Modal Styles */
+        .modal {
             display: none;
-            z-index: 9999;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
         }
-        
-        .offline-indicator.active {
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
             display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
         }
-        
-        /* Mobile responsive */
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            display: none;
+            padding: 100px 0 2rem;
+        }
+
+        .dashboard-header {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+        }
+
+        .sidebar {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            padding: 0.8rem 1rem;
+            text-decoration: none;
+            color: #333;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .main-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Responsive Design */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
         @media (max-width: 768px) {
-            .hero-section h1 {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: #667eea;
+                flex-direction: column;
+                padding: 1rem 0;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .hero h1 {
                 font-size: 2rem;
             }
-            
-            .hero-section {
-                padding: 50px 0;
-            }
-            
-            .navbar-brand {
+
+            .hero p {
                 font-size: 1rem;
             }
+
+            .dashboard-content {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: 2;
+            }
+
+            .main-content {
+                order: 1;
+            }
+
+            .business-grid {
+                grid-template-columns: 1fr;
+            }
         }
-        
-        /* PWA Install Prompt */
-        .install-prompt {
+
+        /* Toast Notification */
+        .toast {
             position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background-color: #2a5298;
+            top: 100px;
+            right: 20px;
+            background: #28a745;
             color: white;
-            padding: 1rem;
+            padding: 1rem 1.5rem;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            display: none;
-            z-index: 9999;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 3000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease-out;
         }
-        
-        .install-prompt.active {
-            display: block;
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            background: #dc3545;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <!-- Offline Indicator -->
-    <div id="offlineIndicator" class="offline-indicator">
-        You're offline - Content may be limited
-    </div>
-
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#home">St. Michael College Cantilan</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#programs">Programs</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#announcements">Announcements</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#events">Events</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#gallery">Gallery</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#teacher-login">Teacher Login</a></li>
-                </ul>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <i class="fas fa-store"></i>
+                LocalBiz Hub
             </div>
-        </div>
-    </nav>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home" onclick="showHome()">Home</a></li>
+                <li><a href="#businesses" onclick="showBusinesses()">Businesses</a></li>
+                <li><a href="#about" onclick="showAbout()">About</a></li>
+                <li id="authButton"><a href="#" onclick="showLoginModal()" class="btn btn-secondary">Login</a></li>
+                <li id="dashboardButton" style="display: none;"><a href="#" onclick="showDashboard()" class="btn btn-primary">Dashboard</a></li>
+                <li id="logoutButton" style="display: none;"><a href="#" onclick="logout()" class="btn btn-secondary">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
 
     <!-- Hero Section -->
-    <section id="home" class="hero-section">
+    <section class="hero" id="home">
         <div class="container">
-            <h1>Saint Michael College Cantilan Incorporated</h1>
-            <p class="lead">Excellence in Education, Faith in Service</p>
-            <p>Empowering students to achieve academic excellence and become responsible leaders in our community.</p>
-        </div>
-    </section>
-
-    <!-- School Programs Section -->
-    <section id="programs" class="py-5">
-        <div class="container">
-            <h2 class="section-title">Academic Programs</h2>
-            <div id="programsContainer">
-                <!-- Programs will be loaded here -->
+            <h1>Discover Local Businesses</h1>
+            <p>Connect with trusted local businesses in your community</p>
+            <div class="search-container">
+                <input type="text" class="search-box" id="searchBox" placeholder="Search for businesses, services, or categories...">
+                <button class="search-btn" onclick="searchBusinesses()">
+                    <i class="fas fa-search"></i>
+                </button>
             </div>
         </div>
     </section>
 
-    <!-- Announcements Section -->
-    <section id="announcements" class="py-5 bg-light">
-        <div class="container">
-            <h2 class="section-title">Latest Announcements</h2>
-            <div id="announcementsContainer">
-                <!-- Announcements will be loaded here -->
+    <!-- Main Content -->
+    <main class="container" id="mainContent">
+        <section id="businesses">
+            <h2 class="section-title">Featured Businesses</h2>
+            <div class="business-grid" id="businessGrid">
+                <!-- Business cards will be dynamically generated here -->
             </div>
+        </section>
+    </main>
+
+    <!-- Dashboard -->
+    <section class="dashboard container" id="dashboard">
+        <div class="dashboard-header">
+            <h1>Business Dashboard</h1>
+            <p>Manage your business profile and settings</p>
         </div>
-    </section>
-
-    <!-- Monthly Events Section -->
-    <section id="events" class="py-5">
-        <div class="container">
-            <h2 class="section-title">Monthly Events</h2>
-            <div id="eventsContainer">
-                <!-- Events will be loaded here -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Gallery Section -->
-    <section id="gallery" class="py-5 bg-light">
-        <div class="container">
-            <h2 class="section-title">School Gallery</h2>
-            <div class="row" id="galleryContainer">
-                <!-- Gallery items will be loaded here -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Teacher Login Section -->
-    <section id="teacher-login" class="py-5">
-        <div class="container">
-            <div id="loginSection">
-                <h2 class="section-title">Teacher Dashboard Login</h2>
-                <div class="login-form">
-                    <form id="teacherLoginForm">
-                        <div class="mb-3">
-                            <label for="teacherId" class="form-label">Teacher ID</label>
-                            <input type="text" class="form-control" id="teacherId" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100">Login</button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Admin Dashboard -->
-            <div id="adminDashboard" class="admin-panel teacher-dashboard">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2>Teacher Dashboard - CMS</h2>
-                    <button id="logoutBtn" class="btn btn-danger">Logout</button>
-                </div>
-                
-                <!-- CMS Tabs -->
-                <ul class="nav nav-tabs mb-3" id="cmsTabs" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="programs-tab" data-bs-toggle="tab" data-bs-target="#programs-tab-pane">Programs</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="announcements-tab" data-bs-toggle="tab" data-bs-target="#announcements-tab-pane">Announcements</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="events-tab" data-bs-toggle="tab" data-bs-target="#events-tab-pane">Events</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="gallery-tab" data-bs-toggle="tab" data-bs-target="#gallery-tab-pane">Gallery</button>
-                    </li>
+        <div class="dashboard-content">
+            <aside class="sidebar">
+                <ul class="sidebar-menu">
+                    <li><a href="#" onclick="showDashboardSection('overview')" class="active"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
+                    <li><a href="#" onclick="showDashboardSection('profile')"><i class="fas fa-store"></i> Business Profile</a></li>
+                    <li><a href="#" onclick="showDashboardSection('settings')"><i class="fas fa-cog"></i> Settings</a></li>
+                    <li><a href="#" onclick="showDashboardSection('analytics')"><i class="fas fa-chart-bar"></i> Analytics</a></li>
                 </ul>
-
-                <div class="tab-content" id="cmsTabContent">
-                    <!-- Programs Tab -->
-                    <div class="tab-pane fade show active" id="programs-tab-pane">
-                        <h3>Manage Programs</h3>
-                        <form id="programForm">
-                            <div class="mb-3">
-                                <label class="form-label">Program Name</label>
-                                <input type="text" class="form-control" id="programName" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Description</label>
-                                <textarea class="form-control" id="programDescription" rows="3" required></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Duration</label>
-                                <input type="text" class="form-control" id="programDuration" placeholder="e.g., 4 years">
-                            </div>
-                            <button type="submit" class="btn btn-primary">Add Program</button>
-                        </form>
-                        <div id="programsList" class="mt-4"></div>
-                    </div>
-
-                    <!-- Announcements Tab -->
-                    <div class="tab-pane fade" id="announcements-tab-pane">
-                        <h3>Manage Announcements</h3>
-                        <form id="announcementForm">
-                            <div class="mb-3">
-                                <label class="form-label">Title</label>
-                                <input type="text" class="form-control" id="announcementTitle" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Content</label>
-                                <textarea class="form-control" id="announcementContent" rows="4" required></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Priority</label>
-                                <select class="form-control" id="announcementPriority">
-                                    <option value="normal">Normal</option>
-                                    <option value="high">High</option>
-                                    <option value="urgent">Urgent</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Add Announcement</button>
-                        </form>
-                        <div id="announcementsList" class="mt-4"></div>
-                    </div>
-
-                    <!-- Events Tab -->
-                    <div class="tab-pane fade" id="events-tab-pane">
-                        <h3>Manage Events</h3>
-                        <form id="eventForm">
-                            <div class="mb-3">
-                                <label class="form-label">Event Name</label>
-                                <input type="text" class="form-control" id="eventName" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Date</label>
-                                <input type="date" class="form-control" id="eventDate" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Time</label>
-                                <input type="time" class="form-control" id="eventTime" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Location</label>
-                                <input type="text" class="form-control" id="eventLocation" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Description</label>
-                                <textarea class="form-control" id="eventDescription" rows="3" required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Add Event</button>
-                        </form>
-                        <div id="eventsList" class="mt-4"></div>
-                    </div>
-
-                    <!-- Gallery Tab -->
-                    <div class="tab-pane fade" id="gallery-tab-pane">
-                        <h3>Manage Gallery</h3>
-                        <form id="galleryForm">
-                            <div class="mb-3">
-                                <label class="form-label">Image Title</label>
-                                <input type="text" class="form-control" id="imageTitle" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Image URL</label>
-                                <input type="url" class="form-control" id="imageUrl" placeholder="Enter image URL or use camera">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Or Take Photo</label>
-                                <input type="file" class="form-control" id="imageFile" accept="image/*" capture="environment">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Description</label>
-                                <textarea class="form-control" id="imageDescription" rows="2"></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Add Image</button>
-                        </form>
-                        <div id="galleryList" class="mt-4"></div>
-                    </div>
-                </div>
+            </aside>
+            <div class="main-content" id="dashboardContent">
+                <!-- Dashboard content will be dynamically loaded here -->
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <h5>Contact Information</h5>
-                    <p>Address: Cantilan, Surigao del Sur</p>
-                    <p>Phone: (086) 123-4567</p>
-                    <p>Email: info@smccantilan.edu.ph</p>
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <h2>Login to Your Business Account</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" required>
                 </div>
-                <div class="col-md-4">
-                    <h5>Quick Links</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#programs" class="text-white">Academic Programs</a></li>
-                        <li><a href="#announcements" class="text-white">Announcements</a></li>
-                        <li><a href="#events" class="text-white">Events</a></li>
-                        <li><a href="#gallery" class="text-white">Gallery</a></li>
-                    </ul>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" required>
                 </div>
-                <div class="col-md-4">
-                    <h5>Follow Us</h5>
-                    <p>Stay connected with Saint Michael College Cantilan</p>
-                    <p>&copy; 2024 Saint Michael College Cantilan Incorporated. All rights reserved.</p>
-                </div>
-            </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+            </form>
+            <p style="text-align: center; margin-top: 1rem;">
+                Don't have an account? <a href="#" onclick="showRegisterModal()">Register here</a>
+            </p>
         </div>
-    </footer>
-
-    <!-- PWA Install Prompt -->
-    <div id="installPrompt" class="install-prompt">
-        <p>Install our app for offline access!</p>
-        <button id="installBtn" class="btn btn-light btn-sm">Install</button>
-        <button id="dismissInstall" class="btn btn-sm btn-link text-white">Dismiss</button>
     </div>
 
-    <!-- Bootstrap JS Bundle with fallback -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeRegisterModal()">&times;</span>
+            <h2>Register Your Business</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="businessName">Business Name</label>
+                    <input type="text" id="businessName" required>
+                </div>
+                <div class="form-group">
+                    <label for="businessCategory">Category</label>
+                    <select id="businessCategory" required>
+                        <option value="">Select a category</option>
+                        <option value="restaurant">Restaurant</option>
+                        <option value="retail">Retail</option>
+                        <option value="services">Services</option>
+                        <option value="health">Health & Wellness</option>
+                        <option value="automotive">Automotive</option>
+                        <option value="technology">Technology</option>
+                        <option value="education">Education</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="businessDescription">Description</label>
+                    <textarea id="businessDescription" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="businessPhone">Phone Number</label>
+                    <input type="tel" id="businessPhone" required>
+                </div>
+                <div class="form-group">
+                    <label for="businessEmail">Business Email</label>
+                    <input type="email" id="businessEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="businessAddress">Address</label>
+                    <input type="text" id="businessAddress" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Register Business</button>
+            </form>
+            <p style="text-align: center; margin-top: 1rem;">
+                Already have an account? <a href="#" onclick="showLoginModal()">Login here</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
     <script>
-        // Offline-first School Website CMS
-        class SchoolCMS {
-            constructor() {
-                this.isOnline = navigator.onLine;
-                this.currentUser = null;
-                this.init();
+        // Sample business data
+        let businesses = [
+            {
+                id: 1,
+                name: "Mario's Italian Restaurant",
+                category: "restaurant",
+                description: "Authentic Italian cuisine with fresh ingredients and traditional recipes.",
+                phone: "(555) 123-4567",
+                email: "info@mariositalian.com",
+                address: "123 Main St, City, State 12345",
+                owner: "mario@business.com"
+            },
+            {
+                id: 2,
+                name: "Tech Solutions Pro",
+                category: "technology",
+                description: "Professional IT services and computer repair for homes and businesses.",
+                phone: "(555) 987-6543",
+                email: "support@techsolutions.com",
+                address: "456 Tech Ave, City, State 12345",
+                owner: "tech@business.com"
+            },
+            {
+                id: 3,
+                name: "Green Garden Landscaping",
+                category: "services",
+                description: "Professional landscaping and garden maintenance services.",
+                phone: "(555) 456-7890",
+                email: "info@greengarden.com",
+                address: "789 Garden Rd, City, State 12345",
+                owner: "garden@business.com"
+            },
+            {
+                id: 4,
+                name: "Wellness Spa & Massage",
+                category: "health",
+                description: "Relaxing spa treatments and therapeutic massage services.",
+                phone: "(555) 234-5678",
+                email: "book@wellnessspa.com",
+                address: "321 Spa Lane, City, State 12345",
+                owner: "spa@business.com"
+            },
+            {
+                id: 5,
+                name: "Auto Care Center",
+                category: "automotive",
+                description: "Complete automotive repair and maintenance services.",
+                phone: "(555) 345-6789",
+                email: "service@autocare.com",
+                address: "654 Auto Blvd, City, State 12345",
+                owner: "auto@business.com"
+            },
+            {
+                id: 6,
+                name: "Learning Academy",
+                category: "education",
+                description: "Quality tutoring and educational programs for all ages.",
+                phone: "(555) 567-8901",
+                email: "info@learningacademy.com",
+                address: "987 Education St, City, State 12345",
+                owner: "education@business.com"
             }
+        ];
 
-            init() {
-                this.setupEventListeners();
-                this.checkOnlineStatus();
-                this.loadAllData();
-                this.setupPWA();
-                this.setupServiceWorker();
-            }
+        let currentUser = null;
+        let userBusinesses = [];
 
-            setupEventListeners() {
-                // Online/offline detection
-                window.addEventListener('online', () => this.handleOnline());
-                window.addEventListener('offline', () => this.handleOffline());
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            renderBusinesses();
+            checkLoginStatus();
+        });
 
-                // Login form
-                document.getElementById('teacherLoginForm').addEventListener('submit', (e) => this.handleLogin(e));
+        // Render businesses
+        function renderBusinesses(searchTerm = '') {
+            const businessGrid = document.getElementById('businessGrid');
+            const filteredBusinesses = businesses.filter(business => {
+                const searchLower = searchTerm.toLowerCase();
+                return business.name.toLowerCase().includes(searchLower) ||
+                       business.category.toLowerCase().includes(searchLower) ||
+                       business.description.toLowerCase().includes(searchLower);
+            });
 
-                // Logout
-                document.getElementById('logoutBtn').addEventListener('click', () => this.handleLogout());
-
-                // CMS Forms
-                document.getElementById('programForm').addEventListener('submit', (e) => this.handleProgramSubmit(e));
-                document.getElementById('announcementForm').addEventListener('submit', (e) => this.handleAnnouncementSubmit(e));
-                document.getElementById('eventForm').addEventListener('submit', (e) => this.handleEventSubmit(e));
-                document.getElementById('galleryForm').addEventListener('submit', (e) => this.handleGallerySubmit(e));
-
-                // Install prompt
-                document.getElementById('installBtn').addEventListener('click', () => this.handleInstall());
-                document.getElementById('dismissInstall').addEventListener('click', () => this.dismissInstall());
-            }
-
-            checkOnlineStatus() {
-                const indicator = document.getElementById('offlineIndicator');
-                if (!this.isOnline) {
-                    indicator.classList.add('active');
-                } else {
-                    indicator.classList.remove('active');
-                }
-            }
-
-            handleOnline() {
-                this.isOnline = true;
-                this.checkOnlineStatus();
-                this.syncData();
-            }
-
-            handleOffline() {
-                this.isOnline = false;
-                this.checkOnlineStatus();
-            }
-
-            setupPWA() {
-                // PWA Manifest
-                const manifest = {
-                    name: 'St. Michael College Cantilan',
-                    short_name: 'SMCC',
-                    description: 'School website with CMS for teachers',
-                    start_url: '/',
-                    display: 'standalone',
-                    background_color: '#ffffff',
-                    theme_color: '#2a5298',
-                    icons: [
-                        {
-                            src: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" fill="%232a5298"/><text x="256" y="300" font-family="Arial" font-size="200" fill="white" text-anchor="middle">SMCC</text></svg>',
-                            sizes: '512x512',
-                            type: 'image/svg+xml'
-                        }
-                    ]
-                };
-
-                const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
-                const manifestUrl = URL.createObjectURL(manifestBlob);
-                
-                let manifestLink = document.querySelector('link[rel="manifest"]');
-                if (!manifestLink) {
-                    manifestLink = document.createElement('link');
-                    manifestLink.rel = 'manifest';
-                    document.head.appendChild(manifestLink);
-                }
-                manifestLink.href = manifestUrl;
-
-                // Install prompt
-                window.addEventListener('beforeinstallprompt', (e) => {
-                    e.preventDefault();
-                    this.deferredPrompt = e;
-                    document.getElementById('installPrompt').classList.add('active');
-                });
-            }
-
-            setupServiceWorker() {
-                if ('serviceWorker' in navigator) {
-                    const sw = `
-                        self.addEventListener('install', (event) => {
-                            event.waitUntil(
-                                caches.open('smcc-v1').then((cache) => {
-                                    return cache.addAll([
-                                        '/',
-                                        '/index.html'
-                                    ]);
-                                })
-                            );
-                        });
-
-                        self.addEventListener('fetch', (event) => {
-                            event.respondWith(
-                                caches.match(event.request).then((response) => {
-                                    return response || fetch(event.request);
-                                })
-                            );
-                        });
-                    `;
-                    
-                    const swBlob = new Blob([sw], { type: 'application/javascript' });
-                    const swUrl = URL.createObjectURL(swBlob);
-                    
-                    navigator.serviceWorker.register(swUrl);
-                }
-            }
-
-            handleLogin(e) {
-                e.preventDefault();
-                const teacherId = document.getElementById('teacherId').value;
-                const password = document.getElementById('password').value;
-
-                // Simple authentication (in production, use proper authentication)
-                if (teacherId && password) {
-                    this.currentUser = { id: teacherId, name: 'Teacher' };
-                    localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
-                    this.showAdminDashboard();
-                } else {
-                    alert('Please enter valid credentials');
-                }
-            }
-
-            handleLogout() {
-                this.currentUser = null;
-                localStorage.removeItem('currentUser');
-                document.getElementById('loginSection').style.display = 'block';
-                document.getElementById('adminDashboard').classList.remove('active');
-            }
-
-            showAdminDashboard() {
-                document.getElementById('loginSection').style.display = 'none';
-                document.getElementById('adminDashboard').classList.add('active');
-                this.loadCMSData();
-            }
-
-            // Data Management
-            loadAllData() {
-                this.loadPrograms();
-                this.loadAnnouncements();
-                this.loadEvents();
-                this.loadGallery();
-            }
-
-            loadPrograms() {
-                const programs = JSON.parse(localStorage.getItem('programs') || '[]');
-                const container = document.getElementById('programsContainer');
-                container.innerHTML = '';
-                
-                programs.forEach(program => {
-                    const programCard = document.createElement('div');
-                    programCard.className = 'col-md-6 col-lg-4';
-                    programCard.innerHTML = `
-                        <div class="program-card">
-                            <h4>${program.name}</h4>
-                            <p>${program.description}</p>
-                            <small><strong>Duration:</strong> ${program.duration}</small>
+            businessGrid.innerHTML = filteredBusinesses.map(business => `
+                <div class="business-card">
+                    <div class="business-image">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <div class="business-info">
+                        <h3 class="business-name">${business.name}</h3>
+                        <p class="business-category">${business.category.charAt(0).toUpperCase() + business.category.slice(1)}</p>
+                        <p class="business-description">${business.description}</p>
+                        <div class="business-contact">
+                            <a href="tel:${business.phone}" class="contact-btn phone">
+                                <i class="fas fa-phone"></i> Call
+                            </a>
+                            <a href="mailto:${business.email}" class="contact-btn email">
+                                <i class="fas fa-envelope"></i> Email
+                            </a>
                         </div>
-                    `;
-                    container.appendChild(programCard);
-                });
-
-                if (programs.length === 0) {
-                    // Default programs
-                    const defaultPrograms = [
-                        {
-                            name: "Bachelor of Elementary Education",
-                            description: "Prepare future educators with comprehensive teaching methodologies and child development principles.",
-                            duration: "4 years"
-                        },
-                        {
-                            name: "Bachelor of Secondary Education",
-                            description: "Develop skilled secondary school teachers with specialization in various academic subjects.",
-                            duration: "4 years"
-                        },
-                        {
-                            name: "Bachelor of Science in Business Administration",
-                            description: "Build strong foundation in business principles, management, and entrepreneurship.",
-                            duration: "4 years"
-                        },
-                        {
-                            name: "Senior High School Program",
-                            description: "Academic and Technical-Vocational tracks for holistic student development.",
-                            duration: "2 years"
-                        }
-                    ];
-                    
-                    localStorage.setItem('programs', JSON.stringify(defaultPrograms));
-                    this.loadPrograms();
-                }
-            }
-
-            loadAnnouncements() {
-                const announcements = JSON.parse(localStorage.getItem('announcements') || '[]');
-                const container = document.getElementById('announcementsContainer');
-                container.innerHTML = '';
-                
-                announcements.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5).forEach(announcement => {
-                    const announcementItem = document.createElement('div');
-                    announcementItem.className = 'announcement-item';
-                    
-                    const priorityClass = announcement.priority === 'urgent' ? 'bg-danger text-white' : 
-                                        announcement.priority === 'high' ? 'bg-warning' : '';
-                    
-                    announcementItem.innerHTML = `
-                        <h5>${announcement.title}</h5>
-                        <p>${announcement.content}</p>
-                        <small class="${priorityClass} p-1 rounded">Priority: ${announcement.priority}</small>
-                        <small class="float-end">${new Date(announcement.date).toLocaleDateString()}</small>
-                    `;
-                    container.appendChild(announcementItem);
-                });
-
-                if (announcements.length === 0) {
-                    const defaultAnnouncements = [
-                        {
-                            title: "Welcome to New Academic Year",
-                            content: "We welcome all students to the new academic year 2024-2025. Classes start on June 15, 2024.",
-                            priority: "normal",
-                            date: new Date().toISOString()
-                        },
-                        {
-                            title: "Enrollment Period Extended",
-                            content: "Enrollment period has been extended until June 30, 2024. Please complete your registration requirements.",
-                            priority: "high",
-                            date: new Date().toISOString()
-                        }
-                    ];
-                    
-                    localStorage.setItem('announcements', JSON.stringify(defaultAnnouncements));
-                    this.loadAnnouncements();
-                }
-            }
-
-            loadEvents() {
-                const events = JSON.parse(localStorage.getItem('events') || '[]');
-                const container = document.getElementById('eventsContainer');
-                container.innerHTML = '';
-                
-                const today = new Date();
-                const upcomingEvents = events.filter(event => new Date(event.date) >= today)
-                    .sort((a, b) => new Date(a.date) - new Date(b.date))
-                    .slice(0, 6);
-                
-                upcomingEvents.forEach(event => {
-                    const eventCard = document.createElement('div');
-                    eventCard.className = 'event-card';
-                    eventCard.innerHTML = `
-                        <div class="d-flex align-items-start">
-                            <div class="event-date">
-                                ${new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                            </div>
-                            <div class="flex-grow-1">
-                                <h5>${event.name}</h5>
-                                <p><strong>Time:</strong> ${event.time}</p>
-                                <p><strong>Location:</strong> ${event.location}</p>
-                                <p>${event.description}</p>
-                            </div>
-                        </div>
-                    `;
-                    container.appendChild(eventCard);
-                });
-
-                if (events.length === 0) {
-                    const defaultEvents = [
-                        {
-                            name: "Foundation Day Celebration",
-                            date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-                            time: "8:00 AM",
-                            location: "School Gymnasium",
-                            description: "Annual foundation day celebration with cultural presentations and competitions."
-                        },
-                        {
-                            name: "Parent-Teacher Conference",
-                            date: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-                            time: "1:00 PM",
-                            location: "Various Classrooms",
-                            description: "Meeting between parents and teachers to discuss student progress."
-                        }
-                    ];
-                    
-                    localStorage.setItem('events', JSON.stringify(defaultEvents));
-                    this.loadEvents();
-                }
-            }
-
-            loadGallery() {
-                const gallery = JSON.parse(localStorage.getItem('gallery') || '[]');
-                const container = document.getElementById('galleryContainer');
-                container.innerHTML = '';
-                
-                gallery.slice(0, 8).forEach(item => {
-                    const galleryItem = document.createElement('div');
-                    galleryItem.className = 'col-md-3 col-sm-6';
-                    galleryItem.innerHTML = `
-                        <div class="gallery-item">
-                            <img src="${item.url || 'https://via.placeholder.com/300x200?text=School+Photo'}" 
-                                 alt="${item.title}" class="img-fluid">
-                            <div class="p-2">
-                                <h6>${item.title}</h6>
-                                <small>${item.description}</small>
-                            </div>
-                        </div>
-                    `;
-                    container.appendChild(galleryItem);
-                });
-
-                if (gallery.length === 0) {
-                    const defaultGallery = [
-                        {
-                            title: "School Building",
-                            url: "https://via.placeholder.com/300x200?text=School+Building",
-                            description: "Main academic building"
-                        },
-                        {
-                            title: "Graduation Day",
-                            url: "https://via.placeholder.com/300x200?text=Graduation",
-                            description: "Class of 2024 graduation ceremony"
-                        },
-                        {
-                            title: "Science Laboratory",
-                            url: "https://via.placeholder.com/300x200?text=Science+Lab",
-                            description: "Modern science laboratory facilities"
-                        },
-                        {
-                            title: "School Library",
-                            url: "https://via.placeholder.com/300x200?text=Library",
-                            description: "Well-equipped library with extensive collection"
-                        }
-                    ];
-                    
-                    localStorage.setItem('gallery', JSON.stringify(defaultGallery));
-                    this.loadGallery();
-                }
-            }
-
-            // CMS Handlers
-            handleProgramSubmit(e) {
-                e.preventDefault();
-                const programs = JSON.parse(localStorage.getItem('programs') || '[]');
-                const program = {
-                    name: document.getElementById('programName').value,
-                    description: document.getElementById('programDescription').value,
-                    duration: document.getElementById('programDuration').value
-                };
-                
-                programs.push(program);
-                localStorage.setItem('programs', JSON.stringify(programs));
-                
-                document.getElementById('programForm').reset();
-                this.loadPrograms();
-                this.loadCMSData();
-                alert('Program added successfully!');
-            }
-
-            handleAnnouncementSubmit(e) {
-                e.preventDefault();
-                const announcements = JSON.parse(localStorage.getItem('announcements') || '[]');
-                const announcement = {
-                    title: document.getElementById('announcementTitle').value,
-                    content: document.getElementById('announcementContent').value,
-                    priority: document.getElementById('announcementPriority').value,
-                    date: new Date().toISOString()
-                };
-                
-                announcements.push(announcement);
-                localStorage.setItem('announcements', JSON.stringify(announcements));
-                
-                document.getElementById('announcementForm').reset();
-                this.loadAnnouncements();
-                this.loadCMSData();
-                alert('Announcement added successfully!');
-            }
-
-            handleEventSubmit(e) {
-                e.preventDefault();
-                const events = JSON.parse(localStorage.getItem('events') || '[]');
-                const event = {
-                    name: document.getElementById('eventName').value,
-                    date: document.getElementById('eventDate').value,
-                    time: document.getElementById('eventTime').value,
-                    location: document.getElementById('eventLocation').value,
-                    description: document.getElementById('eventDescription').value
-                };
-                
-                events.push(event);
-                localStorage.setItem('events', JSON.stringify(events));
-                
-                document.getElementById('eventForm').reset();
-                this.loadEvents();
-                this.loadCMSData();
-                alert('Event added successfully!');
-            }
-
-            handleGallerySubmit(e) {
-                e.preventDefault();
-                const gallery = JSON.parse(localStorage.getItem('gallery') || '[]');
-                const imageUrl = document.getElementById('imageUrl').value;
-                const imageFile = document.getElementById('imageFile').files[0];
-                
-                if (imageFile) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        const item = {
-                            title: document.getElementById('imageTitle').value,
-                            url: e.target.result,
-                            description: document.getElementById('imageDescription').value
-                        };
-                        
-                        gallery.push(item);
-                        localStorage.setItem('gallery', JSON.stringify(gallery));
-                        
-                        document.getElementById('galleryForm').reset();
-                        this.loadGallery();
-                        this.loadCMSData();
-                        alert('Image added successfully!');
-                    };
-                    reader.readAsDataURL(imageFile);
-                } else if (imageUrl) {
-                    const item = {
-                        title: document.getElementById('imageTitle').value,
-                        url: imageUrl,
-                        description: document.getElementById('imageDescription').value
-                    };
-                    
-                    gallery.push(item);
-                    localStorage.setItem('gallery', JSON.stringify(gallery));
-                    
-                    document.getElementById('galleryForm').reset();
-                    this.loadGallery();
-                    this.loadCMSData();
-                    alert('Image added successfully!');
-                } else {
-                    alert('Please provide an image URL or take a photo');
-                }
-            }
-
-            loadCMSData() {
-                if (!this.currentUser) return;
-
-                // Load programs list
-                const programs = JSON.parse(localStorage.getItem('programs') || '[]');
-                const programsList = document.getElementById('programsList');
-                programsList.innerHTML = '<h4>Current Programs</h4>';
-                programs.forEach((program, index) => {
-                    programsList.innerHTML += `
-                        <div class="card mb-2">
-                            <div class="card-body">
-                                <h6>${program.name}</h6>
-                                <p>${program.description}</p>
-                                <button class="btn btn-sm btn-danger" onclick="schoolCMS.deleteItem('programs', ${index})">Delete</button>
-                            </div>
-                        </div>
-                    `;
-                });
-
-                // Load announcements list
-                const announcements = JSON.parse(localStorage.getItem('announcements') || '[]');
-                const announcementsList = document.getElementById('announcementsList');
-                announcementsList.innerHTML = '<h4>Current Announcements</h4>';
-                announcements.slice(-10).reverse().forEach((announcement, index) => {
-                    announcementsList.innerHTML += `
-                        <div class="card mb-2">
-                            <div class="card-body">
-                                <h6>${announcement.title}</h6>
-                                <p>${announcement.content}</p>
-                                <small>Priority: ${announcement.priority}</small>
-                                <button class="btn btn-sm btn-danger" onclick="schoolCMS.deleteItem('announcements', ${announcements.length - 1 - index})">Delete</button>
-                            </div>
-                        </div>
-                    `;
-                });
-
-                // Load events list
-                const events = JSON.parse(localStorage.getItem('events') || '[]');
-                const eventsList = document.getElementById('eventsList');
-                eventsList.innerHTML = '<h4>Current Events</h4>';
-                events.forEach((event, index) => {
-                    eventsList.innerHTML += `
-                        <div class="card mb-2">
-                            <div class="card-body">
-                                <h6>${event.name}</h6>
-                                <p><strong>Date:</strong> ${event.date} at ${event.time}</p>
-                                <p><strong>Location:</strong> ${event.location}</p>
-                                <p>${event.description}</p>
-                                <button class="btn btn-sm btn-danger" onclick="schoolCMS.deleteItem('events', ${index})">Delete</button>
-                            </div>
-                        </div>
-                    `;
-                });
-
-                // Load gallery list
-                const gallery = JSON.parse(localStorage.getItem('gallery') || '[]');
-                const galleryList = document.getElementById('galleryList');
-                galleryList.innerHTML = '<h4>Current Gallery</h4>';
-                gallery.forEach((item, index) => {
-                    galleryList.innerHTML += `
-                        <div class="card mb-2">
-                            <div class="card-body">
-                                <h6>${item.title}</h6>
-                                <img src="${item.url}" alt="${item.title}" style="max-width: 100px; max-height: 100px; object-fit: cover;">
-                                <p>${item.description}</p>
-                                <button class="btn btn-sm btn-danger" onclick="schoolCMS.deleteItem('gallery', ${index})">Delete</button>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-
-            deleteItem(type, index) {
-                if (confirm('Are you sure you want to delete this item?')) {
-                    const items = JSON.parse(localStorage.getItem(type) || '[]');
-                    items.splice(index, 1);
-                    localStorage.setItem(type, JSON.stringify(items));
-                    
-                    this.loadAllData();
-                    this.loadCMSData();
-                    alert('Item deleted successfully!');
-                }
-            }
-
-            syncData() {
-                // In a real application, this would sync with a server
-                console.log('Syncing data with server...');
-            }
-
-            handleInstall() {
-                if (this.deferredPrompt) {
-                    this.deferredPrompt.prompt();
-                    this.deferredPrompt.userChoice.then((choiceResult) => {
-                        if (choiceResult.outcome === 'accepted') {
-                            console.log('User accepted the install prompt');
-                        }
-                        this.deferredPrompt = null;
-                        document.getElementById('installPrompt').classList.remove('active');
-                    });
-                }
-            }
-
-            dismissInstall() {
-                document.getElementById('installPrompt').classList.remove('active');
-            }
+                    </div>
+                </div>
+            `).join('');
         }
 
-        // Initialize the CMS
-        const schoolCMS = new SchoolCMS();
+        // Search businesses
+        function searchBusinesses() {
+            const searchTerm = document.getElementById('searchBox').value;
+            renderBusinesses(searchTerm);
+        }
 
-        // Check for saved user session
-        window.addEventListener('load', () => {
-            const savedUser = localStorage.getItem('currentUser');
-            if (savedUser) {
-                schoolCMS.currentUser = JSON.parse(savedUser);
-                schoolCMS.showAdminDashboard();
+        // Modal functions
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'block';
+            document.getElementById('registerModal').style.display = 'none';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        function showRegisterModal() {
+            document.getElementById('registerModal').style.display = 'block';
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        function closeRegisterModal() {
+            document.getElementById('registerModal').style.display = 'none';
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        // Toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // Simple login simulation
+            const business = businesses.find(b => b.owner === email);
+            if (business && password === 'password123') {
+                currentUser = { email: email, business: business };
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                checkLoginStatus();
+                closeLoginModal();
+                showToast('Login successful!');
+            } else {
+                showToast('Invalid email or password', 'error');
             }
         });
 
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
+        // Register form handler
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('businessName').value;
+            const category = document.getElementById('businessCategory').value;
+            const description = document.getElementById('businessDescription').value;
+            const phone = document.getElementById('businessPhone').value;
+            const email = document.getElementById('businessEmail').value;
+            const address = document.getElementById('businessAddress').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                showToast('Passwords do not match', 'error');
+                return;
+            }
+
+            // Create new business
+            const newBusiness = {
+                id: businesses.length + 1,
+                name: name,
+                category: category,
+                description: description,
+                phone: phone,
+                email: email,
+                address: address,
+                owner: email
+            };
+
+            businesses.push(newBusiness);
+            currentUser = { email: email, business: newBusiness };
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            closeRegisterModal();
+            checkLoginStatus();
+            renderBusinesses();
+            showToast('Business registered successfully!');
+        });
+
+        // Check login status
+        function checkLoginStatus() {
+            const storedUser = localStorage.getItem('currentUser');
+            if (storedUser) {
+                currentUser = JSON.parse(storedUser);
+                document.getElementById('authButton').style.display = 'none';
+                document.getElementById('dashboardButton').style.display = 'block';
+                document.getElementById('logoutButton').style.display = 'block';
+            } else {
+                document.getElementById('authButton').style.display = 'block';
+                document.getElementById('dashboardButton').style.display = 'none';
+                document.getElementById('logoutButton').style.display = 'none';
+            }
+        }
+
+        // Logout function
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            checkLoginStatus();
+            showHome();
+            showToast('Logged out successfully!');
+        }
+
+        // Navigation functions
+        function showHome() {
+            document.getElementById('home').style.display = 'block';
+            document.getElementById('mainContent').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+        }
+
+        function showBusinesses() {
+            document.getElementById('home').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+        }
+
+        function showAbout() {
+            showToast('About page coming soon!');
+        }
+
+        function showDashboard() {
+            if (!currentUser) {
+                showLoginModal();
+                return;
+            }
+            
+            document.getElementById('home').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            showDashboardSection('overview');
+        }
+
+        function showDashboardSection(section) {
+            const content = document.getElementById('dashboardContent');
+            const menuItems = document.querySelectorAll('.sidebar-menu a');
+            
+            menuItems.forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+
+            switch(section) {
+                case 'overview':
+                    content.innerHTML = `
+                        <h2>Welcome back, ${currentUser.business.name}!</h2>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 2rem;">
+                            <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; text-align: center;">
+                                <h3>Profile Views</h3>
+                                <p style="font-size: 2rem; color: #667eea; margin: 0;">127</p>
+                            </div>
+                            <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; text-align: center;">
+                                <h3>Contact Requests</h3>
+                                <p style="font-size: 2rem; color: #28a745; margin: 0;">23</p>
+                            </div>
+                            <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; text-align: center;">
+                                <h3>Reviews</h3>
+                                <p style="font-size: 2rem; color: #ffc107; margin: 0;">4.8</p>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 'profile':
+                    content.innerHTML = `
+                        <h2>Business Profile</h2>
+                        <form id="profileForm" style="margin-top: 2rem;">
+                            <div class="form-group">
+                                <label>Business Name</label>
+                                <input type="text" value="${currentUser.business.name}" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Category</label>
+                                <select required>
+                                    <option value="${currentUser.business.category}">${currentUser.business.category}</option>
+                                    <option value="restaurant">Restaurant</option>
+                                    <option value="retail">Retail</option>
+                                    <option value="services">Services</option>
+                                    <option value="health">Health & Wellness</option>
+                                    <option value="automotive">Automotive</option>
+                                    <option value="technology">Technology</option>
+                                    <option value="education">Education</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea required>${currentUser.business.description}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="tel" value="${currentUser.business.phone}" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" value="${currentUser.business.email}" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Address</label>
+                                <input type="text" value="${currentUser.business.address}" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update Profile</button>
+                        </form>
+                    `;
+                    break;
+                case 'settings':
+                    content.innerHTML = `
+                        <h2>Settings</h2>
+                        <div style="margin-top: 2rem;">
+                            <div class="form-group">
+                                <label>Change Password</label>
+                                <input type="password" placeholder="Current Password">
+                            </div>
+                            <div class="form-group">
+                                <label>New Password</label>
+                                <input type="password" placeholder="New Password">
+                            </div>
+                            <div class="form-group">
+                                <label>Confirm New Password</label>
+                                <input type="password" placeholder="Confirm New Password">
+                            </div>
+                            <button class="btn btn-primary">Update Password</button>
+                        </div>
+                    `;
+                    break;
+                case 'analytics':
+                    content.innerHTML = `
+                        <h2>Analytics</h2>
+                        <div style="margin-top: 2rem;">
+                            <div style="background: #f8f9fa; padding: 2rem; border-radius: 10px; text-align: center;">
+                                <i class="fas fa-chart-line" style="font-size: 4rem; color: #667eea; margin-bottom: 1rem;"></i>
+                                <h3>Analytics Dashboard</h3>
+                                <p>Detailed analytics and insights coming soon!</p>
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const loginModal = document.getElementById('loginModal');
+            const registerModal = document.getElementById('registerModal');
+            if (event.target === loginModal) {
+                closeLoginModal();
+            }
+            if (event.target === registerModal) {
+                closeRegisterModal();
+            }
+        }
+
+        // Search on Enter key
+        document.getElementById('searchBox').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchBusinesses();
+            }
         });
     </script>
 </body>
