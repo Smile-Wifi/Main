@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Inspirational Portrait Reels — Swipe Player</title>
+  <style>
+    :root{ --bg:#0b0b0b; --panel:#0f1720; --accent:#ff6b6b; --muted:#9aa4b2; }
+    html,body{height:100%;margin:0;background:var(--bg);color:#fff;font-family:system-ui,Arial,Segoe UI,Roboto,"Helvetica Neue";overflow:hidden;}
+    
+    /* Welcome Screen */
+    #welcomeScreen {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, #111 0%, #000 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 1000;
+      transition: opacity 1s ease, visibility 1s ease;
+    }
+    #welcomeScreen.fadeOut {
+      opacity: 0;
+      visibility: hidden;
+    }
+    #welcomeLogo {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #fff;
+      text-align: center;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--accent), #ff9f9f);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      user-select: none;
+      transition: transform 0.4s ease;
+    }
+    #welcomeLogo:hover {
+      transform: scale(1.05);
+    }
+    #welcomeNote {
+      margin-top: 12px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    /* Main UI */
+    .topbar{position:fixed;left:0;right:0;top:0;height:56px;display:flex;align-items:center;justify-content:space-between;padding:40px 12px 8px;background:linear-gradient(to bottom,rgba(0,0,0,.35),transparent);z-index:30}
+    .hamburger{width:36px;height:36px;display:flex;flex-direction:column;justify-content:center;gap:4px;cursor:pointer}
+    .hamburger span{display:block;height:3px;background:#fff;border-radius:3px}
+    .brand{font-weight:700;letter-spacing:0.6px}
+    .sidepanel{position:fixed;left:-300px;top:0;bottom:0;width:280px;background:var(--panel);z-index:40;padding:18px 12px;box-shadow:6px 0 30px rgba(0,0,0,.6);transition:left .28s ease}
+    .sidepanel.open{left:0}
+    .sidepanel h3{margin:6px 0 12px;font-size:16px}
+    .category{display:flex;gap:8px;align-items:center;padding:8px;border-radius:8px;cursor:pointer}
+    .category:hover{background:rgba(255,255,255,.03)}
+    .category .dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+    .viewer{position:fixed;inset:0;display:flex;flex-direction:column;align-items:stretch}
+    .slides{flex:1;display:flex;flex-direction:column;scroll-snap-type:y mandatory;overflow-y:scroll;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
+    .slide{scroll-snap-align:start;min-height:100vh;display:flex;align-items:center;justify-content:center;padding-top:56px;box-sizing:border-box;position:relative}
+    .video-wrap{width:100%;height:calc(100vh - 56px);max-width:480px;overflow:hidden;border-radius:12px;background:#000;display:flex;align-items:center;justify-content:center;position:relative}
+    .video-wrap video{width:100%;height:100%;border:0;background:#000;display:block;}
+    .play-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:10;cursor:pointer;background:rgba(0,0,0,0.3)}
+    .play-btn{width:72px;height:72px;background:rgba(255,255,255,0.9);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;color:#000}
+    .controls{position:absolute;right:12px;bottom:18px;display:flex;flex-direction:column;gap:8px;z-index:20}
+    .btn{width:48px;height:48px;border-radius:14px;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;color:#fff;backdrop-filter:blur(6px);}
+    .like-btn.active{background:linear-gradient(135deg,var(--accent),#ff9f9f)}
+    .meta{position:absolute;left:12px;bottom:18px;z-index:20;max-width:62%}
+    .meta h2{margin:0 0 6px;font-size:18px}
+    .meta p{margin:0;color:var(--muted);font-size:13px}
+    .overlay{position:fixed;inset:0;background:transparent;z-index:35;display:none;}
+    .overlay.show{display:block;}
+    @media(min-width:900px){
+      .viewer{align-items:center}
+      .slides{width:420px;border-radius:16px;margin-top:20px;box-shadow:0 8px 40px rgba(0,0,0,.7);overflow:hidden}
+      .slide{padding:0}
+    }
+    .hint{position:fixed;left:50%;transform:translateX(-50%);top:64px;font-size:13px;color:var(--muted);z-index:25}
+  </style>
+</head>
+<body>
+
+  <!-- Welcome Screen -->
+  <div id="welcomeScreen">
+    <div id="welcomeLogo">INSPIRATIONAL REELS</div>
+    <div id="welcomeNote">Click to Enter & Enable Sound</div>
+  </div>
+
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="hamburger" id="hambBtn" aria-label="open menu" role="button">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="brand">Inspirational Reels</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div id="shuffleBtn" class="btn" title="Shuffle">Shuffle</div>
+      <div id="filterBtn" class="btn" title="Categories">Categories</div>
+    </div>
+  </div>
+  <div class="overlay" id="overlay"></div>
+  <aside class="sidepanel" id="sidepanel">
+    <h3>Categories</h3>
+    <div id="categoriesList"></div>
+    <hr style="border:none;height:1px;background:rgba(255,255,255,.04);margin:12px 0">
+    <h3>Quick Actions</h3>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <button id="shufflePanel" class="btn" style="width:120px">Shuffle</button>
+      <button id="resetLikes" class="btn" style="width:120px">Reset Likes</button>
+    </div>
+  </aside>
+  <main class="viewer">
+    <div class="hint"></div>
+    <div class="slides" id="slides"></div>
+  </main>
+
+  <script>
+    const videoSources = [
+      { id: 'reel3', url: 'https://resonant-hotteok-a33564.netlify.app/videos/reel (3).mp4', title: 'Reel 3', category: 'Inspirational Reels', likes: 10 },
+      { id: 'reel5', url: 'https://resonant-hotteok-a33564.netlify.app/videos/reel (5).mp4', title: 'Reel 5', category: 'Inspirational Reels', likes: 8 },
+      { id: 'reel1', url: 'https://resonant-hotteok-a33564.netlify.app/videos/reel (1).mp4', title: 'Reel 1', category: 'Inspirational Reels', likes: 12 },
+      { id: 'reel2', url: 'https://resonant-hotteok-a33564.netlify.app/videos/reel (2).mp4', title: 'Reel 2', category: 'Inspirational Reels', likes: 15 },
+      { id: 'reel4', url: 'https://resonant-hotteok-a33564.netlify.app/videos/reel (4).mp4', title: 'Reel 4', category: 'Inspirational Reels', likes: 9 },
+      { id: 'reel6', url: 'https://resonant-hotteok-a33564.netlify.app/videos/reel (5).mp4', title: 'Reel 6', category: 'Inspirational Reels', likes: 14 }
+    ];
+
+    let order = [...Array(videoSources.length).keys()];
+    let currentIndex = 0;
+    const slidesEl = document.getElementById('slides');
+    const sidepanel = document.getElementById('sidepanel');
+    const overlay = document.getElementById('overlay');
+    let isScrolling = false;
+    let touchStartY = 0;
+    let soundEnabled = false;
+
+    function loadLikes() {
+      const store = JSON.parse(localStorage.getItem('reel_likes') || '{}');
+      videoSources.forEach(v => {
+        v._liked = !!store[v.id];
+        v._likes = store[v.id + '_count'] ?? v.likes ?? 0;
+      });
+    }
+
+    function saveLikes() {
+      const store = {};
+      videoSources.forEach(v => {
+        if (v._liked) store[v.id] = true;
+        store[v.id + '_count'] = v._likes;
+      });
+      localStorage.setItem('reel_likes', JSON.stringify(store));
+    }
+
+    loadLikes();
+
+    function buildCategories() {
+      const cats = [...new Set(videoSources.map(v => v.category || 'Uncategorized'))];
+      const list = document.getElementById('categoriesList'); list.innerHTML = '';
+      cats.forEach(cat => {
+        const el = document.createElement('div'); el.className = 'category';
+        el.innerHTML = `<div class="dot"></div><div>${cat}</div>`;
+        el.onclick = () => { filterByCategory(cat); closePanel(); };
+        list.appendChild(el);
+      });
+    }
+
+    function buildSlides() {
+      slidesEl.innerHTML = '';
+      order.forEach((origIndex, slidePos) => {
+        const v = videoSources[origIndex];
+        const slide = document.createElement('section'); slide.className = 'slide'; slide.dataset.pos = slidePos;
+        const wrap = document.createElement('div'); wrap.className = 'video-wrap';
+        const video = document.createElement('video');
+        video.src = v.url;
+        video.controls = false;
+        video.preload = 'metadata';
+        video.muted = !soundEnabled;
+        wrap.appendChild(video);
+
+        const playOverlay = document.createElement('div'); playOverlay.className = 'play-overlay';
+        const playBtn = document.createElement('div'); playBtn.className = 'play-btn'; playBtn.innerHTML = '▶';
+        playOverlay.appendChild(playBtn);
+        wrap.appendChild(playOverlay);
+
+        const meta = document.createElement('div'); meta.className = 'meta';
+        meta.innerHTML = `<h2>${v.title}</h2><p>${v.category}</p>`;
+
+        const controls = document.createElement('div'); controls.className = 'controls';
+        const likeBtn = document.createElement('div'); likeBtn.className = 'btn like-btn' + (v._liked ? ' active' : '');
+        likeBtn.innerHTML = '♥';
+        const likeCount = document.createElement('div'); likeCount.style.marginTop = '4px'; likeCount.style.fontSize = '13px';
+        likeCount.textContent = v._likes || 0;
+
+        likeBtn.onclick = e => {
+          e.stopPropagation();
+          v._liked = !v._liked;
+          if (v._liked) v._likes++;
+          else v._likes = Math.max(0, v._likes - 1);
+          likeBtn.classList.toggle('active');
+          likeCount.textContent = v._likes;
+          saveLikes();
+        };
+
+        controls.append(likeBtn, likeCount);
+
+        playOverlay.onclick = e => {
+          e.stopPropagation();
+          if (video.paused) {
+            pauseAllOthers(slidePos);
+            video.play();
+            playOverlay.style.display = 'none';
+          } else {
+            video.pause();
+            playOverlay.style.display = 'flex';
+          }
+        };
+
+        video.onended = () => nextSlide();
+
+        slide.append(wrap, meta, controls);
+        slidesEl.appendChild(slide);
+      });
+
+      setTimeout(() => {
+        const target = slidesEl.querySelector(`.slide[data-pos="${currentIndex}"]`);
+        if (target) target.scrollIntoView({ behavior: 'instant' });
+      }, 50);
+    }
+
+    function pauseAllOthers(excludePos) {
+      document.querySelectorAll('.slide').forEach((s, i) => {
+        if (i !== excludePos) {
+          const v = s.querySelector('video');
+          const overlay = s.querySelector('.play-overlay');
+          if (v) v.pause();
+          if (overlay) overlay.style.display = 'flex';
+        }
+      });
+    }
+
+    function showSlide(i) {
+      if (isScrolling) return;
+      isScrolling = true;
+      currentIndex = (i + order.length) % order.length;
+      const slide = slidesEl.querySelector(`.slide[data-pos="${currentIndex}"]`);
+      if (slide) {
+        slide.scrollIntoView({ behavior: 'smooth' });
+        pauseAllOthers(currentIndex);
+        setTimeout(() => {
+          const v = slide.querySelector('video');
+          const overlay = slide.querySelector('.play-overlay');
+          if (v) { v.play(); overlay.style.display = 'none'; }
+          isScrolling = false;
+        }, 600);
+      } else {
+        isScrolling = false;
+      }
+    }
+
+    function nextSlide() { showSlide(currentIndex + 1); }
+    function prevSlide() { showSlide(currentIndex - 1); }
+
+    function shuffleOrder() {
+      order = order.sort(() => Math.random() - 0.5);
+      currentIndex = 0;
+      buildSlides();
+    }
+
+    function filterByCategory(cat) {
+      const filtered = videoSources.map((v, i) => ({ v, i })).filter(x => x.v.category === cat).map(x => x.i);
+      if (filtered.length === 0) return;
+      order = filtered;
+      currentIndex = 0;
+      buildSlides();
+    }
+
+    function togglePanel() {
+      const open = !sidepanel.classList.contains('open');
+      if (open) {
+        sidepanel.classList.add('open');
+        overlay.classList.add('show');
+      } else closePanel();
+    }
+
+    function closePanel() {
+      sidepanel.classList.remove('open');
+      overlay.classList.remove('show');
+    }
+
+    slidesEl.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; }, { passive: true });
+    slidesEl.addEventListener('touchend', e => {
+      if (!touchStartY) return;
+      const diff = touchStartY - e.changedTouches[0].clientY;
+      if (Math.abs(diff) > 80) diff > 0 ? nextSlide() : prevSlide();
+      touchStartY = 0;
+    }, { passive: true });
+
+    let wheelTimeout;
+    slidesEl.addEventListener('wheel', e => {
+      e.preventDefault();
+      clearTimeout(wheelTimeout);
+      wheelTimeout = setTimeout(() => {
+        if (e.deltaY > 50) nextSlide();
+        else if (e.deltaY < -50) prevSlide();
+      }, 50);
+    }, { passive: false });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowDown') nextSlide();
+      if (e.key === 'ArrowUp') prevSlide();
+    });
+
+    overlay.addEventListener('click', closePanel);
+    document.getElementById('hambBtn').addEventListener('click', togglePanel);
+    document.getElementById('filterBtn').addEventListener('click', togglePanel);
+    document.getElementById('shuffleBtn').addEventListener('click', shuffleOrder);
+    document.getElementById('shufflePanel').addEventListener('click', () => { shuffleOrder(); closePanel(); });
+    document.getElementById('resetLikes').addEventListener('click', () => {
+      localStorage.removeItem('reel_likes');
+      loadLikes();
+      buildSlides();
+    });
+
+    function init() {
+      order = [...Array(videoSources.length).keys()];
+      buildCategories();
+      buildSlides();
+    }
+
+    // Welcome screen logic
+    document.getElementById('welcomeLogo').addEventListener('click', () => {
+      soundEnabled = true;
+      document.getElementById('welcomeScreen').classList.add('fadeOut');
+      setTimeout(() => {
+        document.getElementById('welcomeScreen').remove();
+        init();
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
