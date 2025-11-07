@@ -1,0 +1,268 @@
+body {
+  background: #111;
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+/* TOP BAR */
+.topbar {
+  background: #bd8484;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* LOGO CENTERED */
+.logo-container {
+  text-align: center;
+}
+
+.logo {
+  height: 100px;
+  width: auto;
+}
+
+/* HAMBURGER (3 LINES) */
+.hamburger {
+  position: absolute;
+  left: 15px;
+  width: 30px;
+  height: 22px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hamburger span {
+  height: 4px;
+  background: white;
+  width: 100%;
+  border-radius: 4px;
+  transition: 0.3s;
+}
+
+/* SIDE PANEL */
+.side-panel {
+  position: fixed;
+  top: 0;
+  left: -300px; /* hidden */
+  width: 240px;
+  height: 100%;
+  background: #222;
+  padding: 20px;
+  transition: left 0.3s ease;
+  z-index: 1000;
+}
+
+.side-panel.open {
+  left: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  cursor: pointer;
+}
+
+/* MENU */
+.side-panel ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 50px;
+}
+
+.side-panel ul li {
+  margin: 15px 0;
+}
+
+.side-panel ul li a {
+  color: #ddd;
+  text-decoration: none;
+  font-size: 1.1rem;
+}
+
+.side-panel ul li a:hover {
+  color: #00bfff;
+}
+
+/* DARK OVERLAY */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s;
+  z-index: 500;
+}
+
+.overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+
+/* Main */
+main {
+  padding: 15px;
+}
+
+.welcome h1 {
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+}
+
+..liked-card {
+  background: #0e0e0e;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+}
+
+.liked-art {
+  position: relative;
+  display: inline-block;
+  border-radius: 10px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.liked-art img.album-cover {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  display: block;
+}
+
+.liked-art i.fas.fa-heart {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #fff;
+  font-size: 1.8rem;
+  text-shadow: 0 0 5px #000;
+}
+
+.search-box {
+  width: 100%;
+  border-radius: 20px;
+  padding: 8px 15px;
+  margin-top: 15px;
+  background: #222;
+  color: #fff;
+  border: none;
+}
+
+/* Song List */
+.song-list {
+  margin-top: 15px;
+}
+
+.song-item {
+  background: #1b1b1b;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.song-item img {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+}
+
+.song-info {
+  flex: 1;
+  margin-left: 10px;
+}
+
+.song-info h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.song-info p {
+  margin: 0;
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+.add-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* Player Footer */
+.player-bar {
+  background: #181818;
+  padding: 10px;
+  position: sticky;
+  bottom: 0;
+  text-align: center;
+}
+
+.player-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.now-playing-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+}
+
+.controls i {
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.volume-bar input[type=range] {
+  width: 80px;
+}
+
+/* Footer GIFs */
+.footer-gifs {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+
+.footer-gifs img {
+  width: 90px;
+  height: auto;
+  border-radius: 10px;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 600px) {
+  .song-item img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .footer-gifs img {
+    width: 70px;
+  }
+
+  .controls i {
+    font-size: 1rem;
+  }
+}
