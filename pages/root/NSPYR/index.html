@@ -61,8 +61,8 @@
     .slides{flex:1;display:flex;flex-direction:column;scroll-snap-type:y mandatory;overflow-y:scroll;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
     .slide{scroll-snap-align:start;min-height:100vh;display:flex;align-items:center;justify-content:center;padding-top:56px;box-sizing:border-box;position:relative}
     .video-wrap{width:100%;height:calc(100vh - 56px);max-width:480px;overflow:hidden;border-radius:12px;background:#000;display:flex;align-items:center;justify-content:center;position:relative}
-    .video-wrap video{width:100%;height:100%;border:0;background:#000;display:block;}
-    .play-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:10;cursor:pointer;background:rgba(0,0,0,0.3)}
+    .video-wrap video{width:100%;height:100%;object-fit:cover;border:0;background:#000;display:block;}
+    .play-overlay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;z-index:10;cursor:pointer;background:rgba(0,0,0,0.3)}
     .play-btn{width:72px;height:72px;background:rgba(255,255,255,0.9);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;color:#000}
     .controls{position:absolute;right:12px;bottom:18px;display:flex;flex-direction:column;gap:8px;z-index:20}
     .btn{width:48px;height:48px;border-radius:14px;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;color:#fff;backdrop-filter:blur(6px);}
@@ -77,7 +77,6 @@
       .slides{width:420px;border-radius:16px;margin-top:20px;box-shadow:0 8px 40px rgba(0,0,0,.7);overflow:hidden}
       .slide{padding:0}
     }
-    .hint{position:fixed;left:50%;transform:translateX(-50%);top:64px;font-size:13px;color:var(--muted);z-index:25}
   </style>
 </head>
 <body>
@@ -90,14 +89,12 @@
 
   <div class="topbar">
     <div style="display:flex;align-items:center;gap:12px">
-      <div class="hamburger" id="hambBtn" aria-label="open menu" role="button">
-        <span></span><span></span><span></span>
-      </div>
+      <div class="hamburger" id="hambBtn"><span></span><span></span><span></span></div>
       <div class="brand">Inspirational Reels</div>
     </div>
     <div style="display:flex;align-items:center;gap:12px">
-      <div id="shuffleBtn" class="btn" title="Shuffle">Shuffle</div>
-      <div id="filterBtn" class="btn" title="Categories">Categories</div>
+      <div id="shuffleBtn" class="btn">Shuffle</div>
+      <div id="filterBtn" class="btn">Categories</div>
     </div>
   </div>
   <div class="overlay" id="overlay"></div>
@@ -106,13 +103,11 @@
     <div id="categoriesList"></div>
     <hr style="border:none;height:1px;background:rgba(255,255,255,.04);margin:12px 0">
     <h3>Quick Actions</h3>
-    <div style="display:flex;flex-direction:column;gap:8px">
-      <button id="shufflePanel" class="btn" style="width:120px">Shuffle</button>
-      <button id="resetLikes" class="btn" style="width:120px">Reset Likes</button>
-    </div>
+    <button id="shufflePanel" class="btn" style="width:120px">Shuffle</button>
+    <button id="resetLikes" class="btn" style="width:120px">Reset Likes</button>
   </aside>
+
   <main class="viewer">
-    <div class="hint"></div>
     <div class="slides" id="slides"></div>
   </main>
 
@@ -123,17 +118,14 @@
       { id: 'reel1', url: 'https://resonant-hotteok-a33564.netlify.app/videos/reel (1).mp4', title: 'Reel 1', category: 'Inspirational Reels', likes: 12 },
       { id: 'reel2', url: 'https://resonant-hotteok-a33564.netlify.app/videos/reel (2).mp4', title: 'Reel 2', category: 'Inspirational Reels', likes: 15 },
       { id: 'reel4', url: 'https://resonant-hotteok-a33564.netlify.app/videos/reel (4).mp4', title: 'Reel 4', category: 'Inspirational Reels', likes: 9 },
-      { id: 'reel6', url: 'https://resonant-hotteok-a33564.netlify.app/videos/reel (5).mp4', title: 'Reel 6', category: 'Inspirational Reels', likes: 14 }
+      { id: 'reel6', url: 'https://resonant-hotteok-a33564.netlify.app/videos/reel (6).mp4', title: 'Reel 6', category: 'Inspirational Reels', likes: 14 }
     ];
 
     let order = [...Array(videoSources.length).keys()];
-    let currentIndex = 0;
+    let soundEnabled = false;
     const slidesEl = document.getElementById('slides');
     const sidepanel = document.getElementById('sidepanel');
     const overlay = document.getElementById('overlay');
-    let isScrolling = false;
-    let touchStartY = 0;
-    let soundEnabled = false;
 
     function loadLikes() {
       const store = JSON.parse(localStorage.getItem('reel_likes') || '{}');
@@ -152,8 +144,6 @@
       localStorage.setItem('reel_likes', JSON.stringify(store));
     }
 
-    loadLikes();
-
     function buildCategories() {
       const cats = [...new Set(videoSources.map(v => v.category || 'Uncategorized'))];
       const list = document.getElementById('categoriesList'); list.innerHTML = '';
@@ -167,29 +157,31 @@
 
     function buildSlides() {
       slidesEl.innerHTML = '';
-      order.forEach((origIndex, slidePos) => {
-        const v = videoSources[origIndex];
-        const slide = document.createElement('section'); slide.className = 'slide'; slide.dataset.pos = slidePos;
-        const wrap = document.createElement('div'); wrap.className = 'video-wrap';
+      order.forEach((idx) => {
+        const v = videoSources[idx];
+        const slide = document.createElement('section');
+        slide.className = 'slide';
+        const wrap = document.createElement('div');
+        wrap.className = 'video-wrap';
         const video = document.createElement('video');
         video.src = v.url;
-        video.controls = false;
         video.preload = 'metadata';
+        video.loop = false;
+        video.playsInline = true;
         video.muted = !soundEnabled;
-        wrap.appendChild(video);
 
-        const playOverlay = document.createElement('div'); playOverlay.className = 'play-overlay';
-        const playBtn = document.createElement('div'); playBtn.className = 'play-btn'; playBtn.innerHTML = '▶';
-        playOverlay.appendChild(playBtn);
-        wrap.appendChild(playOverlay);
-
-        const meta = document.createElement('div'); meta.className = 'meta';
+        const meta = document.createElement('div');
+        meta.className = 'meta';
         meta.innerHTML = `<h2>${v.title}</h2><p>${v.category}</p>`;
 
-        const controls = document.createElement('div'); controls.className = 'controls';
-        const likeBtn = document.createElement('div'); likeBtn.className = 'btn like-btn' + (v._liked ? ' active' : '');
+        const controls = document.createElement('div');
+        controls.className = 'controls';
+        const likeBtn = document.createElement('div');
+        likeBtn.className = 'btn like-btn' + (v._liked ? ' active' : '');
         likeBtn.innerHTML = '♥';
-        const likeCount = document.createElement('div'); likeCount.style.marginTop = '4px'; likeCount.style.fontSize = '13px';
+        const likeCount = document.createElement('div');
+        likeCount.style.marginTop = '4px';
+        likeCount.style.fontSize = '13px';
         likeCount.textContent = v._likes || 0;
 
         likeBtn.onclick = e => {
@@ -203,84 +195,40 @@
         };
 
         controls.append(likeBtn, likeCount);
-
-        playOverlay.onclick = e => {
-          e.stopPropagation();
-          if (video.paused) {
-            pauseAllOthers(slidePos);
-            video.play();
-            playOverlay.style.display = 'none';
-          } else {
-            video.pause();
-            playOverlay.style.display = 'flex';
-          }
-        };
-
-        video.onended = () => nextSlide();
-
+        wrap.append(video);
         slide.append(wrap, meta, controls);
         slidesEl.appendChild(slide);
       });
 
-      setTimeout(() => {
-        const target = slidesEl.querySelector(`.slide[data-pos="${currentIndex}"]`);
-        if (target) target.scrollIntoView({ behavior: 'instant' });
-      }, 50);
+      setupAutoPlay();
     }
 
-    function pauseAllOthers(excludePos) {
-      document.querySelectorAll('.slide').forEach((s, i) => {
-        if (i !== excludePos) {
-          const v = s.querySelector('video');
-          const overlay = s.querySelector('.play-overlay');
-          if (v) v.pause();
-          if (overlay) overlay.style.display = 'flex';
-        }
-      });
-    }
+    function setupAutoPlay() {
+      const videos = slidesEl.querySelectorAll('video');
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          const v = entry.target;
+          if (entry.isIntersecting) {
+            videos.forEach(x => { if (x !== v) x.pause(); });
+            v.play().catch(() => {});
+            if (soundEnabled) v.muted = false;
+          } else v.pause();
+        });
+      }, { threshold: 0.6 });
 
-    function showSlide(i) {
-      if (isScrolling) return;
-      isScrolling = true;
-      currentIndex = (i + order.length) % order.length;
-      const slide = slidesEl.querySelector(`.slide[data-pos="${currentIndex}"]`);
-      if (slide) {
-        slide.scrollIntoView({ behavior: 'smooth' });
-        pauseAllOthers(currentIndex);
-        setTimeout(() => {
-          const v = slide.querySelector('video');
-          const overlay = slide.querySelector('.play-overlay');
-          if (v) { v.play(); overlay.style.display = 'none'; }
-          isScrolling = false;
-        }, 600);
-      } else {
-        isScrolling = false;
-      }
-    }
-
-    function nextSlide() { showSlide(currentIndex + 1); }
-    function prevSlide() { showSlide(currentIndex - 1); }
-
-    function shuffleOrder() {
-      order = order.sort(() => Math.random() - 0.5);
-      currentIndex = 0;
-      buildSlides();
+      videos.forEach(v => observer.observe(v));
     }
 
     function filterByCategory(cat) {
-      const filtered = videoSources.map((v, i) => ({ v, i })).filter(x => x.v.category === cat).map(x => x.i);
-      if (filtered.length === 0) return;
-      order = filtered;
-      currentIndex = 0;
+      order = videoSources.map((v, i) => ({v, i}))
+        .filter(x => x.v.category === cat)
+        .map(x => x.i);
       buildSlides();
     }
 
     function togglePanel() {
-      const open = !sidepanel.classList.contains('open');
-      if (open) {
-        sidepanel.classList.add('open');
-        overlay.classList.add('show');
-      } else closePanel();
+      sidepanel.classList.toggle('open');
+      overlay.classList.toggle('show');
     }
 
     function closePanel() {
@@ -288,55 +236,27 @@
       overlay.classList.remove('show');
     }
 
-    slidesEl.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; }, { passive: true });
-    slidesEl.addEventListener('touchend', e => {
-      if (!touchStartY) return;
-      const diff = touchStartY - e.changedTouches[0].clientY;
-      if (Math.abs(diff) > 80) diff > 0 ? nextSlide() : prevSlide();
-      touchStartY = 0;
-    }, { passive: true });
-
-    let wheelTimeout;
-    slidesEl.addEventListener('wheel', e => {
-      e.preventDefault();
-      clearTimeout(wheelTimeout);
-      wheelTimeout = setTimeout(() => {
-        if (e.deltaY > 50) nextSlide();
-        else if (e.deltaY < -50) prevSlide();
-      }, 50);
-    }, { passive: false });
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'ArrowDown') nextSlide();
-      if (e.key === 'ArrowUp') prevSlide();
-    });
-
-    overlay.addEventListener('click', closePanel);
-    document.getElementById('hambBtn').addEventListener('click', togglePanel);
-    document.getElementById('filterBtn').addEventListener('click', togglePanel);
-    document.getElementById('shuffleBtn').addEventListener('click', shuffleOrder);
-    document.getElementById('shufflePanel').addEventListener('click', () => { shuffleOrder(); closePanel(); });
-    document.getElementById('resetLikes').addEventListener('click', () => {
-      localStorage.removeItem('reel_likes');
-      loadLikes();
-      buildSlides();
-    });
+    document.getElementById('hambBtn').onclick = togglePanel;
+    document.getElementById('filterBtn').onclick = togglePanel;
+    document.getElementById('shuffleBtn').onclick = () => { order.sort(()=>Math.random()-0.5); buildSlides(); };
+    document.getElementById('shufflePanel').onclick = () => { order.sort(()=>Math.random()-0.5); buildSlides(); closePanel(); };
+    document.getElementById('resetLikes').onclick = () => { localStorage.removeItem('reel_likes'); loadLikes(); buildSlides(); };
+    overlay.onclick = closePanel;
 
     function init() {
-      order = [...Array(videoSources.length).keys()];
+      loadLikes();
       buildCategories();
       buildSlides();
     }
 
-    // Welcome screen logic
-    document.getElementById('welcomeLogo').addEventListener('click', () => {
+    document.getElementById('welcomeLogo').onclick = () => {
       soundEnabled = true;
       document.getElementById('welcomeScreen').classList.add('fadeOut');
       setTimeout(() => {
         document.getElementById('welcomeScreen').remove();
         init();
       }, 1000);
-    });
+    };
   </script>
 </body>
 </html>
