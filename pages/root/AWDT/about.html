@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shenhab – Advanced Water Desalination & Energy Solutions</title>
+    <meta name="description" content="Shenhab delivers high-efficiency desalination systems that cut water costs up to 40%. ISO-certified, Singapore-based. Book a free engineering assessment today.">
+    
+    <!-- Open Graph / Social -->
+    <meta property="og:title" content="Shenhab – Advanced Water Desalination">
+    <meta property="og:description" content="Cut water production costs up to 40% with Shenhab’s ISO-certified desalination technology.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://shenhab.com">
+    <meta property="og:image" content="https://shenhab.com/og-image.jpg">
+    
+    <!-- Favicons -->
+    <link rel="icon" href="favicon.ico">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Schema Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Corporation",
+      "name": "Shenhab-Energy Pte. Ltd.",
+      "url": "https://shenhab.com",
+      "logo": "https://shenhab.com/logo.svg",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+65-6XXX-XXXX",
+        "contactType": "Sales"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/shenhab"
+      ]
+    }
+    </script>
+    
+    <style>
+        /* ---------- CSS RESET ---------- */
+        *, *::before, *::after { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Inter', sans-serif; line-height: 1.6; color: #0f172a; background: #fff; }
+        h1, h2, h3, p { margin: 0; }
+        img { max-width: 100%; display: block; }
+        a { color: inherit; text-decoration: none; }
+        
+        /* ---------- VARIABLES ---------- */
+        :root {
+            --primary: #0ea5e9;   /* Shenhab Blue */
+            --primary-dark: #0284c7;
+            --accent: #06b6d4;   /* Teal accent */
+            --text: #0f172a;
+            --muted: #64748b;
+            --bg-light: #f8fafc;
+            --bg-dark: #0f172a;
+            --white: #ffffff;
+            --radius: 8px;
+            --shadow: 0 4px 12px rgba(0,0,0,.08);
+            --max-width: 1100px;
+            --transition: .25s ease;
+        }
+        
+        /* ---------- LAYOUT ---------- */
+        .container { width: 90%; max-width: var(--max-width); margin: auto; }
+        .flex { display: flex; align-items: center; justify-content: space-between; }
+        .grid { display: grid; gap: 2rem; }
+        .text-center { text-align: center; }
+        
+        /* ---------- BUTTONS ---------- */
+        .btn {
+            display: inline-block;
+            padding: .9rem 1.8rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+        .btn-primary { background: var(--primary); color: var(--white); }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-outline { border: 2px solid var(--primary); color: var(--primary); }
+        .btn-outline:hover { background: var(--primary); color: var(--white); }
+        
+        /* ---------- HEADER ---------- */
+        header {
+            background: var(--white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        nav { padding: 1rem 0; }
+        .logo { font-weight: 700; font-size: 1.25rem; color: var(--primary); }
+        .nav-links { display: flex; gap: 1.5rem; list-style: none; margin: 0; padding: 0; }
+        .nav-links a { color: var(--text); font-weight: 500; }
+        .nav-links a:hover { color: var(--primary); }
+        .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--text);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+        
+        /* ---------- HERO ---------- */
+        .hero {
+            padding: 4rem 0 5rem;
+            background: var(--bg-light);
+        }
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .hero p {
+            font-size: 1.125rem;
+            color: var(--muted);
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+        .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+        
+        /* ---------- SECTIONS ---------- */
+        section { padding: 4rem 0; }
+        h2 { font-size: 2rem; margin-bottom: 1rem; }
+        .subtitle { color: var(--muted); margin-bottom: 2.5rem; max-width: 600px; }
+        
+        /* ---------- BENEFITS ---------- */
+        .benefits-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+        .benefit-card {
+            background: var(--white);
+            border: 1px solid #e2e8f0;
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        .benefit-card:hover { transform: translateY(-4px); }
+        .benefit-card h3 { margin: 1rem 0 .5rem; }
+        
+        /* ---------- SOCIAL PROOF ---------- */
+        .stats { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; }
+        .stat { text-align: center; }
+        .stat strong { font-size: 2.5rem; color: var(--primary); }
+        .stat p { color: var(--muted); }
+        
+        /* ---------- TESTIMONIALS ---------- */
+        .testimonials {
+            background: var(--bg-light);
+        }
+        .testimonial {
+            max-width: 700px;
+            margin: auto;
+            text-align: center;
+            font-style: italic;
+            color: var(--muted);
+        }
+        .testimonial footer {
+            margin-top: 1rem;
+            font-weight: 600;
+            color: var(--text);
+            font-style: normal;
+        }
+        
+        /* ---------- CTA BANNER ---------- */
+        .cta-banner {
+            background: var(--primary);
+            color: var(--white);
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+        .cta-banner h2 { margin-bottom: 1rem; }
+        .cta-banner .btn { background: var(--white); color: var(--primary); }
+        .cta-banner .btn:hover { background: #e2e8f0; }
+        
+        /* ---------- FOOTER ---------- */
+        footer {
+            background: var(--bg-dark);
+            color: #cbd5e1;
+            padding: 3rem 0 2rem;
+            font-size: .9rem;
+        }
+        footer a { color: #94a3b8; }
+        footer a:hover { color: var(--white); }
+        .footer-grid {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            margin-bottom: 2rem;
+        }
+        .footer-bottom {
+            border-top: 1px solid #334155;
+            padding-top: 1rem;
+            text-align: center;
+            color: #64748b;
+        }
+        
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--white);
+                flex-direction: column;
+                padding: 1rem 0;
+                box-shadow: var(--shadow);
+                display: none;
+            }
+            .nav-links.open { display: flex; }
+            .hero-btns { flex-direction: column; }
+            .stats { flex-direction: column; gap: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- ---------- HEADER ---------- -->
+    <header>
+        <nav class="container flex">
+            <a class="logo" href="/">Shenhab</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#benefits">Benefits</a></li>
+                <li><a href="#proof">Proof</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- ---------- HERO ---------- -->
+        <section class="hero">
+            <div class="container grid" style="grid-template-columns: 1fr 1fr; align-items:center;">
+                <div>
+                    <h1>Advanced Desalination That Cuts Water Costs up to 40 %</h1>
+                    <p>Singapore-based Shenhab designs, builds and maintains high-efficiency reverse-osmosis systems for municipalities, industry and resorts.</p>
+                    <div class="hero-btns">
+                        <a class="btn btn-primary" href="#contact">Book Free Assessment</a>
+                        <a class="btn btn-outline" href="#proof">See Case Studies</a>
+                    </div>
+                </div>
+                <div>
+                    <img src="hero-desal-unit.jpg" alt="Shenhab modular desalination unit">
+                </div>
+            </div>
+        </section>
+
+        <!-- ---------- BENEFITS ---------- -->
+        <section id="benefits" class="container">
+            <div class="text-center">
+                <h2>Why Engineers Choose Shenhab</h2>
+                <p class="subtitle">Every system is optimised for lowest life-cycle cost, smallest footprint and maximum uptime.</p>
+            </div>
+            <div class="benefits-grid grid">
+                <div class="benefit-card">
+                    <img src="icon-cost.svg" alt="" width="48" height="48">
+                    <h3>40 % Lower OPEX</h3>
+                    <p>Patented energy-recovery and smart-controls reduce power and chemical consumption.</p>
+                </div>
+                <div class="benefit-card">
+                    <img src="icon-footprint.svg" alt="" width="48" height="48">
+                    <h3>30 % Smaller Footprint</h3>
+                    <p>High-flux membranes and modular skids fit tight sites—no costly civil works.</p>
+                </div>
+                <div class="benefit-card">
+                    <img src="icon-uptime.svg" alt="" width="48" height="48">
+                    <h3>99 % Uptime Guaranteed</h3>
+                    <p>Remote monitoring and 24-hour service team keep water flowing, or we pay penalties.</p>
+                </div>
+                <div class="benefit-card">
+                    <img src="icon-green.svg" alt="" width="48" height="48">
+                    <h3>Green Compliance</h3>
+                    <p>ISO 14001-certified processes and low-pressure design cut CO₂ emissions.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ---------- SOCIAL PROOF ---------- -->
+        <section id="proof" class="container">
+            <div class="text-center">
+                <h2>Proven Across 120+ Projects</h2>
+                <p class="subtitle">From 50 m³/day resort units to 50,000 m³/day municipal plants.</p>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <strong>120+</strong>
+                    <p>Plants Delivered</p>
+                </div>
+                <div class="stat">
+                    <strong>1.2 B</strong>
+                    <p>Litres Produced Daily</p>
+                </div>
+                <div class="stat">
+                    <strong>15</strong>
+                    <p>Countries Served</p>
+                </div>
+                <div class="stat">
+                    <strong>99.2 %</strong>
+                    <p>Average Uptime</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ---------- TESTIMONIALS ---------- -->
+        <section class="testimonials">
+            <div class="container">
+                <blockquote class="testimonial">
+                    “Shenhab’s 4,000 m³/day plant reduced our utility bill by S$1.3 M in the first year while meeting Singapore’s strict PUB standards.”
+                    <footer>— Tan Wei Ming, Plant Manager, PacificChem Industries</footer>
+                </blockquote>
+            </div>
+        </section>
+
+        <!-- ---------- SERVICES ---------- -->
+        <section id="services" class="container">
+            <div class="text-center">
+                <h2>End-to-End Services</h2>
+                <p class="subtitle">One contract, single point of accountability.</p>
+            </div>
+            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+                <div>
+                    <h3>Design & Build</h3>
+                    <p>Feed-water analysis, process simulation, 3-D modelling, fabrication, commissioning.</p>
+                </div>
+                <div>
+                    <h3>Finance & Operate</h3>
+                    <p>Build-Own-Operate (BOO) and BOOT models—zero-capex option for public clients.</p>
+                </div>
+                <div>
+                    <h3>Upgrade & Retrofit</h3>
+                    <p>Membrane replacement, energy-recovery retrofits, automation upgrades for legacy plants.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ---------- CTA BANNER ---------- -->
+        <section class="cta-banner">
+            <h2>Ready to Cut Water Costs?</h2>
+            <p>Get a free engineering assessment and ROI projection within 5 business days.</p>
+            <a class="btn" href="#contact">Book Free Assessment</a>
+        </section>
+    </main>
+
+    <!-- ---------- FOOTER ---------- -->
+    <footer id="contact">
+        <div class="container footer-grid">
+            <div>
+                <h3>Shenhab-Energy Pte. Ltd.</h3>
+                <p>1 Commonwealth Lane<br>
+                #07-23 Singapore 149544<br>
+                +65 6XXX XXXX<br>
+                <a href="mailto:sales@shenhab.com">sales@shenhab.com</a></p>
+            </div>
+            <div>
+                <h4>Quick Links</h4>
+                <ul style="list-style:none;padding:0;">
+                    <li><a href="#benefits">Benefits</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#proof">Case Studies</a></li>
+                    <li><a href="privacy.pdf" target="_blank">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Certifications</h4>
+                <p>ISO 9001 | ISO 14001 | ISO 45001</p>
+                <a href="https://www.linkedin.com/company/shenhab" target="_blank" aria-label="LinkedIn">
+                    <img src="linkedin.svg" alt="LinkedIn" width="24" height="24">
+                </a>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            © <span id="year"></span> Shenhab-Energy Pte. Ltd. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- ---------- SCRIPTS ---------- -->
+    <script>
+        // Mobile nav toggle
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        hamburger.addEventListener('click', () => {
+            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
+            hamburger.setAttribute('aria-expanded', !expanded);
+            navLinks.classList.toggle('open');
+        });
+
+        // Dynamic year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+    </script>
+</body>
+</html>
