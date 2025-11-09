@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Mini-Browser+</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#fff">
+  <link rel="icon" href="favicon.ico">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <style>
+    * { touch-action: manipulation; }
+  </style>
+</head>
+<body>
+  <!-- TOP BAR -->
+  <header id="top-bar">
+    <button id="back" aria-label="Back">Back</button>
+    <div id="url-display">google.com</div>
+    <button id="bm" aria-label="Bookmark">Bookmark</button>
+    <button id="menu" aria-label="Menu">Menu</button>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main id="main">
+    <!-- Google Homepage -->
+    <section id="google-home">
+      <div class="logo-container">
+        <h1 class="google-logo">Google</h1>
+      </div>
+
+      <form id="search-form" class="search-box">
+        <div class="search-inner">
+          <span class="icon search-icon">Search</span>
+          <input id="search-input" type="text" placeholder="" autocomplete="off">
+          <button type="submit" hidden></button>
+          <span class="icon mic-icon">Mic</span>
+          <span class="icon lens-icon">Lens</span>
+        </div>
+      </form>
+
+      <div class="lang-links">
+        Google offered in:
+        <a href="#" data-lang="fil">Filipino</a>
+        <a href="#" data-lang="ceb">Cebuano</a>
+      </div>
+
+      <div class="trending">
+        <h3>Trending searches</h3>
+        <ul id="trending-list"></ul>
+      </div>
+    </section>
+
+    <!-- Web View -->
+    <iframe id="frame" src="about:blank" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals"></iframe>
+  </main>
+
+  <!-- BOTTOM NAV -->
+  <nav id="bottom-nav">
+    <button id="bhome" class="active">Home</button>
+    <button id="bsearch">Search</button>
+    <button id="btabs">Tabs</button>
+    <button id="bmore">More</button>
+  </nav>
+
+  <!-- DRAWERS -->
+  <aside id="bookmarks" class="drawer">
+    <div class="drawer-header">
+      <h3>Bookmarks</h3>
+      <button id="close-bm">Close</button>
+    </div>
+    <ul id="bmlist"></ul>
+  </aside>
+
+  <aside id="history" class="drawer">
+    <div class="drawer-header">
+      <h3>History <button id="clrHist">Clear</button></h3>
+      <button id="close-hist">Close</button>
+    </div>
+    <ul id="histlist"></ul>
+  </aside>
+
+  <aside id="menu-drawer" class="drawer">
+    <div class="drawer-header">
+      <h3>Menu</h3>
+      <button id="close-menu">Close</button>
+    </div>
+    <ul>
+      <li><button id="dark-mode-toggle">Dark Mode</button></li>
+      <li><button id="share-page">Share Page</button></li>
+      <li><button id="find-in-page">Find in page</button></li>
+      <li><button id="desktop-mode">Request Desktop Site</button></li>
+    </ul>
+  </aside>
+
+  <script src="app.js" type="module"></script>
+</body>
+</html>
