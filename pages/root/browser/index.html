@@ -1,255 +1,241 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chrome Browser Clone</title>
-<style>
-  :root {
-    --bg-color: #ffffff;
-    --text-color: #000000;
-    --header-bg: #eee;
-    --btn-bg: #4285F4;
-    --icon-bg: #f0f0f0;
-  }
-
-  body.dark {
-    --bg-color: #1e1e1e;
-    --text-color: #f5f5f5;
-    --header-bg: #2c2c2c;
-    --btn-bg: #4285F4;
-    --icon-bg: #2a2a2a;
-  }
-
-  * {
-    box-sizing: border-box;
-  }
-
-  body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    font-family: Arial, sans-serif;
-    background: var(--bg-color);
-    color: var(--text-color);
-  }
-
-  .browser-window {
-    max-width: 800px;
-    margin: 20px auto;
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    background: var(--bg-color);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    height: 90vh;
-  }
-
-  .browser-header {
-    background: var(--header-bg);
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    justify-content: space-between;
-  }
-
-  .chrome-buttons {
-    display: flex;
-    gap: 6px;
-  }
-
-  .chrome-buttons div {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-  }
-
-  .close { background: #f25f5c; }
-  .minimize { background: #ffbe40; }
-  .maximize { background: #0acf83; }
-
-  .theme-toggle {
-    cursor: pointer;
-    padding: 5px 10px;
-    background: var(--btn-bg);
-    color: #fff;
-    border-radius: 5px;
-    border: none;
-  }
-
-  .browser-body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-
-  .search-bar {
-    width: 80%;
-    max-width: 400px;
-    padding: 10px;
-    border-radius: 25px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-    margin-bottom: 10px;
-  }
-
-  .search-btn {
-    padding: 10px 20px;
-    border-radius: 25px;
-    border: none;
-    background: var(--btn-bg);
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    margin-bottom: 20px;
-  }
-
-  .icon-grid {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-
-  .icon-grid a {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-decoration: none;
-    color: var(--text-color);
-    font-size: 14px;
-  }
-
-  .icon-grid img {
-    width: 50px;
-    height: 50px;
-    background: var(--icon-bg);
-    border-radius: 10px;
-    padding: 10px;
-  }
-
-  #bookmarks {
-    margin-top: 20px;
-    width: 90%;
-    max-width: 600px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-  }
-
-  #bookmarks a {
-    padding: 6px 12px;
-    background: var(--icon-bg);
-    border-radius: 8px;
-    text-decoration: none;
-    color: var(--text-color);
-    font-size: 14px;
-  }
-
-  iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    display: none;
-  }
-
-  @media(max-width: 500px) {
-    .search-bar { width: 70%; }
-    .icon-grid img { width: 40px; height: 40px; padding: 5px; }
-  }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MiniBrowser PWA</title>
+  <link rel="manifest" href="/manifest.json" />
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #111;
+    }
+    [data-theme="dark"] {
+      --bg: #111;
+      --fg: #f0f0f0;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, Segoe UI, Roboto, Helvetica, Arial;
+      background: var(--bg);
+      color: var(--fg);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      display: flex;
+      gap: 8px;
+      padding: 8px;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.03);
+    }
+    .tabs {
+      display: flex;
+      gap: 6px;
+      flex: 1;
+      overflow-x: auto;
+    }
+    .tab {
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .tab.active {
+      outline: 2px solid;
+      font-weight: 600;
+    }
+    .controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .address {
+      flex: 1;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      padding: 8px;
+    }
+    .webviews {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      flex: 1;
+      background: #f5f5f5;
+    }
+    footer {
+      padding: 6px;
+      text-align: center;
+      font-size: 12px;
+      color: gray;
+    }
+    button {
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: none;
+      background: rgba(0, 0, 0, 0.06);
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-
-<div class="browser-window">
-  <div class="browser-header">
-    <div class="chrome-buttons">
-      <div class="close"></div>
-      <div class="minimize"></div>
-      <div class="maximize"></div>
+  <header>
+    <div class="tabs" id="tabs"></div>
+    <div class="controls">
+      <button id="newTab">New tab</button>
+      <button id="toggleTheme">Toggle Dark</button>
+      <button id="bookmarksBtn">Bookmarks</button>
     </div>
-    <button class="theme-toggle" onclick="toggleTheme()">Toggle Dark</button>
-  </div>
+  </header>
 
-  <div class="browser-body" id="browserBody">
-    <input type="text" class="search-bar" id="searchInput" placeholder="Enter URL or search Google...">
-    <button class="search-btn" onclick="openURL()">Go</button>
-
-    <!-- Icon grid -->
-    <div class="icon-grid">
-      <a href="https://www.google.com" target="_blank">
-        <img src="https://www.google.com/favicon.ico" alt="Google">
-        <span>Google</span>
-      </a>
-      <a href="https://www.youtube.com" target="_blank">
-        <img src="https://www.youtube.com/s/desktop/11de5f3d/img/favicon_32x32.png" alt="YouTube">
-        <span>YouTube</span>
-      </a>
-      <a href="https://github.com" target="_blank">
-        <img src="https://github.githubassets.com/favicons/favicon.png" alt="GitHub">
-        <span>GitHub</span>
-      </a>
+  <main>
+    <div class="toolbar">
+      <input id="address" class="address" placeholder="Enter URL or search..." />
+      <button id="go">Go</button>
+      <button id="bookmark">☆</button>
     </div>
 
-    <!-- Bookmarks -->
-    <div id="bookmarks"></div>
-  </div>
+    <div class="webviews" id="webviews"></div>
+  </main>
 
-  <iframe id="browserFrame"></iframe>
-</div>
+  <footer>MiniBrowser — PWA-ready, offline caching & bookmarks</footer>
 
 <script>
-// Dark theme toggle
-function toggleTheme() {
-  document.body.classList.toggle('dark');
+const tabsEl = document.getElementById('tabs');
+const webviewsEl = document.getElementById('webviews');
+const addressInput = document.getElementById('address');
+const newTabBtn = document.getElementById('newTab');
+const goBtn = document.getElementById('go');
+const bookmarkBtn = document.getElementById('bookmark');
+const toggleThemeBtn = document.getElementById('toggleTheme');
+const bookmarksKey = 'mini_browser_bookmarks_v2';
+const tabsKey = 'mini_browser_tabs_v2';
+
+let tabs = JSON.parse(localStorage.getItem(tabsKey) || '[]');
+let active = 0;
+
+// Add a new tab
+function addTab(url = 'https://duckduckgo.com') {
+  tabs.push({ url });
+  active = tabs.length - 1;
+  saveTabs();
+  render();
 }
 
-// Open URL or search
-function openURL() {
-  const input = document.getElementById('searchInput').value.trim();
-  const iframe = document.getElementById('browserFrame');
-  const body = document.getElementById('browserBody');
+// Close a tab
+function closeTab(idx) {
+  tabs.splice(idx, 1);
+  if (active >= tabs.length) active = Math.max(0, tabs.length - 1);
+  saveTabs();
+  render();
+}
 
-  if (!input) return;
+function saveTabs() {
+  localStorage.setItem(tabsKey, JSON.stringify(tabs));
+}
 
-  let url = input;
+function render() {
+  tabsEl.innerHTML = '';
+  webviewsEl.innerHTML = '';
+  tabs.forEach((t, i) => {
+    const tb = document.createElement('div');
+    tb.className = 'tab' + (i === active ? ' active' : '');
+    tb.textContent = (new URL(t.url, location.origin).hostname || t.url).slice(0, 20);
+    tb.onclick = () => { active = i; render(); };
+    tb.oncontextmenu = (e) => { e.preventDefault(); closeTab(i); };
+    tabsEl.appendChild(tb);
+  });
 
-  // If input doesn't start with http/https, treat as Google search
-  if (!/^https?:\/\//i.test(input)) {
-    url = `https://www.google.com/search?q=${encodeURIComponent(input)}`;
+  if (tabs.length === 0) { addTab(); return; }
+
+  const iframe = document.createElement('iframe');
+  iframe.src = tabs[active].url;
+  iframe.loading = 'lazy';
+  iframe.setAttribute('sandbox', 'allow-scripts allow-forms allow-same-origin allow-popups');
+  
+  // Detect blocked / refused pages
+  iframe.onerror = () => {
+    window.open(tabs[active].url, '_blank');
+  };
+
+  iframe.onload = () => {
+    // Try to detect same-origin access (blocked pages)
+    try {
+      const doc = iframe.contentDocument;
+      if (!doc || doc.body.innerHTML === '') {
+        throw new Error("Blocked");
+      }
+    } catch (e) {
+      // Blocked by CSP / X-Frame — open in real browser tab
+      window.open(tabs[active].url, '_blank');
+    }
+  };
+
+  webviewsEl.appendChild(iframe);
+  addressInput.value = tabs[active].url;
+}
+
+function navigate(text) {
+  let url = text.trim();
+  if (!url) return;
+  if (!/^https?:\/\//i.test(url)) {
+    // Use DuckDuckGo search
+    url = 'https://duckduckgo.com/?q=' + encodeURIComponent(url);
   }
-
-  iframe.src = url;
-  iframe.style.display = 'block';
-  body.style.display = 'none';
-
-  // Save as bookmark
-  addBookmark(input);
+  tabs[active].url = url;
+  saveTabs();
+  render();
 }
 
-// Allow Enter key
-document.getElementById('searchInput').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') openURL();
+goBtn.addEventListener('click', () => navigate(addressInput.value));
+addressInput.addEventListener('keydown', e => { if (e.key === 'Enter') navigate(addressInput.value); });
+newTabBtn.addEventListener('click', () => addTab('https://duckduckgo.com'));
+bookmarkBtn.addEventListener('click', () => {
+  const b = JSON.parse(localStorage.getItem(bookmarksKey) || '[]');
+  b.push({ url: tabs[active].url, title: tabs[active].url });
+  localStorage.setItem(bookmarksKey, JSON.stringify(b));
+  alert('Bookmarked!');
+});
+document.getElementById('bookmarksBtn').addEventListener('click', () => {
+  const b = JSON.parse(localStorage.getItem(bookmarksKey) || '[]');
+  const pick = prompt('Bookmarks:\n' + b.map((x, i) => `${i + 1}: ${x.title}`).join('\n') + '\nEnter number to open');
+  const idx = parseInt(pick, 10) - 1;
+  if (!isNaN(idx) && b[idx]) {
+    tabs[active].url = b[idx].url;
+    saveTabs();
+    render();
+  }
+});
+toggleThemeBtn.addEventListener('click', () => {
+  const cur = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
 });
 
-// Bookmark functionality
-function addBookmark(url) {
-  const bookmarks = document.getElementById('bookmarks');
-  const link = document.createElement('a');
-  link.href = url.startsWith('http') ? url : `https://www.google.com/search?q=${encodeURIComponent(url)}`;
-  link.target = "_blank";
-  link.textContent = url;
-  bookmarks.appendChild(link);
+// Initialize
+if (tabs.length === 0) tabs = [{ url: 'https://duckduckgo.com' }];
+render();
+
+// Register service worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(err => console.warn('SW reg failed', err));
 }
 </script>
-
 </body>
 </html>
