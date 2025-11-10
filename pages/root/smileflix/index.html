@@ -1,233 +1,296 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>HDO — Smileflix (Auto GitHub MP4)</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drama Stream</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#0b0b0b; --panel:rgba(16,16,16,0.75); --muted:#9aa3ad; --accent:#ff6b00; --glass: rgba(255,255,255,0.04);
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:linear-gradient(180deg,#050505 0%, #0b0b0b 100%);color:#fff;font-family:"Inter",system-ui,Segoe UI,Roboto,Arial,sans-serif;}
-a{color:inherit;text-decoration:none}
-.app{min-height:100vh;padding-bottom:76px;}
-.header{display:flex;align-items:center;justify-content:space-between;padding:40px 16px;position:sticky;top:0;z-index:30;background: linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.15));backdrop-filter: blur(6px);}
-.brand{display:flex;align-items:center;gap:10px;}
-.logo-badge{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,#ff7f2a,#ff4d00);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:18px;box-shadow:0 6px 18px rgba(255,107,0,0.12);}
-.brand .title{display:flex;flex-direction:column;line-height:1;}
-.brand h1{font-size:16px;font-weight:700}
-.brand span{font-size:11px;color:var(--muted);margin-top:2px}
-.header-controls{display:flex;gap:12px;align-items:center}
-.icon-btn{width:38px;height:38px;border-radius:10px;background:var(--glass);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 6px 14px rgba(0,0,0,0.6);}
-.icon-btn svg{width:18px;height:18px;color:#fff;opacity:0.95}
-.tabs{display:flex;gap:8px;padding:12px 12px 6px;overflow:auto}
-.tab{padding:8px 14px;border-radius:999px;background:transparent;color:var(--muted);font-weight:600;font-size:13px;border:1px solid transparent;cursor:pointer;white-space:nowrap;}
-.tab.active{background:linear-gradient(90deg, rgba(255,107,0,0.12), rgba(255,107,0,0.06));color:var(--accent);box-shadow:0 8px 22px rgba(255,107,0,0.06);border-color:rgba(255,107,0,0.08)}
-.player-wrap{padding:14px}
-.player-card{border-radius:16px;overflow:hidden;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow: 0 14px 40px rgba(2,6,23,0.6);padding:0.5rem;}
-#mainPlayer{width:100%;height:220px;border-radius:12px;background:#000;display:block;object-fit:cover}
-.section{padding:14px 14px 4px;display:flex;align-items:center;justify-content:space-between}
-.section h2{font-size:16px;font-weight:700}
-.grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(140px, 1fr));gap:12px;padding:12px}
-.card{position:relative;border-radius:12px;overflow:hidden;background:var(--glass);transition:transform .28s ease, box-shadow .28s ease;cursor:pointer}
-.card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,0.6)}
-.card video{width:100%;height:190px;object-fit:cover;display:block;background:#000}
-.card .meta{position:absolute;left:10px;right:10px;bottom:10px;color:#fff;display:flex;align-items:center;justify-content:space-between}
-.card .meta .title{font-size:13px;font-weight:700;text-shadow:0 4px 12px rgba(0,0,0,0.6)}
-.card .meta .badge{background:linear-gradient(90deg,#ff8a3b,#ff5a00);padding:6px 8px;border-radius:8px;font-size:12px;font-weight:700;color:#fff}
-.card.active{outline:3px solid rgba(255,107,0,0.16);box-shadow:0 26px 50px rgba(255,107,0,0.06)}
-.bottom-nav{position:fixed;left:0;right:0;bottom:10px;margin:0 auto;max-width:760px;display:flex;gap:6px;justify-content:space-between;padding:10px 12px;background:linear-gradient(180deg, rgba(10,10,10,0.95), rgba(5,5,5,0.9));border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,0.6);z-index:50;margin-left:12px;margin-right:12px;}
-.nav-item{flex:1;text-align:center;padding:8px 6px;border-radius:12px;color:var(--muted);font-weight:700;font-size:13px}
-.nav-item.active{color:var(--accent);background:linear-gradient(90deg, rgba(255,107,0,0.06), rgba(255,107,0,0.03));box-shadow:0 8px 20px rgba(255,107,0,0.04)}
-@media(min-width:900px){#mainPlayer{height:380px}.card video{height:220px}}@media(max-width:420px){#mainPlayer{height:200px}.card video{height:160px}.grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}}
-.small-muted{font-size:12px;color:var(--muted);padding:8px 12px}
-.warn{padding:8px 12px;color:#ffd7b5;background:rgba(255,107,0,0.06);border-radius:8px;margin:12px}
+  <style>
+    /* Basic reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
- /* bottom carousel */
-    .carousel {
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      gap:24px;
-      margin:40px auto;
-      padding:10px 0;
-      flex-wrap:wrap;
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: #141414;
+      color: #fff;
+      overflow-x: hidden;
     }
-    .carousel-item img {
-      width:80px;
-      height:80px;
-      object-fit:contain;
-      border-radius:50%;
-      box-shadow:0 4px 10px rgba(0,0,0,0.1);
-      transition:transform .3s ease;
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: #000;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
-    .carousel-item img:hover {
-      transform:scale(1.1);
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #e50914;
     }
-</style>
+
+    .main-banner {
+      position: relative;
+      background: url("https://images.unsplash.com/photo-1606112219348-204d7d8b94ee?auto=format&fit=crop&w=1400&q=80") center/cover no-repeat;
+      height: 60vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .banner-content {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 2rem;
+      border-radius: 10px;
+      max-width: 90%;
+    }
+
+    .banner-content h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .banner-content p {
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      color: #ccc;
+    }
+
+    .watch-btn {
+      background: #e50914;
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .watch-btn:hover {
+      background: #f40612;
+    }
+
+    /* Recommended Section */
+    .section {
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+
+    .section h2 {
+      font-size: 1.8em;
+      color: #e50914;
+      margin-bottom: 1.5rem;
+    }
+
+    .row {
+      display: flex;
+      overflow-x: auto;
+      gap: 1rem;
+      scroll-behavior: smooth;
+      padding-bottom: 1rem;
+    }
+
+    .row::-webkit-scrollbar {
+      height: 6px;
+    }
+    .row::-webkit-scrollbar-thumb {
+      background: #333;
+      border-radius: 3px;
+    }
+
+    .card {
+      flex: 0 0 auto;
+      width: 180px;
+      border-radius: 10px;
+      overflow: hidden;
+      background-color: #222;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    /* Video modal overlay */
+    .video-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.9);
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .video-content {
+      position: relative;
+      width: 90%;
+      max-width: 800px;
+    }
+
+    .video-content iframe {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border: none;
+      border-radius: 10px;
+    }
+
+    .close {
+      position: absolute;
+      top: -35px;
+      right: 0;
+      color: #fff;
+      font-size: 2em;
+      cursor: pointer;
+      background: rgba(0,0,0,0.5);
+      border-radius: 50%;
+      padding: 0 10px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      color: #777;
+      font-size: 0.9rem;
+      margin-top: 2rem;
+    }
+
+    /* Mobile-friendly adjustments */
+    @media (max-width: 768px) {
+      .banner-content h1 {
+        font-size: 1.5rem;
+      }
+      .banner-content p {
+        font-size: 0.9rem;
+      }
+      .card {
+        width: 140px;
+      }
+      .section h2 {
+        font-size: 1.4em;
+      }
+      .close {
+        top: -25px;
+        font-size: 1.5em;
+      }
+    }
+  </style>
 </head>
-<body>
-<div class="app">
 
-  <header class="header">
-    <div class="brand">
-      <div class="logo-badge">20</div>
-      <div class="title"><h1>Smile Flex</h1><span>Auto GitHub MP4 • Offline-ready</span></div>
-    </div>
-    <div class="header-controls">
-      <div class="icon-btn" title="Search" onclick="document.getElementById('searchInput').focus()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 21l-4.35-4.35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11" cy="11" r="6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-    </div>
+<body>
+  <header>
+    <div class="logo">MyDrama</div>
   </header>
 
-  <div class="tabs" role="tablist" aria-label="Categories">
-    <button class="tab active" data-tab="home">Home</button>
-    <button class="tab" data-tab="movie">Movie</button>
-    <button class="tab" data-tab="tvshow">TVshow</button>
-    <input id="searchInput" type="search" placeholder="Search videos..." style="margin-left:12px;background:transparent;border:none;color:#fff;outline:none;font-size:13px" />
-  </div>
-
-  <div class="player-wrap">
-    <div class="player-card">
-      <video id="mainPlayer" controls preload="metadata">
-        <source src="media/underworld6.mp4" type="video/mp4">
-        Your browser doesn't support HTML5 video.
-      </video>
+  <section class="main-banner">
+    <div class="banner-content">
+      <h1>Watch Your Favorite Drama</h1>
+      <p>Start streaming now in HD quality — just one click away.</p>
+      <a href="https://m.mydramawave.com/series/jfYqrhG2Co/jBYoCT0npx?return_to=/&from_page=home"
+         target="_blank"
+         class="watch-btn">▶ Watch Now</a>
     </div>
-  </div>
-
-  <section class="section">
-    <h2>Recommended (auto from GitHub)</h2>
-    <a href="#" id="refreshBtn" title="Refresh list">Refresh</a>
   </section>
 
-  <div class="small-muted">Source: <strong>Smile-Wifi/smileflex</strong> (public GitHub repo). Files are discovered dynamically.</div>
-  <div class="warn">Note: videos may be large — your browser may refuse to store multiple big files. The app caches videos only after they're requested (played).</div>
+<section class="section">
+  <h2>Recommended For You</h2>
+  <div class="row">
 
-  <div class="grid" id="grid">
-    <!-- video cards injected here -->
-  </div>
-
-  <!-- Fixed Carousel – Home button now matches the others -->
-  <section class="carousel" aria-label="Quick navigation">
-    <div class="carousel-item"><a href="earth.html"><img src="GIF/earth.gif" alt="Earth"></a></div>
-
-    <!-- Home button – wrapped, local, accessible -->
-    <div class="carousel-item">
-      <a href="https://smile-wifi.github.io/Main" title="Back to Home" aria-label="Back to Home">
-        <img src="GIF/Home.png" alt="Home">
+    <div class="card">
+      <a href="https://m.mydramawave.com/series/46XCeNSPCG/r6GD8LukR8?return_to=/&from_page=home" target="_blank">
+        <img src="images/drama1.jpg" alt="Sleeping for 30 Years, My Brothers Regret" />
       </a>
     </div>
 
-    <div class="carousel-item"><a href="cribble.html"><img src="GIF/mars.gif" alt="Mars"></a></div>
+    <div class="card">
+      <a href="https://m.mydramawave.com/series/utIY1faQ7f/sK5KW7IRZr?return_to=/&from_page=home" target="_blank">
+        <img src="images/drama2.jpg" alt="The Billionaire Heir She Dumped (Dubbed)" />
+      </a>
+    </div>
+
+    <div class="card">
+      <a href="https://m.mydramawave.com/series/pXkVaWtbGi/f9hgvleZar?return_to=/&from_page=home" target="_blank">
+        <img src="https://placehold.co/300x450?text=My+CEO,+My+Miracle+(Dubbed)" alt="My CEO, My Miracle (Dubbed)" />
+      </a>
+    </div>
+
+    <!-- Optional extra cards -->
+    <div class="card">
+      <a href="https://m.mydramawave.com/series/jfYqrhG2Co/jBYoCT0npx?return_to=/&from_page=home" target="_blank">
+        <img src="https://placehold.co/300x450?text=Featured+Drama" alt="Featured Drama" />
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+    <!-- Modal video player -->
+    <div class="video-modal" id="videoModal">
+      <div class="video-content">
+        <span class="close">&times;</span>
+        <iframe id="videoFrame" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+    </div>
   </section>
 
-</div> <!-- end of .app -->
+  <footer>© 2025 MyDrama. All rights reserved.</footer>
 
-<nav class="bottom-nav" role="navigation" aria-label="Bottom Navigation">
-  <a class="nav-item active" href="https://smile-wifi.github.io/Main">Home</a>
-  <a class="nav-item" href="#">Movies</a>
-  <a class="nav-item" href="#">TV Shows</a>
-  <a class="nav-item" href="#">Watchlist</a>
-</nav>
+  <script>
+    const cards = document.querySelectorAll('.card');
+    const modal = document.getElementById('videoModal');
+    const frame = document.getElementById('videoFrame');
+    const closeBtn = document.querySelector('.close');
 
-<script>
-/* CONFIG: repo owner & name */
-const GITHUB_OWNER = 'Smile-Wifi';
-const GITHUB_REPO  = 'smileflex';
-const GITHUB_BRANCH = 'main'; // usually main or master
-
-const grid = document.getElementById('grid');
-const player = document.getElementById('mainPlayer');
-const searchInput = document.getElementById('searchInput');
-const refreshBtn = document.getElementById('refreshBtn');
-
-/* Helper: raw file URL builder */
-function rawUrlFor(path){
-  return `https://raw.githubusercontent.com/${encodeURIComponent(GITHUB_OWNER)}/${encodeURIComponent(GITHUB_REPO)}/${encodeURIComponent(GITHUB_BRANCH)}/${encodeURIComponent(path)}`;
-}
-
-/* Fetch repository root file list from GitHub API and build grid */
-async function fetchRepoFiles(){
-  grid.innerHTML = '<div class="small-muted" style="padding:12px">Loading file list…</div>';
-  try {
-    const api = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents`;
-    const res = await fetch(api, { headers: { 'Accept': 'application/vnd.github.v3+json' }});
-    if (!res.ok) throw new Error('GitHub API error: ' + res.status);
-    const items = await res.json();
-    // Filter .mp4 files (case-insensitive)
-    const mp4 = items.filter(i => i.type === 'file' && /\.mp4$/i.test(i.name));
-    if (mp4.length === 0){
-      grid.innerHTML = '<p style="padding:12px;color:var(--muted)">No .mp4 files found in repo root.</p>';
-      return;
-    }
-    // Build cards
-    grid.innerHTML = '';
-    mp4.forEach(item => {
-      const fileName = item.name;
-      const src = rawUrlFor(fileName);
-      const card = document.createElement('div');
-      card.className = 'card playlist-item';
-      card.tabIndex = 0;
-      card.dataset.name = (fileName).toLowerCase();
-      const vid = document.createElement('video');
-      vid.src = src;
-      vid.muted = true;
-      vid.playsInline = true;
-      vid.preload = 'metadata';
-      vid.setAttribute('title', fileName);
-      card.appendChild(vid);
-      const meta = document.createElement('div');
-      meta.className = 'meta';
-      meta.innerHTML = `<div class="title">${fileName.replace(/\.mp4$/i,'')}</div><div class="badge">HD</div>`;
-      card.appendChild(meta);
-      card.addEventListener('click', ()=>playVideoInMain(src, card));
-      card.addEventListener('keydown', e=>{ if (e.key === 'Enter') card.click(); });
-      card.addEventListener('mouseenter', ()=>{ vid.play().catch(()=>{}); vid.loop = true; });
-      card.addEventListener('mouseleave', ()=>{ vid.pause(); vid.currentTime = 0; });
-      grid.appendChild(card);
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        const videoURL = card.getAttribute('data-video');
+        frame.src = videoURL;
+        modal.style.display = 'flex';
+      });
     });
-  } catch (err) {
-    console.error(err);
-    grid.innerHTML = `<p style="padding:12px;color:var(--muted)">Failed to load repo files. ${err.message}</p>`;
-  }
-}
 
-/* Play selected video in main player */
-function playVideoInMain(src, el){
-  if (!src) return;
-  player.src = src;
-  player.play().catch(()=>{});
-  document.querySelectorAll('.playlist-item').forEach(i=>i.classList.remove('active'));
-  el.classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+    closeBtn.addEventListener('click', () => {
+      modal.style.display = 'none';
+      frame.src = ''; // stop video
+    });
 
-/* Search filter */
-searchInput.addEventListener('input', ()=> {
-  const q = (searchInput.value || '').trim().toLowerCase();
-  document.querySelectorAll('.card').forEach(card=>{
-    const name = card.dataset.name || '';
-    card.style.display = (!q || name.includes(q)) ? '' : 'none';
-  });
-});
-
-/* Refresh button */
-refreshBtn.addEventListener('click', (e)=>{ e.preventDefault(); fetchRepoFiles(); });
-
-/* Register service worker for offline caching */
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js').then(reg=>{
-    console.log('SW registered', reg);
-  }).catch(err=>console.warn('SW registration failed', err));
-}
-
-/* Initial load */
-fetchRepoFiles();
-</script>
+    window.addEventListener('click', e => {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+        frame.src = '';
+      }
+    });
+  </script>
 </body>
 </html>
