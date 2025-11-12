@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🧑‍💼 Smile News Admin</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+      color: #222;
+    }
+    h1 { text-align: center; }
+    form {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    input, textarea {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      background: #0078ff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover { background: #005bd1; }
+    #status {
+      text-align: center;
+      margin-top: 20px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧑‍💼 Smile News CMS</h1>
+
+  <form id="news-form">
+    <input type="text" id="title" placeholder="News title" required />
+    <textarea id="content" rows="5" placeholder="Write your news content..." required></textarea>
+    <label for="media">📎 Upload image or video:</label>
+    <input type="file" id="media" accept="image/*,video/*" />
+    <button type="submit">📤 Publish</button>
+  </form>
+
+  <div id="status"></div>
+
+  <script>
+    const statusBox = document.getElementById("status");
+
+    // Convert file to Base64
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // Upload media file to GitHub via Netlify Function
+    async function uploadToGitHub(file) {
+      const base64 = await fileToBase64(file);
+      const fileName = Date.now() + "_" + file.name;
+
+      const res = await fetch("/.netlify/functions/upload-to-github", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fileName,
+          fileContent: base64.split(",")[1], // remove data prefix
+        }),
+      });
+
+      const data = await res.json();
+      if (data.url) return data.url;
+      else throw new Error("Upload failed");
+    }
+
+    // Save post (text + media URL) to GitHub JSON via Netlify Function
+    async function savePostToGitHub(newPost) {
+      const res = await fetch("/.netlify/functions/update-news", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ newPost }),
+      });
+      if (!res.ok) throw new Error("Failed to update news.json");
+      return await res.json();
+    }
+
+    // Handle form submission
+    document.getElementById("news-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      statusBox.textContent = "⏳ Uploading...";
+      try {
+        const title = document.getElementById("title").value.trim();
+        const content = document.getElementById("content").value.trim();
+        const file = document.getElementById("media").files[0];
+
+        let mediaUrl = null;
+        if (file) {
+          statusBox.textContent = "⏫ Uploading media...";
+          mediaUrl = await uploadToGitHub(file);
+        }
+
+        const newPost = {
+          title,
+          content,
+          mediaUrl,
+          date: new Date().toISOString(),
+        };
+
+        statusBox.textContent = "💾 Saving post...";
+        await savePostToGitHub(newPost);
+
+        statusBox.textContent = "✅ News added successfully!";
+        e.target.reset();
+      } catch (err) {
+        console.error(err);
+        statusBox.textContent = "❌ " + err.message;
+      }
+    });
+  </script>
+</body>
+</html>
