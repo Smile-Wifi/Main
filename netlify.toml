@@ -1,0 +1,9 @@
+# netlify.toml (in the Main/ root folder)
+
+[build]
+  base = "news"
+  publish = "."
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "18"
