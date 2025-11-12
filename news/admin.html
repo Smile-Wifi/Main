@@ -13,7 +13,10 @@
       background: #f5f5f5;
       color: #222;
     }
-    h1 { text-align: center; }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
     form {
       max-width: 600px;
       margin: 0 auto;
@@ -37,12 +40,20 @@
       padding: 10px 20px;
       border-radius: 6px;
       cursor: pointer;
+      font-size: 16px;
     }
     button:hover { background: #005bd1; }
     #status {
       text-align: center;
       margin-top: 20px;
       font-weight: 600;
+      transition: opacity 0.3s ease;
+    }
+    #preview {
+      display: block;
+      margin: 10px auto;
+      max-width: 100%;
+      border-radius: 8px;
     }
   </style>
 </head>
@@ -54,15 +65,57 @@
     <textarea id="content" rows="5" placeholder="Write your news content..." required></textarea>
     <label for="media">📎 Upload image or video:</label>
     <input type="file" id="media" accept="image/*,video/*" />
+    <div id="media-preview"></div>
     <button type="submit">📤 Publish</button>
   </form>
 
   <div id="status"></div>
 
+  <!-- 🔐 Simple password lock -->
+  <script>
+    const ADMIN_KEY = "smile123"; // change this to your secret key
+    const saved = localStorage.getItem("smileAdminAuth");
+
+    if (saved !== ADMIN_KEY) {
+      const input = prompt("🔐 Enter admin password:");
+      if (input !== ADMIN_KEY) {
+        alert("❌ Wrong password. Redirecting...");
+        location.href = "/";
+      } else {
+        localStorage.setItem("smileAdminAuth", ADMIN_KEY);
+        alert("✅ Welcome, admin!");
+      }
+    }
+  </script>
+
   <script>
     const statusBox = document.getElementById("status");
+    const mediaInput = document.getElementById("media");
+    const previewContainer = document.getElementById("media-preview");
 
-    // Convert file to Base64
+    // 🖼 Show preview of selected file
+    mediaInput.addEventListener("change", (e) => {
+      previewContainer.innerHTML = "";
+      const file = e.target.files[0];
+      if (!file) return;
+      const url = URL.createObjectURL(file);
+      if (file.type.startsWith("video/")) {
+        const vid = document.createElement("video");
+        vid.src = url;
+        vid.controls = true;
+        vid.style.maxWidth = "100%";
+        vid.style.borderRadius = "8px";
+        previewContainer.appendChild(vid);
+      } else if (file.type.startsWith("image/")) {
+        const img = document.createElement("img");
+        img.src = url;
+        img.style.maxWidth = "100%";
+        img.style.borderRadius = "8px";
+        previewContainer.appendChild(img);
+      }
+    });
+
+    // 🔄 Convert file to Base64
     function fileToBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -72,7 +125,7 @@
       });
     }
 
-    // Upload media file to GitHub via Netlify Function
+    // ⬆️ Upload media to GitHub via Netlify Function
     async function uploadToGitHub(file) {
       const base64 = await fileToBase64(file);
       const fileName = Date.now() + "_" + file.name;
@@ -82,16 +135,16 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           fileName,
-          fileContent: base64.split(",")[1], // remove data prefix
+          fileContent: base64.split(",")[1],
         }),
       });
 
       const data = await res.json();
       if (data.url) return data.url;
-      else throw new Error("Upload failed");
+      throw new Error("Upload failed");
     }
 
-    // Save post (text + media URL) to GitHub JSON via Netlify Function
+    // 💾 Save post (text + media URL) to GitHub JSON via Netlify Function
     async function savePostToGitHub(newPost) {
       const res = await fetch("/.netlify/functions/update-news", {
         method: "POST",
@@ -102,14 +155,20 @@
       return await res.json();
     }
 
-    // Handle form submission
+    // 🧑‍💼 Handle form submission
     document.getElementById("news-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       statusBox.textContent = "⏳ Uploading...";
+      statusBox.style.opacity = "1";
       try {
         const title = document.getElementById("title").value.trim();
         const content = document.getElementById("content").value.trim();
         const file = document.getElementById("media").files[0];
+
+        if (!title || !content) {
+          alert("⚠️ Please fill in all fields!");
+          return;
+        }
 
         let mediaUrl = null;
         if (file) {
@@ -129,9 +188,12 @@
 
         statusBox.textContent = "✅ News added successfully!";
         e.target.reset();
+        previewContainer.innerHTML = "";
+        setTimeout(() => (statusBox.style.opacity = "0"), 3000);
       } catch (err) {
         console.error(err);
         statusBox.textContent = "❌ " + err.message;
+        statusBox.style.color = "red";
       }
     });
   </script>
