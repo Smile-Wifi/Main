@@ -4,27 +4,37 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>🧑‍💼 Smile News Admin</title>
-  <link rel="stylesheet" href="css/style.css" />
   <style>
+    :root {
+      --bg: #f5f5f5;
+      --fg: #222;
+      --card: #fff;
+      --accent: #0078ff;
+      --shadow: rgba(0,0,0,0.1);
+    }
+
     body {
       font-family: system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
       margin: 0;
-      padding: 20px;
-      background: #f5f5f5;
-      color: #222;
+      padding: 40px 20px;
     }
+
     h1 {
       text-align: center;
       margin-bottom: 30px;
     }
+
     form {
       max-width: 600px;
       margin: 0 auto;
-      background: #fff;
-      padding: 20px;
+      background: var(--card);
+      padding: 25px;
       border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px var(--shadow);
     }
+
     input, textarea {
       width: 100%;
       margin: 10px 0;
@@ -32,90 +42,77 @@
       font-size: 16px;
       border: 1px solid #ccc;
       border-radius: 6px;
+      box-sizing: border-box;
     }
+
     button {
-      background: #0078ff;
+      background: var(--accent);
       color: #fff;
       border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 1rem;
       cursor: pointer;
-      font-size: 16px;
+      transition: 0.3s;
     }
-    button:hover { background: #005bd1; }
+
+    button:hover {
+      background: #005bd1;
+    }
+
     #status {
       text-align: center;
       margin-top: 20px;
       font-weight: 600;
-      transition: opacity 0.3s ease;
     }
-    #preview {
-      display: block;
-      margin: 10px auto;
-      max-width: 100%;
-      border-radius: 8px;
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .logout-btn {
+      background: #e53e3e;
+    }
+
+    .logout-btn:hover {
+      background: #c53030;
     }
   </style>
 </head>
 <body>
-  <h1>🧑‍💼 Smile News CMS</h1>
+  <!-- 🔒 Require login before access -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script>
+    netlifyIdentity.on('init', user => {
+      if (!user) {
+        window.location.href = '/login.html';
+      }
+    });
+    netlifyIdentity.init();
+  </script>
+
+  <div class="topbar">
+    <h1>🧑‍💼 Smile News CMS</h1>
+    <button class="logout-btn" onclick="netlifyIdentity.logout()">🚪 Logout</button>
+  </div>
 
   <form id="news-form">
-    <input type="text" id="title" placeholder="News title" required />
+    <input type="text" id="title" placeholder="📰 News title" required />
     <textarea id="content" rows="5" placeholder="Write your news content..." required></textarea>
     <label for="media">📎 Upload image or video:</label>
     <input type="file" id="media" accept="image/*,video/*" />
-    <div id="media-preview"></div>
     <button type="submit">📤 Publish</button>
   </form>
 
   <div id="status"></div>
 
-  <!-- 🔐 Simple password lock -->
-  <script>
-    const ADMIN_KEY = "smile123"; // change this to your secret key
-    const saved = localStorage.getItem("smileAdminAuth");
-
-    if (saved !== ADMIN_KEY) {
-      const input = prompt("🔐 Enter admin password:");
-      if (input !== ADMIN_KEY) {
-        alert("❌ Wrong password. Redirecting...");
-        location.href = "/";
-      } else {
-        localStorage.setItem("smileAdminAuth", ADMIN_KEY);
-        alert("✅ Welcome, admin!");
-      }
-    }
-  </script>
-
   <script>
     const statusBox = document.getElementById("status");
-    const mediaInput = document.getElementById("media");
-    const previewContainer = document.getElementById("media-preview");
 
-    // 🖼 Show preview of selected file
-    mediaInput.addEventListener("change", (e) => {
-      previewContainer.innerHTML = "";
-      const file = e.target.files[0];
-      if (!file) return;
-      const url = URL.createObjectURL(file);
-      if (file.type.startsWith("video/")) {
-        const vid = document.createElement("video");
-        vid.src = url;
-        vid.controls = true;
-        vid.style.maxWidth = "100%";
-        vid.style.borderRadius = "8px";
-        previewContainer.appendChild(vid);
-      } else if (file.type.startsWith("image/")) {
-        const img = document.createElement("img");
-        img.src = url;
-        img.style.maxWidth = "100%";
-        img.style.borderRadius = "8px";
-        previewContainer.appendChild(img);
-      }
-    });
-
-    // 🔄 Convert file to Base64
+    // Convert file to Base64
     function fileToBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -125,7 +122,7 @@
       });
     }
 
-    // ⬆️ Upload media to GitHub via Netlify Function
+    // Upload media file to GitHub via Netlify Function
     async function uploadToGitHub(file) {
       const base64 = await fileToBase64(file);
       const fileName = Date.now() + "_" + file.name;
@@ -135,16 +132,16 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           fileName,
-          fileContent: base64.split(",")[1],
+          fileContent: base64.split(",")[1], // remove data: prefix
         }),
       });
 
       const data = await res.json();
       if (data.url) return data.url;
-      throw new Error("Upload failed");
+      else throw new Error("Upload failed");
     }
 
-    // 💾 Save post (text + media URL) to GitHub JSON via Netlify Function
+    // Save post (text + media URL) to GitHub JSON via Netlify Function
     async function savePostToGitHub(newPost) {
       const res = await fetch("/.netlify/functions/update-news", {
         method: "POST",
@@ -155,20 +152,14 @@
       return await res.json();
     }
 
-    // 🧑‍💼 Handle form submission
+    // Handle form submission
     document.getElementById("news-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       statusBox.textContent = "⏳ Uploading...";
-      statusBox.style.opacity = "1";
       try {
         const title = document.getElementById("title").value.trim();
         const content = document.getElementById("content").value.trim();
         const file = document.getElementById("media").files[0];
-
-        if (!title || !content) {
-          alert("⚠️ Please fill in all fields!");
-          return;
-        }
 
         let mediaUrl = null;
         if (file) {
@@ -188,13 +179,15 @@
 
         statusBox.textContent = "✅ News added successfully!";
         e.target.reset();
-        previewContainer.innerHTML = "";
-        setTimeout(() => (statusBox.style.opacity = "0"), 3000);
       } catch (err) {
         console.error(err);
         statusBox.textContent = "❌ " + err.message;
-        statusBox.style.color = "red";
       }
+    });
+
+    // Handle logout
+    netlifyIdentity.on('logout', () => {
+      window.location.href = '/login.html';
     });
   </script>
 </body>
