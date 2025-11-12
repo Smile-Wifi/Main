@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MiniBrowser PWA</title>
+  <link rel="manifest" href="/manifest.json" />
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #111;
+    }
+    [data-theme="dark"] {
+      --bg: #111;
+      --fg: #f0f0f0;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, Segoe UI, Roboto, Helvetica, Arial;
+      background: var(--bg);
+      color: var(--fg);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      display: flex;
+      gap: 8px;
+      padding: 8px;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.03);
+    }
+    .tabs {
+      display: flex;
+      gap: 6px;
+      flex: 1;
+      overflow-x: auto;
+    }
+    .tab {
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .tab.active {
+      outline: 2px solid;
+      font-weight: 600;
+    }
+    .controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .address {
+      flex: 1;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      padding: 8px;
+    }
+    .webviews {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      flex: 1;
+      background: #f5f5f5;
+    }
+    footer {
+      padding: 6px;
+      text-align: center;
+      font-size: 12px;
+      color: gray;
+    }
+    button {
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: none;
+      background: rgba(0, 0, 0, 0.06);
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="tabs" id="tabs"></div>
+    <div class="controls">
+      <button id="newTab">New tab</button>
+      <button id="toggleTheme">Toggle Dark</button>
+      <button id="bookmarksBtn">Bookmarks</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="toolbar">
+      <input id="address" class="address" placeholder="Enter URL or search..." />
+      <button id="go">Go</button>
+      <button id="bookmark">☆</button>
+    </div>
+
+    <div class="webviews" id="webviews"></div>
+  </main>
+
+  <footer>MiniBrowser — PWA-ready, offline caching & bookmarks</footer>
+
+<script>
+const tabsEl = document.getElementById('tabs');
+const webviewsEl = document.getElementById('webviews');
+const addressInput = document.getElementById('address');
+const newTabBtn = document.getElementById('newTab');
+const goBtn = document.getElementById('go');
+const bookmarkBtn = document.getElementById('bookmark');
+const toggleThemeBtn = document.getElementById('toggleTheme');
+const bookmarksKey = 'mini_browser_bookmarks_v2';
+const tabsKey = 'mini_browser_tabs_v2';
+
+let tabs = JSON.parse(localStorage.getItem(tabsKey) || '[]');
+let active = 0;
+
+// Add a new tab
+function addTab(url = 'https://duckduckgo.com') {
+  tabs.push({ url });
+  active = tabs.length - 1;
+  saveTabs();
+  render();
+}
+
+// Close a tab
+function closeTab(idx) {
+  tabs.splice(idx, 1);
+  if (active >= tabs.length) active = Math.max(0, tabs.length - 1);
+  saveTabs();
+  render();
+}
+
+function saveTabs() {
+  localStorage.setItem(tabsKey, JSON.stringify(tabs));
+}
+
+function render() {
+  tabsEl.innerHTML = '';
+  webviewsEl.innerHTML = '';
+  tabs.forEach((t, i) => {
+    const tb = document.createElement('div');
+    tb.className = 'tab' + (i === active ? ' active' : '');
+    tb.textContent = (new URL(t.url, location.origin).hostname || t.url).slice(0, 20);
+    tb.onclick = () => { active = i; render(); };
+    tb.oncontextmenu = (e) => { e.preventDefault(); closeTab(i); };
+    tabsEl.appendChild(tb);
+  });
+
+  if (tabs.length === 0) { addTab(); return; }
+
+  const iframe = document.createElement('iframe');
+  iframe.src = tabs[active].url;
+  iframe.loading = 'lazy';
+  iframe.setAttribute('sandbox', 'allow-scripts allow-forms allow-same-origin allow-popups');
+  
+  // Detect blocked / refused pages
+  iframe.onerror = () => {
+    window.open(tabs[active].url, '_blank');
+  };
+
+  iframe.onload = () => {
+    // Try to detect same-origin access (blocked pages)
+    try {
+      const doc = iframe.contentDocument;
+      if (!doc || doc.body.innerHTML === '') {
+        throw new Error("Blocked");
+      }
+    } catch (e) {
+      // Blocked by CSP / X-Frame — open in real browser tab
+      window.open(tabs[active].url, '_blank');
+    }
+  };
+
+  webviewsEl.appendChild(iframe);
+  addressInput.value = tabs[active].url;
+}
+
+function navigate(text) {
+  let url = text.trim();
+  if (!url) return;
+  if (!/^https?:\/\//i.test(url)) {
+    // Use DuckDuckGo search
+    url = 'https://duckduckgo.com/?q=' + encodeURIComponent(url);
+  }
+  tabs[active].url = url;
+  saveTabs();
+  render();
+}
+
+goBtn.addEventListener('click', () => navigate(addressInput.value));
+addressInput.addEventListener('keydown', e => { if (e.key === 'Enter') navigate(addressInput.value); });
+newTabBtn.addEventListener('click', () => addTab('https://duckduckgo.com'));
+bookmarkBtn.addEventListener('click', () => {
+  const b = JSON.parse(localStorage.getItem(bookmarksKey) || '[]');
+  b.push({ url: tabs[active].url, title: tabs[active].url });
+  localStorage.setItem(bookmarksKey, JSON.stringify(b));
+  alert('Bookmarked!');
+});
+document.getElementById('bookmarksBtn').addEventListener('click', () => {
+  const b = JSON.parse(localStorage.getItem(bookmarksKey) || '[]');
+  const pick = prompt('Bookmarks:\n' + b.map((x, i) => `${i + 1}: ${x.title}`).join('\n') + '\nEnter number to open');
+  const idx = parseInt(pick, 10) - 1;
+  if (!isNaN(idx) && b[idx]) {
+    tabs[active].url = b[idx].url;
+    saveTabs();
+    render();
+  }
+});
+toggleThemeBtn.addEventListener('click', () => {
+  const cur = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+});
+
+// Initialize
+if (tabs.length === 0) tabs = [{ url: 'https://duckduckgo.com' }];
+render();
+
+// Register service worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(err => console.warn('SW reg failed', err));
+}
+</script>
+</body>
+</html>

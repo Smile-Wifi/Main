@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seller Dashboard – ShopEasy</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    /* ---- seller avatar ---- */
+    .seller-avatar-wrap{text-align:center;margin-bottom:20px}
+    .seller-avatar{position:relative;width:100px;height:100px;margin:0 auto;border-radius:50%;overflow:hidden;border:3px solid var(--primary-color);cursor:pointer;background:#fff}
+    .seller-avatar img{width:100%;height:100%;object-fit:cover}
+    .seller-avatar .cam{position:absolute;bottom:5px;right:5px;background:rgba(0,0,0,.6);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:12px}
+    #avatarInput{display:none}
+    /* ---- edit modal ---- */
+    .modal.edit-modal{z-index:1003}
+  </style>
+</head>
+
+<body>
+  <!-- =====  Header  ===== -->
+  <header class="dashboard-header">
+    <div class="header-left">
+      <button class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i></button>
+      <h1>Seller Dashboard</h1>
+    </div>
+    <div class="header-right">
+      <button class="add-product-btn" id="addProductBtn"><i class="fas fa-plus"></i> Add Product</button>
+    </div>
+  </header>
+
+  <!-- =====  Seller Avatar  ===== -->
+  <section class="seller-avatar-wrap">
+    <div class="seller-avatar" id="avatarBox" title="Change profile picture">
+      <img id="avatarImg" src="https://via.placeholder.com/300x300/FF6B6B/FFFFFF?text=You">
+      <i class="fas fa-camera cam"></i>
+    </div>
+    <input type="file" id="avatarInput" accept="image/*">
+  </section>
+
+  <!-- =====  Stats  ===== -->
+  <section class="dashboard-stats">
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fas fa-box"></i></div>
+      <div class="stat-info"><h3 id="totalProducts">0</h3><p>Total Products</p></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fas fa-shopping-bag"></i></div>
+      <div class="stat-info"><h3 id="totalOrders">0</h3><p>Total Orders</p></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
+      <div class="stat-info"><h3 id="totalRevenue">P0</h3><p>Revenue</p></div>
+    </div>
+  </section>
+
+  <!-- =====  Product List  ===== -->
+  <section class="products-management">
+    <div class="section-header">
+      <h2>My Products</h2>
+      <button class="filter-btn"><i class="fas fa-filter"></i> Filter</button>
+    </div>
+    <div class="products-list" id="sellerProducts"></div>
+  </section>
+
+  <!-- =====  ADD Product Modal  ===== -->
+  <div class="modal" id="addProductModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Add New Product</h2>
+        <button class="close-modal" id="closeAddModal"><i class="fas fa-times"></i></button>
+      </div>
+      <form class="product-form" id="addProductForm">
+        <!-- inside fields identical to edit (shared logic) -->
+        <div class="form-group"><label for="addName">Product Name</label><input id="addName" required></div>
+        <div class="form-group"><label for="addPrice">Price P</label><input type="number" id="addPrice" step="0.01" required></div>
+        <div class="form-group">
+          <label for="addCategory">Category</label>
+          <select id="addCategory" required>
+            <option value="">Select Category</option>
+            <option value="electronics">Electronics</option>
+            <option value="fashion">Fashion</option>
+            <option value="home">Home & Living</option>
+            <option value="beauty">Beauty</option>
+            <option value="sports">Sports</option>
+          </select>
+        </div>
+        <div class="form-group"><label for="addDesc">Description</label><textarea id="addDesc" rows="4" required></textarea></div>
+        <div class="form-group">
+          <label>Product Image</label>
+          <input type="file" id="addImage" accept="image/*">
+          <button type="button" id="addDemoImg" style="margin-top:6px;font-size:12px;padding:4px 8px;">Load Demo Image</button>
+          <div class="image-preview" id="addPreview"></div>
+        </div>
+        <div class="form-group"><label for="addStock">Stock Quantity</label><input type="number" id="addStock" min="1" required></div>
+        <button type="submit" class="submit-btn">Add Product</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- =====  EDIT Product Modal  ===== -->
+  <div class="modal edit-modal" id="editProductModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Edit Product</h2>
+        <button class="close-modal" id="closeEditModal"><i class="fas fa-times"></i></button>
+      </div>
+      <form class="product-form" id="editProductForm">
+        <input type="hidden" id="editId">
+        <div class="form-group"><label for="editName">Product Name</label><input id="editName" required></div>
+        <div class="form-group"><label for="editPrice">Price P</label><input type="number" id="editPrice" step="0.01" required></div>
+        <div class="form-group">
+          <label for="editCategory">Category</label>
+          <select id="editCategory" required>
+            <option value="">Select Category</option>
+            <option value="electronics">Electronics</option>
+            <option value="fashion">Fashion</option>
+            <option value="home">Home & Living</option>
+            <option value="beauty">Beauty</option>
+            <option value="sports">Sports</option>
+          </select>
+        </div>
+        <div class="form-group"><label for="editDesc">Description</label><textarea id="editDesc" rows="4" required></textarea></div>
+        <div class="form-group">
+          <label>Product Image (choose new to replace)</label>
+          <input type="file" id="editImage" accept="image/*">
+          <button type="button" id="editDemoImg" style="margin-top:6px;font-size:12px;padding:4px 8px;">Reload Demo Image</button>
+          <div class="image-preview" id="editPreview"></div>
+        </div>
+        <div class="form-group"><label for="editStock">Stock Quantity</label><input type="number" id="editStock" min="1" required></div>
+        <button type="submit" class="submit-btn">Save Changes</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

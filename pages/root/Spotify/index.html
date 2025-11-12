@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grokify Player</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div id="hamburger" class="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <div class="logo-container">
+      <img src="logo2.png" class="logo" height="40" />
+    </div>
+  </header>
+
+  <!-- SIDE PANEL -->
+  <aside id="side-panel" class="side-panel">
+    <button id="close-panel" class="close-btn">&times;</button>
+    <h2>Features</h2>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Liked Songs</a></li>
+      <li><a href="#">Playlists</a></li>
+      <li><a href="#">Downloads</a></li>
+      <li><a href="#">Settings</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+  </aside>
+
+  <!-- OVERLAY -->
+  <div id="overlay" class="overlay"></div>
+
+  <main>
+    <section class="music-section">
+      <div class="liked-card">
+        <div class="liked-art">
+          <img src="album.png" alt="Album Cover" class="album-cover">
+          <i class="fas fa-heart"></i>
+        </div>
+        <p>SORRY GAW (Album)</p>
+      </div>
+
+      <input type="text" placeholder="Search songs..." class="search-box" />
+
+      <div id="song-list" class="song-list"></div>
+    </section>
+  </main>
+
+  <!-- PLAYER FOOTER -->
+  <footer class="player-bar">
+    <div class="player-controls">
+      <img id="player-cover" src="album.png" alt="Current Song" class="now-playing-thumb" width="50" height="50" />
+      <div class="controls">
+        <i id="prev" class="fas fa-backward"></i>
+        <i id="play" class="fas fa-play"></i>
+        <i id="next" class="fas fa-forward"></i>
+      </div>
+      <div class="volume-bar">
+        <i class="fas fa-volume-up"></i>
+        <input id="volume" type="range" min="0" max="1" step="0.1" value="0.7" />
+      </div>
+    </div>
+
+    <div class="progress-container">
+      <input id="progress-bar" type="range" min="0" max="100" value="0" />
+      <div class="time-display">
+        <span id="current-time">0:00</span> / <span id="duration">0:00</span>
+      </div>
+    </div>
+
+    <div class="footer-gifs">
+      <img src="GIF/earth.gif" alt="Earth" />
+      <img src="GIF/Home.png" alt="Rings" />
+      <img src="GIF/mars.gif" alt="Mars" />
+    </div>
+  </footer>
+
+  <!-- Load the JS -->
+  <script src="script.js"></script>
+</body>
+</html>

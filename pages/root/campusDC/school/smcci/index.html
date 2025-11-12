@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>St. Michael College Cantilan | Learn. Grow. Shine!</title>
+    
+    <!-- Bootstrap 5 + Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --secondary: #7c3aed;
+            --success: #10b981;
+            --info: #06b6d4;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --light: #f3f4f6;
+            --dark: #1f2937;
+            --accent: #ec4899;
+            --font-main: 'Poppins', sans-serif;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        * {font-family: var(--font-main);}
+        body {background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); color: var(--dark); min-height: 100vh;}
+
+        /* ---------- ALL ORIGINAL STYLES (unchanged) ---------- */
+        .navbar {background: var(--primary); box-shadow: 0 4px 12px rgba(79,70,229,.2); padding:.8rem 0;}
+        .navbar-brand {font-weight:700; font-size:1.4rem; color:white !important;}
+        .nav-link {color:rgba(255,255,255,.9)!important; font-weight:500; transition:all .3s; border-radius:8px; margin:0 4px;}
+        .nav-link:hover,.nav-link.active {background:rgba(255,255,255,.2); color:white !important;}
+
+        .hero-section {color:white; padding:90px 0 70px; text-align:center; position:relative; overflow:hidden;}
+        .hero-section::before {content:''; position:absolute; inset:0; background:url('data:image/svg+xml,<svg xmlns="bgsmcci.jpg" viewBox="0 0 100 20"><defs><radialGradient id="a"><stop offset="0%" stop-color="%23ffffff" stop-opacity="0.1"/><stop offset="100%" stop-color="%23ffffff" stop-opacity="0"/></radialGradient></defs><circle cx="10" cy="10" r="8" fill="url(%23a)"/></svg>') repeat; opacity:.3;}
+        .hero-title {font-size:2.8rem; font-weight:700; text-shadow:0 2px 4px rgba(0,0,0,.2);}
+        .hero-subtitle {font-size:1.3rem; margin:1rem 0 2rem; opacity:.95;}
+        .btn-cta {background:white; color:var(--primary); font-weight:600; padding:.75rem 2rem; border-radius:50px; transition:all .3s; box-shadow:0 4px 15px rgba(0,0,0,.1);}
+        .btn-cta:hover {transform:translateY(-3px); box-shadow:0 8px 20px rgba(0,0,0,.15);}
+        .section-title {color:var(--primary); font-weight:700; font-size:2rem; position:relative; display:inline-block; margin-bottom:2rem;}
+        .section-title::after {content:''; position:absolute; bottom:-8px; left:50%; transform:translateX(-50%); width:60px; height:4px; background:var(--accent); border-radius:2px;}
+        .card {border:none; border-radius:16px; overflow:hidden; box-shadow:0 8px 20px rgba(0,0,0,.08); transition:all .3s ease; height:100%;}
+        .card:hover {transform:translateY(-8px); box-shadow:0 16px 30px rgba(0,0,0,.12);}
+        .card-icon {width:60px; height:60px; background:linear-gradient(135deg,var(--primary),var(--secondary)); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.5rem; margin:0 auto 1rem;}
+        .program-card {background:white; border-radius:16px; padding:1.5rem; text-align:center; transition:all .3s; border:2px solid transparent;}
+        .program-card:hover {border-color:var(--primary); transform:translateY(-5px);}
+        .resource-card {background:white; border-radius:16px; padding:1.5rem; text-align:center; cursor:pointer; transition:all .3s;}
+        .resource-card:hover {background:var(--light); transform:scale(1.05);}
+        .resource-icon {font-size:2.5rem; margin-bottom:1rem; color:var(--primary);}
+        .announcement-item {background:white; border-left:5px solid var(--info); padding:1rem; border-radius:0 12px 12px 0; margin-bottom:1rem; box-shadow:0 4px 10px rgba(0,0,0,.05);}
+        .event-card {background:white; border-radius:12px; padding:1rem; margin-bottom:1rem; display:flex; align-items:center; box-shadow:0 4px 10px rgba(0,0,0,.05);}
+        .event-date {background:var(--success); color:white; width:60px; height:60px; border-radius:12px; text-align:center; padding:8px; font-weight:600; margin-right:1rem; flex-shrink:0;}
+        .event-month {font-size:.8rem; text-transform:uppercase;}
+        .event-day {font-size:1.4rem; font-weight:700;}
+        .gallery-item {position:relative; overflow:hidden; border-radius:16px; margin-bottom:1rem; box-shadow:0 6px 15px rgba(0,0,0,.1);}
+        .gallery-item img {width:100%; height:220px; object-fit:cover; transition:transform .4s ease;}
+        .gallery-item:hover img {transform:scale(1.12);}
+        .gallery-caption {position:absolute; bottom:0; left:0; right:0; background:linear-gradient(transparent,rgba(0,0,0,.7)); color:white; padding:1.5rem 1rem 1rem; transform:translateY(10px); transition:all .3s;}
+        .gallery-item:hover .gallery-caption {transform:translateY(0);}
+        .student-dashboard {background:white; border-radius:16px; padding:2rem; box-shadow:0 10px 25px rgba(0,0,0,.08); margin:2rem 0;}
+        .progress-circle {position:relative; width:120px; height:120px; margin:0 auto;}
+        .progress-circle svg {transform:rotate(-90deg);}
+        .progress-circle circle {fill:none; stroke:#e5e7eb; stroke-width:10;}
+        .progress-circle .progress {stroke:var(--success); stroke-linecap:round; transition:stroke-dashoffset 1s ease;}
+        .progress-text {position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:1.8rem; font-weight:700; color:var(--primary);}
+        .badge-level {background:linear-gradient(135deg,#fbbf24,#f59e0b); color:white; padding:.5rem 1rem; border-radius:50px; font-weight:600; font-size:.9rem;}
+        .quick-actions {display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:1rem; margin:2rem 0;}
+        .action-btn {background:white; border:none; padding:1.2rem; border-radius:16px; text-align:center; box-shadow:0 6px 15px rgba(0,0,0,.08); transition:all .3s; font-weight:500;}
+        .action-btn:hover {transform:translateY(-5px); box-shadow:0 12px 20px rgba(0,0,0,.12);}
+        .action-icon {font-size:1.8rem; margin-bottom:.5rem; display:block;}
+        .offline-indicator {position:fixed; top:1rem; right:1rem; background:var(--danger); color:white; padding:.5rem 1rem; border-radius:50px; font-size:.9rem; z-index:9999; display:none; box-shadow:0 4px 10px rgba(0,0,0,.2);}
+        .offline-indicator.active {display:block;}
+        .install-prompt {position:fixed; bottom:1rem; left:1rem; background:var(--primary); color:white; padding:1rem 1.5rem; border-radius:16px; box-shadow:0 10px 25px rgba(0,0,0,.15); display:none; z-index:9999; max-width:300px;}
+        .install-prompt.active {display:block;}
+        @media (max-width:768px){
+            .hero-title{font-size:2.2rem;}
+            .hero-subtitle{font-size:1.1rem;}
+            .quick-actions{grid-template-columns:repeat(2,1fr);}
+        }
+
+        /* ---------- HERO RE-STYLE (unchanged) ---------- */
+        .hero-section{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;color:white;text-align:center;overflow:hidden;padding:0;}
+        .hero-bg{position:absolute;inset:0;background:url('bgsmcci.jpg') center/cover no-repeat;filter:brightness(.6);z-index:-2;}
+        .hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(79,70,229,.7),rgba(124,58,237,.6));z-index:-1;}
+        .hero-content{max-width:800px;padding:2rem;animation:fadeInUp 1s ease-out;}
+        .hero-title{font-size:3.2rem;font-weight:800;text-shadow:0 4px 12px rgba(0,0,0,.5);margin-bottom:1rem;line-height:1.2;}
+        .hero-subtitle{font-size:1.4rem;font-weight:400;text-shadow:0 2px 8px rgba(0,0,0,.4);margin-bottom:2rem;opacity:.95;}
+        .btn-cta{background:white;color:var(--primary);font-weight:700;padding:.9rem 2.5rem;border-radius:50px;font-size:1.1rem;box-shadow:0 8px 25px rgba(0,0,0,.2);transition:all .3s ease;border:none;}
+        .btn-cta:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(0,0,0,.3);color:var(--primary);}
+        @keyframes fadeInUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+        @media (max-width:768px){
+            .hero-title{font-size:2.3rem;}
+            .hero-subtitle{font-size:1.1rem;}
+            .btn-cta{padding:.75rem 2rem;font-size:1rem;}
+        }
+
+        .footer {
+            background: #0d1b2a;
+            color: #fff;
+            position: relative;
+        }
+        .footer-gif {
+            width: 180px;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255,255,255,0.2);
+        }
+		
+		/* Landscape Footer GIFs - Responsive & Wide */
+.footer-gif-landscape {
+    width: 110px;           /* Wider for landscape */
+    height: auto;
+    max-height: 120px;
+    border-radius: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    object-fit: contain;
+    padding: 8px;
+}
+
+.footer-gif-landscape:hover {
+    transform: translateY(-6px) scale(1.05);
+    box-shadow: 0 16px 30px rgba(255, 255, 255, 0.25);
+    z-index: 10;
+}
+
+/* Ensure horizontal layout even on large screens */
+@media (min-width: 992px) {
+    .footer-gif-landscape { width: 240px; }
+}
+
+@media (max-width: 768px) {
+    .footer-gif-landscape { width: 110px; }
+    .gap-4 { gap: 1rem !important; }
+    small { font-size: 0.75rem; }
+}
+    </style>
+</head>
+<body>
+    <!-- Offline Indicator -->
+    <div id="offlineIndicator" class="offline-indicator">
+        Offline Mode
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#home">
+                SMCC
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#dashboard">My Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#programs">Programs</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#resources">Study Hub</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#announcements">News</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#events">Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#gallery">Gallery</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="hero-bg"></div>
+        <div class="container position-relative text-center">
+            <div class="hero-content">
+                <h1 class="hero-title">Welcome to SMCC!</h1>
+                <p class="hero-subtitle">Your journey to excellence starts here</p>
+                <button class="btn btn-cta" onclick="scrollToSection('dashboard')">
+                    Start Learning
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Student Dashboard -->
+    <section id="dashboard" class="py-5">
+        <div class="container">
+            <h2 class="section-title text-center">Your Learning Dashboard</h2>
+            <div class="student-dashboard">
+                <div class="row text-center">
+                    <div class="col-md-3 mb-4">
+                        <div class="progress-circle">
+                            <svg width="120" height="120">
+                                <circle cx="60" cy="60" r="50"></circle>
+                                <circle cx="60" cy="60" r="50" class="progress" stroke-dasharray="314" stroke-dashoffset="94"></circle>
+                            </svg>
+                            <div class="progress-text">70%</div>
+                        </div>
+                        <h5 class="mt-3">Course Progress</h5>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <h2 class="display-4 fw-bold text-primary">12</h2>
+                        <p class="text-muted">Assignments Due</p>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <h2 class="display-4 fw-bold text-success">A-</h2>
+                        <p class="text-muted">Current Grade</p>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <span class="badge-level">Gold Scholar</span>
+                        <p class="mt-2">Level 8</p>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <button class="action-btn" onclick="alert('Opening Class Schedule...')">
+                        Schedule
+                    </button>
+                    <button class="action-btn" onclick="alert('Checking Grades...')">
+                        Grades
+                    </button>
+                    <button class="action-btn" onclick="scrollToSection('resources')">
+                        Study Hub
+                    </button>
+                    <button class="action-btn" onclick="alert('Opening Forum...')">
+                        Forum
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Academic Programs -->
+    <section id="programs" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title text-center">Choose Your Path</h2>
+            <div class="row" id="programsContainer"></div>
+        </div>
+    </section>
+
+    <!-- Study Resources Hub -->
+    <section id="resources" class="py-5">
+        <div class="container">
+            <h2 class="section-title text-center">Study Hub</h2>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="resource-card" onclick="alert('Opening Past Papers...')">
+                        Past Papers
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="resource-card" onclick="alert('Opening Notes...')">
+                        Study Notes
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="resource-card" onclick="alert('Opening Videos...')">
+                        Video Lessons
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="resource-card" onclick="alert('Opening Quiz...')">
+                        Practice Quiz
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Announcements -->
+    <section id="announcements" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title text-center">Latest News</h2>
+            <div id="announcementsContainer"></div>
+        </div>
+    </section>
+
+    <!-- Events -->
+    <section id="events" class="py-5">
+        <div class="container">
+            <h2 class="section-title text-center">Upcoming Events</h2>
+            <div id="eventsContainer"></div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section id="gallery" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title text-center">Campus Life</h2>
+            <div class="row" id="galleryContainer"></div>
+        </div>
+    </section>
+	
+<!-- Landscape Footer: Wide, Horizontal GIF Bar -->
+<footer class="footer text-center py-5" style="background: #0d1b2a; color: #fff;">
+    <div class="container-fluid px-4">
+
+        <!-- Full-width horizontal GIF line -->
+<div class="d-flex justify-content-center align-items-center gap-4 flex-nowrap overflow-x-auto pb-2"
+     style="scrollbar-width: none; -ms-overflow-style: none;">
+     
+    <!-- Earth GIF -->
+    <div class="text-center">
+        <a href="earth.html">
+            <img src="GIF/earth.gif" alt="Earth" class="footer-gif-landscape">
+        </a>
+    </div>
+
+    <!-- Home PNG -->
+    <div class="text-center">
+        <a href="https://smile-wifi.github.io/Main" id="homeBtn">
+            <img src="GIF/Home.png" alt="Home" class="footer-gif-landscape">
+        </a>
+    </div>
+
+    <!-- Mars GIF -->
+    <div class="text-center">
+        <a href="cribble.html">
+            <img src="GIF/mars.gif" alt="Mars" class="footer-gif-landscape">
+        </a>
+    </div>
+</div>
+        </div>
+
+        <!-- Hide scrollbar for clean look -->
+        <style>
+            .d-flex::-webkit-scrollbar { display: none; }
+        </style>
+    </div>
+</footer>
+
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Home-button scrolls to top
+        document.getElementById('homeBtn')?.addEventListener('click', () => {
+            window.scrollTo({top:0, behavior:'smooth'});
+        });
+
+        /* ----- ALL ORIGINAL JS (unchanged) ----- */
+        class StudentPortal {
+            constructor(){this.isOnline=navigator.onLine;this.init();}
+            init(){this.setupPWA();this.checkOnlineStatus();this.loadAllData();this.setupSmoothScroll();this.setupProgressAnimation();}
+            setupPWA(){
+                const manifest={name:'SMCC Student Portal',short_name:'SMCC',start_url:'/',display:'standalone',background_color:'#ffffff',theme_color:'#4f46e5',icons:[{src:'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width="100" height="100" fill="%234f46e5" rx="20"/><text x="50" y="60" font-family="Arial" font-size="50" fill="white" text-anchor="middle">SMCC</text></svg>',sizes:'192x192',type:'image/svg+xml'}]};
+                const blob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
+                const url=URL.createObjectURL(blob);
+                let link=document.querySelector('link[rel="manifest"]');
+                if(!link){link=document.createElement('link');link.rel='manifest';document.head.appendChild(link);}
+                link.href=url;
+
+                let deferredPrompt;
+                window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;document.getElementById('installPrompt').classList.add('active');});
+                document.getElementById('installBtn').onclick=()=>{document.getElementById('installPrompt').classList.remove('active');deferredPrompt?.prompt();};
+                document.getElementById('dismissInstall').onclick=()=>{document.getElementById('installPrompt').classList.remove('active');};
+            }
+            checkOnlineStatus(){document.getElementById('offlineIndicator').classList.toggle('active',!this.isOnline);}
+            loadAllData(){this.loadPrograms();this.loadAnnouncements();this.loadEvents();this.loadGallery();}
+            loadPrograms(){
+                const programs=JSON.parse(localStorage.getItem('programs')||'[]');
+                const container=document.getElementById('programsContainer'); container.innerHTML='';
+                const defaults=[{name:"Bachelor of Elementary Education",desc:"Become a passionate educator",icon:"bi-people",color:"primary"},
+                                {name:"Bachelor of Secondary Education",desc:"Teach with excellence",icon:"bi-book",color:"success"},
+                                {name:"BS Business Administration",desc:"Lead the future of business",icon:"bi-graph-up",color:"warning"},
+                                {name:"Senior High School",desc:"Prepare for college success",icon:"bi-award",color:"info"}];
+                (programs.length?programs:defaults).forEach(p=>{const col=document.createElement('div');col.className='col-md-6 col-lg-3';
+                    col.innerHTML=`<div class="program-card"><i class="bi ${p.icon||'bi-mortarboard-fill'} card-icon"></i><h5>${p.name}</h5><p class="text-muted small">${p.desc}</p><button class="btn btn-sm btn-outline-primary w-100">Learn More</button></div>`;
+                    container.appendChild(col);});
+                if(!programs.length) localStorage.setItem('programs',JSON.stringify(defaults));
+            }
+            loadAnnouncements(){
+                const announcements=JSON.parse(localStorage.getItem('announcements')||'[]');
+                const container=document.getElementById('announcementsContainer'); container.innerHTML='';
+                const defaults=[{title:"Midterm Exams Start Next Week!",content:"Prepare your reviewers and get good rest.",priority:"urgent"},
+                                {title:"Scholarship Applications Open",content:"Apply before June 30 for full academic support.",priority:"high"}];
+                (announcements.length?announcements.slice(-5).reverse():defaults).forEach(a=>{const item=document.createElement('div');item.className='announcement-item';
+                    item.innerHTML=`<h6>${a.title}</h6><p>${a.content}</p>`;container.appendChild(item);});
+                if(!announcements.length) localStorage.setItem('announcements',JSON.stringify(defaults));
+            }
+            loadEvents(){
+                const events=JSON.parse(localStorage.getItem('events')||'[]');
+                const container=document.getElementById('eventsContainer'); container.innerHTML='';
+                const defaults=[{name:"Intramurals 2025",date:"2025-03-15",time:"8:00 AM",location:"SMCC Gym"},
+                                {name:"Career Orientation",date:"2025-03-20",time:"1:00 PM",location:"Auditorium"}];
+                (events.length?events:defaults).forEach(e=>{const d=new Date(e.date);
+                    const card=document.createElement('div');card.className='event-card';
+                    card.innerHTML=`<div class="event-date"><div class="event-month">${d.toLocaleString('default',{month:'short'})}</div><div class="event-day">${d.getDate()}</div></div>
+                                    <div><h6>${e.name}</h6><p class="small text-muted"><i class="bi bi-clock"></i> ${e.time} • ${e.location}</p></div>`;
+                    container.appendChild(card);});
+                if(!events.length) localStorage.setItem('events',JSON.stringify(defaults));
+            }
+            loadGallery(){
+                const gallery=JSON.parse(localStorage.getItem('gallery')||'[]');
+                const container=document.getElementById('galleryContainer'); container.innerHTML='';
+                const defaults=[{title:"Graduation 2024",url:"https://via.placeholder.com/400x300?text=Graduation",desc:"Proud graduates!"},
+                                {title:"Science Fair",url:"https://via.placeholder.com/400x300?text=Science+Fair",desc:"Amazing projects"}];
+                (gallery.length?gallery:defaults).forEach(g=>{const col=document.createElement('div');col.className='col-md-4 col-sm-6';
+                    col.innerHTML=`<div class="gallery-item"><img src="${g.url}" alt="${g.title}"><div class="gallery-caption"><h6>${g.title}</h6><small>${g.desc}</small></div></div>`;
+                    container.appendChild(col);});
+                if(!gallery.length) localStorage.setItem('gallery',JSON.stringify(defaults));
+            }
+            setupSmoothScroll(){
+                document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();
+                    const target=document.querySelector(a.getAttribute('href'));
+                    if(target) window.scrollTo({top:target.offsetTop-80,behavior:'smooth'});});});
+            }
+            setupProgressAnimation(){setTimeout(()=>{const p=document.querySelector('.progress');if(p) p.style.strokeDashoffset='94';},500);}
+        }
+        const portal=new StudentPortal();
+
+        function scrollToSection(id){document.querySelector(`#${id}`).scrollIntoView({behavior:'smooth'});}
+        window.addEventListener('online',()=>location.reload());
+        window.addEventListener('offline',()=>portal.checkOnlineStatus());
+    </script>
+</body>
+</html>
+

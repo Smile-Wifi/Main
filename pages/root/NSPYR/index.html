@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Inspirational Portrait Reels — Swipe Player</title>
+  <style>
+    :root{ --bg:#0b0b0b; --panel:#0f1720; --accent:#ff6b6b; --muted:#9aa4b2; }
+    html,body{height:100%;margin:0;background:var(--bg);color:#fff;font-family:system-ui,Arial,Segoe UI,Roboto,"Helvetica Neue";overflow:hidden;}
+    
+    /* Welcome Screen */
+    #welcomeScreen {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, #111 0%, #000 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 1000;
+      transition: opacity 1s ease, visibility 1s ease;
+    }
+    #welcomeScreen.fadeOut {
+      opacity: 0;
+      visibility: hidden;
+    }
+    #welcomeLogo {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #fff;
+      text-align: center;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--accent), #ff9f9f);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      user-select: none;
+      transition: transform 0.4s ease;
+    }
+    #welcomeLogo:hover {
+      transform: scale(1.05);
+    }
+    #welcomeNote {
+      margin-top: 12px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    /* Main UI */
+    .topbar{position:fixed;left:0;right:0;top:0;height:56px;display:flex;align-items:center;justify-content:space-between;padding:40px 12px 8px;background:linear-gradient(to bottom,rgba(0,0,0,.35),transparent);z-index:30}
+    .hamburger{width:36px;height:36px;display:flex;flex-direction:column;justify-content:center;gap:4px;cursor:pointer}
+    .hamburger span{display:block;height:3px;background:#fff;border-radius:3px}
+    .brand{font-weight:700;letter-spacing:0.6px}
+    .sidepanel{position:fixed;left:-300px;top:0;bottom:0;width:280px;background:var(--panel);z-index:40;padding:18px 12px;box-shadow:6px 0 30px rgba(0,0,0,.6);transition:left .28s ease}
+    .sidepanel.open{left:0}
+    .sidepanel h3{margin:6px 0 12px;font-size:16px}
+    .category{display:flex;gap:8px;align-items:center;padding:8px;border-radius:8px;cursor:pointer}
+    .category:hover{background:rgba(255,255,255,.03)}
+    .category .dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+    .viewer{position:fixed;inset:0;display:flex;flex-direction:column;align-items:stretch}
+    .slides{flex:1;display:flex;flex-direction:column;scroll-snap-type:y mandatory;overflow-y:scroll;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
+    .slide{scroll-snap-align:start;min-height:100vh;display:flex;align-items:center;justify-content:center;padding-top:56px;box-sizing:border-box;position:relative}
+    .video-wrap{width:100%;height:calc(100vh - 56px);max-width:480px;overflow:hidden;border-radius:12px;background:#000;display:flex;align-items:center;justify-content:center;position:relative}
+    .video-wrap video{width:100%;height:100%;object-fit:cover;border:0;background:#000;display:block;}
+    .play-overlay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;z-index:10;cursor:pointer;background:rgba(0,0,0,0.3)}
+    .play-btn{width:72px;height:72px;background:rgba(255,255,255,0.9);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;color:#000}
+    .controls{position:absolute;right:12px;bottom:18px;display:flex;flex-direction:column;gap:8px;z-index:20}
+    .btn{width:48px;height:48px;border-radius:14px;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;color:#fff;backdrop-filter:blur(6px);}
+    .like-btn.active{background:linear-gradient(135deg,var(--accent),#ff9f9f)}
+    .meta{position:absolute;left:12px;bottom:18px;z-index:20;max-width:62%}
+    .meta h2{margin:0 0 6px;font-size:18px}
+    .meta p{margin:0;color:var(--muted);font-size:13px}
+    .overlay{position:fixed;inset:0;background:transparent;z-index:35;display:none;}
+    .overlay.show{display:block;}
+    @media(min-width:900px){
+      .viewer{align-items:center}
+      .slides{width:420px;border-radius:16px;margin-top:20px;box-shadow:0 8px 40px rgba(0,0,0,.7);overflow:hidden}
+      .slide{padding:0}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Welcome Screen -->
+  <div id="welcomeScreen">
+    <div id="welcomeLogo">INSPIRATIONAL REELS</div>
+    <div id="welcomeNote">Click to Enter & Enable Sound</div>
+  </div>
+
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="hamburger" id="hambBtn"><span></span><span></span><span></span></div>
+      <div class="brand">Inspirational Reels</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div id="shuffleBtn" class="btn">Shuffle</div>
+      <div id="filterBtn" class="btn">Categories</div>
+    </div>
+  </div>
+  <div class="overlay" id="overlay"></div>
+  <aside class="sidepanel" id="sidepanel">
+    <h3>Categories</h3>
+    <div id="categoriesList"></div>
+    <hr style="border:none;height:1px;background:rgba(255,255,255,.04);margin:12px 0">
+    <h3>Quick Actions</h3>
+    <button id="shufflePanel" class="btn" style="width:120px">Shuffle</button>
+    <button id="resetLikes" class="btn" style="width:120px">Reset Likes</button>
+  </aside>
+
+  <main class="viewer">
+    <div class="slides" id="slides"></div>
+  </main>
+
+  <script>
+    const videoSources = [
+      { id: 'reel3', url: 'https://resonant-hotteok-a33564.netlify.app/media/videos/NSPYR/reel1.mp4', title: 'Reel 3', category: 'Inspirational Reels', likes: 10 },
+      { id: 'reel5', url: 'https://resonant-hotteok-a33564.netlify.app/media/videos/NSPYR/reel2.mp4', title: 'Reel 5', category: 'Inspirational Reels', likes: 8 },
+      { id: 'reel1', url: 'https://resonant-hotteok-a33564.netlify.app/media/videos/NSPYR/reel3.mp4', title: 'Reel 1', category: 'Inspirational Reels', likes: 12 },
+      { id: 'reel2', url: 'https://resonant-hotteok-a33564.netlify.app/media/videos/NSPYR/reel4.mp4', title: 'Reel 2', category: 'Inspirational Reels', likes: 15 },
+      { id: 'reel4', url: 'https://resonant-hotteok-a33564.netlify.app/media/videos/NSPYR/reel5.mp4', title: 'Reel 4', category: 'Inspirational Reels', likes: 9 },
+      { id: 'reel6', url: 'https://resonant-hotteok-a33564.netlify.app/media/videos/NSPYR/reel6.mp4', title: 'Reel 6', category: 'Inspirational Reels', likes: 14 }
+    ];
+
+    let order = [...Array(videoSources.length).keys()];
+    let soundEnabled = false;
+    const slidesEl = document.getElementById('slides');
+    const sidepanel = document.getElementById('sidepanel');
+    const overlay = document.getElementById('overlay');
+
+    function loadLikes() {
+      const store = JSON.parse(localStorage.getItem('reel_likes') || '{}');
+      videoSources.forEach(v => {
+        v._liked = !!store[v.id];
+        v._likes = store[v.id + '_count'] ?? v.likes ?? 0;
+      });
+    }
+
+    function saveLikes() {
+      const store = {};
+      videoSources.forEach(v => {
+        if (v._liked) store[v.id] = true;
+        store[v.id + '_count'] = v._likes;
+      });
+      localStorage.setItem('reel_likes', JSON.stringify(store));
+    }
+
+    function buildCategories() {
+      const cats = [...new Set(videoSources.map(v => v.category || 'Uncategorized'))];
+      const list = document.getElementById('categoriesList'); list.innerHTML = '';
+      cats.forEach(cat => {
+        const el = document.createElement('div'); el.className = 'category';
+        el.innerHTML = `<div class="dot"></div><div>${cat}</div>`;
+        el.onclick = () => { filterByCategory(cat); closePanel(); };
+        list.appendChild(el);
+      });
+    }
+
+    function buildSlides() {
+      slidesEl.innerHTML = '';
+      order.forEach((idx) => {
+        const v = videoSources[idx];
+        const slide = document.createElement('section');
+        slide.className = 'slide';
+        const wrap = document.createElement('div');
+        wrap.className = 'video-wrap';
+        const video = document.createElement('video');
+        video.src = v.url;
+        video.preload = 'metadata';
+        video.loop = false;
+        video.playsInline = true;
+        video.muted = !soundEnabled;
+
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+        meta.innerHTML = `<h2>${v.title}</h2><p>${v.category}</p>`;
+
+        const controls = document.createElement('div');
+        controls.className = 'controls';
+        const likeBtn = document.createElement('div');
+        likeBtn.className = 'btn like-btn' + (v._liked ? ' active' : '');
+        likeBtn.innerHTML = '♥';
+        const likeCount = document.createElement('div');
+        likeCount.style.marginTop = '4px';
+        likeCount.style.fontSize = '13px';
+        likeCount.textContent = v._likes || 0;
+
+        likeBtn.onclick = e => {
+          e.stopPropagation();
+          v._liked = !v._liked;
+          if (v._liked) v._likes++;
+          else v._likes = Math.max(0, v._likes - 1);
+          likeBtn.classList.toggle('active');
+          likeCount.textContent = v._likes;
+          saveLikes();
+        };
+
+        controls.append(likeBtn, likeCount);
+        wrap.append(video);
+        slide.append(wrap, meta, controls);
+        slidesEl.appendChild(slide);
+      });
+
+      setupAutoPlay();
+    }
+
+    function setupAutoPlay() {
+      const videos = slidesEl.querySelectorAll('video');
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          const v = entry.target;
+          if (entry.isIntersecting) {
+            videos.forEach(x => { if (x !== v) x.pause(); });
+            v.play().catch(() => {});
+            if (soundEnabled) v.muted = false;
+          } else v.pause();
+        });
+      }, { threshold: 0.6 });
+
+      videos.forEach(v => observer.observe(v));
+    }
+
+    function filterByCategory(cat) {
+      order = videoSources.map((v, i) => ({v, i}))
+        .filter(x => x.v.category === cat)
+        .map(x => x.i);
+      buildSlides();
+    }
+
+    function togglePanel() {
+      sidepanel.classList.toggle('open');
+      overlay.classList.toggle('show');
+    }
+
+    function closePanel() {
+      sidepanel.classList.remove('open');
+      overlay.classList.remove('show');
+    }
+
+    document.getElementById('hambBtn').onclick = togglePanel;
+    document.getElementById('filterBtn').onclick = togglePanel;
+    document.getElementById('shuffleBtn').onclick = () => { order.sort(()=>Math.random()-0.5); buildSlides(); };
+    document.getElementById('shufflePanel').onclick = () => { order.sort(()=>Math.random()-0.5); buildSlides(); closePanel(); };
+    document.getElementById('resetLikes').onclick = () => { localStorage.removeItem('reel_likes'); loadLikes(); buildSlides(); };
+    overlay.onclick = closePanel;
+
+    function init() {
+      loadLikes();
+      buildCategories();
+      buildSlides();
+    }
+
+    document.getElementById('welcomeLogo').onclick = () => {
+      soundEnabled = true;
+      document.getElementById('welcomeScreen').classList.add('fadeOut');
+      setTimeout(() => {
+        document.getElementById('welcomeScreen').remove();
+        init();
+      }, 1000);
+    };
+  </script>
+</body>
+</html>

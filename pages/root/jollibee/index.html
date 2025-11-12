@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<title>Offline Kiosk — Jolli Clone (With Payment Options)</title>
+<style>
+:root{
+  --red:#d81d3b;--accent:#ff5a5f;--yellow:#ffb400;--bg:#f7f7f9;--card:#fff;--muted:#6b6b6b;--max-w:980px;
+}
+*{box-sizing:border-box;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;}
+body{margin:0;background:linear-gradient(180deg,#f7f7f9,#fff);display:flex;flex-direction:column;align-items:center;padding:14px;}
+header{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:var(--max-w);background:#fff;border-radius:14px;padding:10px 14px;box-shadow:0 4px 16px rgba(0,0,0,.06);}
+.brand{display:flex;align-items:center;gap:10px}
+.logo-img{width:50px;height:50px;border-radius:10px;object-fit:cover;background:#fff;}
+.logo-fallback{width:50px;height:50px;border-radius:10px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:22px;}
+.title{font-weight:800;color:var(--red);font-size:18px}
+.small{font-size:13px;color:var(--muted)}
+.controls{display:flex;gap:8px;align-items:center}
+.controls a{text-decoration:none;}
+.btn,.ghost{display:inline-block;text-align:center;cursor:pointer;font-weight:800;border-radius:10px;padding:8px 12px;}
+.btn{background:var(--red);color:#fff;border:none;}
+.ghost{background:transparent;color:var(--red);border:1px solid rgba(216,29,59,.12);}
+
+/* main layout */
+.content{display:flex;width:100%;max-width:var(--max-w);margin-top:10px;background:var(--bg);border-radius:14px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.08);}
+.main{flex:1;padding:16px;overflow:auto;}
+.cart{width:320px;background:#fff;border-left:1px solid rgba(0,0,0,.05);padding:14px;}
+.categories{display:flex;gap:8px;overflow:auto;padding:6px 0;}
+.cat{padding:8px 12px;border-radius:999px;background:#fff;border:1px solid rgba(0,0,0,.08);cursor:pointer;white-space:nowrap}
+.cat.active{background:var(--red);color:#fff;}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:10px}
+.card{background:var(--card);border-radius:12px;padding:10px;border:1px solid rgba(0,0,0,.04);display:flex;flex-direction:column;gap:8px;}
+.thumb{height:120px;border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.thumb img{width:100%;height:100%;object-fit:cover;}
+.price{font-weight:800;color:var(--red);}
+.add-btn{padding:8px;border-radius:8px;border:none;background:var(--accent);color:#fff;cursor:pointer;font-weight:600;}
+.add-btn:hover{background:#ff3c40}
+
+/* cart */
+.cart-list{display:flex;flex-direction:column;gap:8px;max-height:320px;overflow:auto;}
+.cart-item{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;background:rgba(0,0,0,.02);}
+.qty{display:flex;gap:6px;align-items:center;}
+.qty button{padding:6px 8px;border-radius:6px;border:1px solid rgba(0,0,0,.06);background:#fff;cursor:pointer;}
+.total-row{display:flex;justify-content:space-between;align-items:center;font-weight:800;color:#111;font-size:18px;margin-top:10px;}
+.pay-btn{width:100%;margin-top:14px;padding:10px;border:none;border-radius:10px;background:var(--yellow);font-weight:800;color:#000;cursor:pointer;}
+.payment-method{width:100%;margin-top:10px;padding:8px;border-radius:8px;border:1px solid #ccc;font-weight:600;}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:20px;background:rgba(0,0,0,.8);color:#fff;padding:8px 12px;border-radius:10px;z-index:99;}
+
+/* QR modal */
+.qr-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:100;}
+.qr-box{background:#fff;padding:20px;border-radius:14px;text-align:center;max-width:90%;}
+.qr-box canvas{margin-top:10px;}
+.qr-box button{margin-top:10px;padding:8px 14px;border:none;border-radius:8px;background:var(--red);color:#fff;cursor:pointer;font-weight:600;}
+
+/* responsive fix */
+@media(max-width:900px){
+  .content{flex-direction:column;}
+  .cart{
+    width:100%;
+    border-left:none;
+    border-top:2px solid rgba(0,0,0,.05);
+    order:2;
+    display:block;
+    max-height:45vh;
+    overflow-y:auto;
+  }
+  .main{order:1;}
+  .menu-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <img src="jollibee.png" alt="Logo" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+    <div class="logo-fallback" style="display:none;">J</div>
+    <div>
+      <div class="title">Jollibee Kiosk</div>
+      <div class="small">Smile Wifi</div>
+    </div>
+  </div>
+  <div class="controls">
+    <a href="../../../index.html" class="ghost">Home</a>
+    <a href="#orderSection" class="btn">Order</a>
+  </div>
+</header>
+
+<div class="content" id="orderSection">
+  <main class="main">
+    <div class="categories" id="catBar"></div>
+    <div class="menu-grid" id="menuGrid"></div>
+  </main>
+
+  <aside class="cart">
+    <h3>Your Cart</h3>
+    <div class="small" id="cartCount">0 items</div>
+    <div class="cart-list" id="cartList"></div>
+    <div class="total-row"><span>Total</span><span id="totalPrice">₱0.00</span></div>
+
+    <!-- 💳 Added Payment Method Selector -->
+    <select id="paymentSelect" class="payment-method">
+      <option value="">-- Select Payment Method --</option>
+      <option value="GCash">GCash</option>
+      <option value="PayMaya">PayMaya</option>
+      <option value="GoTyme Bank">GoTyme Bank</option>
+	  <option value="GoTyme Bank">Wireless Wallet</option>
+      <option value="Cash">Cash (Pay at Counter)</option>
+    </select>
+
+    <button class="pay-btn" id="payBtn">💳 Pay Now</button>
+  </aside>
+</div>
+
+<!-- QR modal -->
+<div class="qr-modal" id="qrModal">
+  <div class="qr-box">
+    <h3>Order QR</h3>
+    <canvas id="qrCanvas"></canvas>
+    <button onclick="closeQR()">Close</button>
+  </div>
+</div>
+
+<!-- Offline QR Generator -->
+<script src="qrious.min.js"></script>
+<script>
+const MENU=[
+  {id:'1',cat:'Chickenjoy',name:'1pc Chickenjoy',price:79,img:'images/1.png'},
+  {id:'2',cat:'Chickenjoy',name:'2pc Chickenjoy',price:149,img:'images/2.png'},
+  {id:'3',cat:'Spaghetti',name:'Jolly Spaghetti',price:69,img:'images/3.png'},
+  {id:'4',cat:'Burger',name:'Yum Burger',price:59,img:'images/4.png'},
+  {id:'5',cat:'Sides',name:'Jolly Fries (L)',price:49,img:'images/5.png'},
+  {id:'6',cat:'Drinks',name:'Coke Regular',price:20,img:'images/6.png'},
+  {id:'7',cat:'Dessert',name:'Peach Mango Pie',price:39,img:'images/7.png'},
+];
+let cart=JSON.parse(localStorage.getItem('cart')||'[]');
+function fmt(n){return '₱'+Number(n).toFixed(2);}
+function renderCats(){
+  const cats=['All',...new Set(MENU.map(m=>m.cat))];
+  const catBar=document.getElementById('catBar');
+  catBar.innerHTML='';
+  cats.forEach(c=>{
+    const d=document.createElement('div');d.className='cat';d.textContent=c;
+    d.onclick=()=>{document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));d.classList.add('active');renderMenu(c==='All'?null:c);};
+    catBar.appendChild(d);
+  });
+  catBar.firstChild.classList.add('active');
+}
+function renderMenu(cat){
+  const list=cat?MENU.filter(m=>m.cat===cat):MENU;
+  const menuGrid=document.getElementById('menuGrid');
+  menuGrid.innerHTML='';
+  list.forEach(m=>{
+    const c=document.createElement('div');c.className='card';
+    c.innerHTML=`<div class="thumb"><img src="${m.img}" alt="${m.name}" onerror="this.src='images/demo.jpg'"></div>
+    <h3>${m.name}</h3><div class="price">${fmt(m.price)}</div>`;
+    const add=document.createElement('button');add.className='add-btn';add.textContent='Add';add.onclick=()=>addToCart(m);
+    c.appendChild(add);menuGrid.appendChild(c);
+  });
+}
+function addToCart(item){
+  const f=cart.find(x=>x.id===item.id);
+  if(f)f.qty++;else cart.push({...item,qty:1});
+  localStorage.setItem('cart',JSON.stringify(cart));
+  renderCart();
+}
+function renderCart(){
+  const cl=document.getElementById('cartList'),cc=document.getElementById('cartCount'),tp=document.getElementById('totalPrice');
+  cl.innerHTML='';let total=0,count=0;
+  cart.forEach(i=>{
+    total+=i.price*i.qty;count+=i.qty;
+    const row=document.createElement('div');row.className='cart-item';
+    row.innerHTML=`<div><strong>${i.name}</strong><br><small>${fmt(i.price)} × ${i.qty}</small></div>
+    <div class="qty"><button>-</button><span>${i.qty}</span><button>+</button></div>`;
+    row.querySelectorAll('button')[0].onclick=()=>changeQty(i.id,-1);
+    row.querySelectorAll('button')[1].onclick=()=>changeQty(i.id,1);
+    cl.appendChild(row);
+  });
+  cc.textContent=`${count} item${count!=1?'s':''}`;
+  tp.textContent=fmt(total);
+  if(count===0)cl.innerHTML='<div class="small">Cart empty</div>';
+}
+function changeQty(id,d){
+  const f=cart.find(x=>x.id===id);if(!f)return;f.qty+=d;if(f.qty<1)cart=cart.filter(x=>x.id!==id);
+  localStorage.setItem('cart',JSON.stringify(cart));renderCart();
+}
+function showQR(){
+  if(cart.length===0){alert('Cart empty');return;}
+  const payMethod=document.getElementById('paymentSelect').value;
+  if(!payMethod){alert('Please select a payment method');return;}
+  const total=document.getElementById('totalPrice').textContent;
+  const data={cart,total,payment:payMethod,date:new Date().toLocaleString()};
+  new QRious({
+    element:document.getElementById('qrCanvas'),
+    value:JSON.stringify(data,null,0),
+    size:220
+  });
+  document.getElementById('qrModal').style.display='flex';
+}
+function closeQR(){document.getElementById('qrModal').style.display='none';}
+document.getElementById('payBtn').onclick=()=>showQR();
+
+renderCats();renderMenu();renderCart();
+</script>
+</body>
+</html>

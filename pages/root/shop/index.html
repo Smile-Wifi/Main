@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocalBiz Hub - Connect with Local Businesses</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #453030;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #667eea;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 120px 0 80px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 1rem 3rem 1rem 1rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 2rem;
+            padding: 2rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        /* Business Grid */
+        .business-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .business-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .business-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .business-image {
+            height: 200px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .business-info {
+            padding: 1.5rem;
+        }
+
+        .business-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .business-category {
+            color: #667eea;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .business-description {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .business-contact {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .contact-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .contact-btn.phone {
+            background: #e8f5e8;
+            color: #28a745;
+        }
+
+        .contact-btn.email {
+            background: #e3f2fd;
+            color: #007bff;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            display: none;
+            padding: 100px 0 2rem;
+        }
+
+        .dashboard-header {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+        }
+
+        .sidebar {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            padding: 0.8rem 1rem;
+            text-decoration: none;
+            color: #333;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .main-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Responsive Design */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: #667eea;
+                flex-direction: column;
+                padding: 1rem 0;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .dashboard-content {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: 2;
+            }
+
+            .main-content {
+                order: 1;
+            }
+
+            .business-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 3000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease-out;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            background: #dc3545;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <i class="fas fa-store"></i>
+                LocalBiz Hub
+            </div>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home" onclick="showHome()">Home</a></li>
+                <li><a href="#businesses" onclick="showBusinesses()">Businesses</a></li>
+                <li><a href="#about" onclick="showAbout()">About</a></li>
+                <li id="authButton"><a href="#" onclick="showLoginModal()" class="btn btn-secondary">Login</a></li>
+                <li id="dashboardButton" style="display: none;"><a href="#" onclick="showDashboard()" class="btn btn-primary">Dashboard</a></li>
+                <li id="logoutButton" style="display: none;"><a href="#" onclick="logout()" class="btn btn-secondary">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h1>Discover Local Businesses</h1>
+            <p>Connect with trusted local businesses in your community</p>
+            <div class="search-container">
+                <input type="text" class="search-box" id="searchBox" placeholder="Search for businesses, services, or categories...">
+                <button class="search-btn" onclick="searchBusinesses()">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container" id="mainContent">
+        <section id="businesses">
+            <h2 class="section-title">Featured Businesses</h2>
+            <div class="business-grid" id="businessGrid">
+                <!-- Business cards will be dynamically generated here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Dashboard -->
+    <section class="dashboard container" id="dashboard">
+        <div class="dashboard-header">
+            <h1>Business Dashboard</h1>
+            <p>Manage your business profile and settings</p>
+        </div>
+        <div class="dashboard-content">
+            <aside class="sidebar">
+                <ul class="sidebar-menu">
+                    <li><a href="#" onclick="showDashboardSection('overview')" class="active"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
+                    <li><a href="#" onclick="showDashboardSection('profile')"><i class="fas fa-store"></i> Business Profile</a></li>
+                    <li><a href="#" onclick="showDashboardSection('settings')"><i class="fas fa-cog"></i> Settings</a></li>
+                    <li><a href="#" onclick="showDashboardSection('analytics')"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+                </ul>
+            </aside>
+            <div class="main-content" id="dashboardContent">
+                <!-- Dashboard content will be dynamically loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <h2>Login to Your Business Account</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+            </form>
+            <p style="text-align: center; margin-top: 1rem;">
+                Don't have an account? <a href="#" onclick="showRegisterModal()">Register here</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeRegisterModal()">&times;</span>
+            <h2>Register Your Business</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="businessName">Business Name</label>
+                    <input type="text" id="businessName" required>
+                </div>
+                <div class="form-group">
+                    <label for="businessCategory">Category</label>
+                    <select id="businessCategory" required>
+                        <option value="">Select a category</option>
+                        <option value="restaurant">Restaurant</option>
+                        <option value="retail">Retail</option>
+                        <option value="services">Services</option>
+                        <option value="health">Health & Wellness</option>
+                        <option value="automotive">Automotive</option>
+                        <option value="technology">Technology</option>
+                        <option value="education">Education</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="businessDescription">Description</label>
+                    <textarea id="businessDescription" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="businessPhone">Phone Number</label>
+                    <input type="tel" id="businessPhone" required>
+                </div>
+                <div class="form-group">
+                    <label for="businessEmail">Business Email</label>
+                    <input type="email" id="businessEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="businessAddress">Address</label>
+                    <input type="text" id="businessAddress" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Register Business</button>
+            </form>
+            <p style="text-align: center; margin-top: 1rem;">
+                Already have an account? <a href="#" onclick="showLoginModal()">Login here</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // Sample business data
+        let businesses = [
+            {
+                id: 1,
+                name: "Mario's Italian Restaurant",
+                category: "restaurant",
+                description: "Authentic Italian cuisine with fresh ingredients and traditional recipes.",
+                phone: "(555) 123-4567",
+                email: "info@mariositalian.com",
+                address: "123 Main St, City, State 12345",
+                owner: "mario@business.com"
+            },
+            {
+                id: 2,
+                name: "Tech Solutions Pro",
+                category: "technology",
+                description: "Professional IT services and computer repair for homes and businesses.",
+                phone: "(555) 987-6543",
+                email: "support@techsolutions.com",
+                address: "456 Tech Ave, City, State 12345",
+                owner: "tech@business.com"
+            },
+            {
+                id: 3,
+                name: "Green Garden Landscaping",
+                category: "services",
+                description: "Professional landscaping and garden maintenance services.",
+                phone: "(555) 456-7890",
+                email: "info@greengarden.com",
+                address: "789 Garden Rd, City, State 12345",
+                owner: "garden@business.com"
+            },
+            {
+                id: 4,
+                name: "Wellness Spa & Massage",
+                category: "health",
+                description: "Relaxing spa treatments and therapeutic massage services.",
+                phone: "(555) 234-5678",
+                email: "book@wellnessspa.com",
+                address: "321 Spa Lane, City, State 12345",
+                owner: "spa@business.com"
+            },
+            {
+                id: 5,
+                name: "Auto Care Center",
+                category: "automotive",
+                description: "Complete automotive repair and maintenance services.",
+                phone: "(555) 345-6789",
+                email: "service@autocare.com",
+                address: "654 Auto Blvd, City, State 12345",
+                owner: "auto@business.com"
+            },
+            {
+                id: 6,
+                name: "Learning Academy",
+                category: "education",
+                description: "Quality tutoring and educational programs for all ages.",
+                phone: "(555) 567-8901",
+                email: "info@learningacademy.com",
+                address: "987 Education St, City, State 12345",
+                owner: "education@business.com"
+            }
+        ];
+
+        let currentUser = null;
+        let userBusinesses = [];
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            renderBusinesses();
+            checkLoginStatus();
+        });
+
+        // Render businesses
+        function renderBusinesses(searchTerm = '') {
+            const businessGrid = document.getElementById('businessGrid');
+            const filteredBusinesses = businesses.filter(business => {
+                const searchLower = searchTerm.toLowerCase();
+                return business.name.toLowerCase().includes(searchLower) ||
+                       business.category.toLowerCase().includes(searchLower) ||
+                       business.description.toLowerCase().includes(searchLower);
+            });
+
+            businessGrid.innerHTML = filteredBusinesses.map(business => `
+                <div class="business-card">
+                    <div class="business-image">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <div class="business-info">
+                        <h3 class="business-name">${business.name}</h3>
+                        <p class="business-category">${business.category.charAt(0).toUpperCase() + business.category.slice(1)}</p>
+                        <p class="business-description">${business.description}</p>
+                        <div class="business-contact">
+                            <a href="tel:${business.phone}" class="contact-btn phone">
+                                <i class="fas fa-phone"></i> Call
+                            </a>
+                            <a href="mailto:${business.email}" class="contact-btn email">
+                                <i class="fas fa-envelope"></i> Email
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Search businesses
+        function searchBusinesses() {
+            const searchTerm = document.getElementById('searchBox').value;
+            renderBusinesses(searchTerm);
+        }
+
+        // Modal functions
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'block';
+            document.getElementById('registerModal').style.display = 'none';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        function showRegisterModal() {
+            document.getElementById('registerModal').style.display = 'block';
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        function closeRegisterModal() {
+            document.getElementById('registerModal').style.display = 'none';
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        // Toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // Simple login simulation
+            const business = businesses.find(b => b.owner === email);
+            if (business && password === 'password123') {
+                currentUser = { email: email, business: business };
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                checkLoginStatus();
+                closeLoginModal();
+                showToast('Login successful!');
+            } else {
+                showToast('Invalid email or password', 'error');
+            }
+        });
+
+        // Register form handler
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('businessName').value;
+            const category = document.getElementById('businessCategory').value;
+            const description = document.getElementById('businessDescription').value;
+            const phone = document.getElementById('businessPhone').value;
+            const email = document.getElementById('businessEmail').value;
+            const address = document.getElementById('businessAddress').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                showToast('Passwords do not match', 'error');
+                return;
+            }
+
+            // Create new business
+            const newBusiness = {
+                id: businesses.length + 1,
+                name: name,
+                category: category,
+                description: description,
+                phone: phone,
+                email: email,
+                address: address,
+                owner: email
+            };
+
+            businesses.push(newBusiness);
+            currentUser = { email: email, business: newBusiness };
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            closeRegisterModal();
+            checkLoginStatus();
+            renderBusinesses();
+            showToast('Business registered successfully!');
+        });
+
+        // Check login status
+        function checkLoginStatus() {
+            const storedUser = localStorage.getItem('currentUser');
+            if (storedUser) {
+                currentUser = JSON.parse(storedUser);
+                document.getElementById('authButton').style.display = 'none';
+                document.getElementById('dashboardButton').style.display = 'block';
+                document.getElementById('logoutButton').style.display = 'block';
+            } else {
+                document.getElementById('authButton').style.display = 'block';
+                document.getElementById('dashboardButton').style.display = 'none';
+                document.getElementById('logoutButton').style.display = 'none';
+            }
+        }
+
+        // Logout function
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            checkLoginStatus();
+            showHome();
+            showToast('Logged out successfully!');
+        }
+
+        // Navigation functions
+        function showHome() {
+            document.getElementById('home').style.display = 'block';
+            document.getElementById('mainContent').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+        }
+
+        function showBusinesses() {
+            document.getElementById('home').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+        }
+
+        function showAbout() {
+            showToast('About page coming soon!');
+        }
+
+        function showDashboard() {
+            if (!currentUser) {
+                showLoginModal();
+                return;
+            }
+            
+            document.getElementById('home').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            showDashboardSection('overview');
+        }
+
+        function showDashboardSection(section) {
+            const content = document.getElementById('dashboardContent');
+            const menuItems = document.querySelectorAll('.sidebar-menu a');
+            
+            menuItems.forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+
+            switch(section) {
+                case 'overview':
+                    content.innerHTML = `
+                        <h2>Welcome back, ${currentUser.business.name}!</h2>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 2rem;">
+                            <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; text-align: center;">
+                                <h3>Profile Views</h3>
+                                <p style="font-size: 2rem; color: #667eea; margin: 0;">127</p>
+                            </div>
+                            <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; text-align: center;">
+                                <h3>Contact Requests</h3>
+                                <p style="font-size: 2rem; color: #28a745; margin: 0;">23</p>
+                            </div>
+                            <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; text-align: center;">
+                                <h3>Reviews</h3>
+                                <p style="font-size: 2rem; color: #ffc107; margin: 0;">4.8</p>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 'profile':
+                    content.innerHTML = `
+                        <h2>Business Profile</h2>
+                        <form id="profileForm" style="margin-top: 2rem;">
+                            <div class="form-group">
+                                <label>Business Name</label>
+                                <input type="text" value="${currentUser.business.name}" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Category</label>
+                                <select required>
+                                    <option value="${currentUser.business.category}">${currentUser.business.category}</option>
+                                    <option value="restaurant">Restaurant</option>
+                                    <option value="retail">Retail</option>
+                                    <option value="services">Services</option>
+                                    <option value="health">Health & Wellness</option>
+                                    <option value="automotive">Automotive</option>
+                                    <option value="technology">Technology</option>
+                                    <option value="education">Education</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea required>${currentUser.business.description}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="tel" value="${currentUser.business.phone}" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" value="${currentUser.business.email}" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Address</label>
+                                <input type="text" value="${currentUser.business.address}" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update Profile</button>
+                        </form>
+                    `;
+                    break;
+                case 'settings':
+                    content.innerHTML = `
+                        <h2>Settings</h2>
+                        <div style="margin-top: 2rem;">
+                            <div class="form-group">
+                                <label>Change Password</label>
+                                <input type="password" placeholder="Current Password">
+                            </div>
+                            <div class="form-group">
+                                <label>New Password</label>
+                                <input type="password" placeholder="New Password">
+                            </div>
+                            <div class="form-group">
+                                <label>Confirm New Password</label>
+                                <input type="password" placeholder="Confirm New Password">
+                            </div>
+                            <button class="btn btn-primary">Update Password</button>
+                        </div>
+                    `;
+                    break;
+                case 'analytics':
+                    content.innerHTML = `
+                        <h2>Analytics</h2>
+                        <div style="margin-top: 2rem;">
+                            <div style="background: #f8f9fa; padding: 2rem; border-radius: 10px; text-align: center;">
+                                <i class="fas fa-chart-line" style="font-size: 4rem; color: #667eea; margin-bottom: 1rem;"></i>
+                                <h3>Analytics Dashboard</h3>
+                                <p>Detailed analytics and insights coming soon!</p>
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const loginModal = document.getElementById('loginModal');
+            const registerModal = document.getElementById('registerModal');
+            if (event.target === loginModal) {
+                closeLoginModal();
+            }
+            if (event.target === registerModal) {
+                closeRegisterModal();
+            }
+        }
+
+        // Search on Enter key
+        document.getElementById('searchBox').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchBusinesses();
+            }
+        });
+    </script>
+</body>
+</html>

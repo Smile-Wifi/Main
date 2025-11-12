@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Guide - Municipal Services Portal</title>
+    <meta name="description" content="Step-by-step guide to applying for Philippine municipal documents and government services.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Core Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'government-blue': '#1B365D',
+                        'trust-navy': '#2C3E50',
+                        'official-gold': '#B8860B',
+                        'success-green': '#28A745',
+                        'warning-amber': '#FFC107'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                        'source': ['Source Sans Pro', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .step-card {
+            transition: all 0.3s ease;
+        }
+        
+        .step-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .step-number {
+            background: linear-gradient(135deg, #1B365D, #2C3E50);
+        }
+        
+        .progress-line {
+            position: relative;
+        }
+        
+        .progress-line::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            width: 2px;
+            height: 40px;
+            background: #e5e7eb;
+            transform: translateX(-50%);
+        }
+        
+        .progress-line.completed::after {
+            background: #28A745;
+        }
+        
+        .progress-line:last-child::after {
+            display: none;
+        }
+        
+        .checklist-item {
+            transition: all 0.3s ease;
+        }
+        
+        .checklist-item.completed {
+            background-color: #f0f9ff;
+            border-color: #1B365D;
+        }
+        
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .timeline-item {
+            position: relative;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -25px;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: #e5e7eb;
+        }
+        
+        .timeline-item:last-child::before {
+            display: none;
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            left: -32px;
+            top: 8px;
+            width: 16px;
+            height: 16px;
+            background: #1B365D;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px #1B365D;
+        }
+    </style>
+</head>
+<body class="font-source text-trust-navy bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-xl font-inter font-bold text-government-blue">
+                            🇵🇭 Municipal Services
+                        </h1>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="index.html" class="text-gray-600 hover:text-government-blue px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a>
+                        <a href="services.html" class="text-gray-600 hover:text-government-blue px-3 py-2 rounded-md text-sm font-medium transition-colors">Services</a>
+                        <a href="#" class="text-government-blue hover:text-official-gold px-3 py-2 rounded-md text-sm font-medium transition-colors">Guide</a>
+                        <a href="index.html#contact" class="text-gray-600 hover:text-government-blue px-3 py-2 rounded-md text-sm font-medium transition-colors">Contact</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-government-blue hover:text-official-gold">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
+                <a href="index.html" class="text-gray-600 hover:text-government-blue block px-3 py-2 rounded-md text-base font-medium">Home</a>
+                <a href="services.html" class="text-gray-600 hover:text-government-blue block px-3 py-2 rounded-md text-base font-medium">Services</a>
+                <a href="#" class="text-government-blue block px-3 py-2 rounded-md text-base font-medium">Guide</a>
+                <a href="index.html#contact" class="text-gray-600 hover:text-government-blue block px-3 py-2 rounded-md text-base font-medium">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <section class="pt-24 pb-12 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-inter font-bold text-trust-navy mb-4">Application Guide</h1>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Step-by-step instructions for obtaining Philippine municipal documents and government services
+                </p>
+            </div>
+            
+            <!-- Quick Navigation -->
+            <div class="bg-gray-50 rounded-xl p-6">
+                <h3 class="text-lg font-semibold text-trust-navy mb-4">Quick Navigation</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <a href="#preparation" class="bg-white p-4 rounded-lg text-center hover:bg-government-blue hover:text-white transition-colors">
+                        <div class="w-8 h-8 bg-government-blue rounded-full flex items-center justify-center mx-auto mb-2">
+                            <span class="text-white text-sm font-bold">1</span>
+                        </div>
+                        <span class="text-sm font-medium">Preparation</span>
+                    </a>
+                    <a href="#application" class="bg-white p-4 rounded-lg text-center hover:bg-government-blue hover:text-white transition-colors">
+                        <div class="w-8 h-8 bg-government-blue rounded-full flex items-center justify-center mx-auto mb-2">
+                            <span class="text-white text-sm font-bold">2</span>
+                        </div>
+                        <span class="text-sm font-medium">Application</span>
+                    </a>
+                    <a href="#processing" class="bg-white p-4 rounded-lg text-center hover:bg-government-blue hover:text-white transition-colors">
+                        <div class="w-8 h-8 bg-government-blue rounded-full flex items-center justify-center mx-auto mb-2">
+                            <span class="text-white text-sm font-bold">3</span>
+                        </div>
+                        <span class="text-sm font-medium">Processing</span>
+                    </a>
+                    <a href="#completion" class="bg-white p-4 rounded-lg text-center hover:bg-government-blue hover:text-white transition-colors">
+                        <div class="w-8 h-8 bg-government-blue rounded-full flex items-center justify-center mx-auto mb-2">
+                            <span class="text-white text-sm font-bold">4</span>
+                        </div>
+                        <span class="text-sm font-medium">Completion</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Overview -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 scroll-reveal">
+                <h2 class="text-3xl font-inter font-bold text-trust-navy mb-4">Application Process Overview</h2>
+                <p class="text-lg text-gray-600">Understanding the complete journey from preparation to document completion</p>
+            </div>
+            
+            <div class="relative">
+                <!-- Progress Line -->
+                <div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gray-300"></div>
+                
+                <div class="space-y-12">
+                    <!-- Step 1: Preparation -->
+                    <div id="preparation" class="timeline-item pl-16 scroll-reveal">
+                        <div class="timeline-dot"></div>
+                        <div class="bg-white rounded-xl shadow-lg p-8">
+                            <div class="flex items-center mb-6">
+                                <div class="step-number w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
+                                    1
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-inter font-bold text-trust-navy">Preparation Phase</h3>
+                                    <p class="text-gray-600">Gather requirements and plan your application</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div>
+                                    <h4 class="text-lg font-semibold text-trust-navy mb-4">What You'll Need</h4>
+                                    <ul class="space-y-3">
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 text-success-green mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            <span>Valid government-issued ID (original and photocopy)</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 text-success-green mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            <span>Supporting documents (birth certificate, proof of address)</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 text-success-green mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            <span>Application fee (cash or accepted payment method)</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 text-success-green mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            <span>2x2 ID photos (if required)</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <svg class="w-5 h-5 text-success-green mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            <span>Application forms (downloadable or available at office)</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="text-lg font-semibold text-trust-navy mb-4">Pro Tips</h4>
+                                    <div class="space-y-4">
+                                        <div class="bg-blue-50 p-4 rounded-lg">
+                                            <h5 class="font-semibold text-government-blue mb-2">📋 Check Requirements Online</h5>
+                                            <p class="text-sm text-gray-600">Visit the official government website to verify current requirements and fees before visiting.</p>
+                                        </div>
+                                        <div class="bg-green-50 p-4 rounded-lg">
+                                            <h5 class="font-semibold text-success-green mb-2">⏰ Go Early</h5>
+                                            <p class="text-sm text-gray-600">Arrive at government offices early (before 8:00 AM) to avoid long queues and ensure same-day processing.</p>
+                                        </div>
+                                        <div class="bg-yellow-50 p-4 rounded-lg">
+                                            <h5 class="font-semibold text-warning-amber mb-2">💳 Bring Extra Cash</h5>
+                                            <p class="text-sm text-gray-600">Some offices may have additional fees or require exact change. Bring more than the estimated amount.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 2: Application -->
+                    <div id="application" class="timeline-item pl-16 scroll-reveal">
+                        <div class="timeline-dot"></div>
+                        <div class="bg-white rounded-xl shadow-lg p-8">
+                            <div class="flex items-center mb-6">
+                                <div class="step-number w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
+                                    2
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-inter font-bold text-trust-navy">Application Submission</h3>
+                                    <p class="text-gray-600">Submit your application at the appropriate government office</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="bg-gray-50 p-6 rounded-lg">
+                                    <div class="w-12 h-12 bg-government-blue rounded-lg flex items-center justify-center mb-4">
+                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                        </svg>
+                                    </div>
+                                    <h4 class="font-semibold text-trust-navy mb-2">Fill Out Forms</h4>
+                            <p class="text-sm text-gray-600">Complete all required application forms accurately. Double-check spelling and information.</p>
+                                </div>
+                                
+                                <div class="bg-gray-50 p-6 rounded-lg">
+                                    <div class="w-12 h-12 bg-official-gold rounded-lg flex items-center justify-center mb-4">
+                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                        </svg>
+                                    </div>
+                                    <h4 class="font-semibold text-trust-navy mb-2">Submit Documents</h4>
+                                    <p class="text-sm text-gray-600">Present all required documents to the receiving officer for verification.</p>
+                                </div>
+                                
+                                <div class="bg-gray-50 p-6 rounded-lg">
+                                    <div class="w-12 h-12 bg-success-green rounded-lg flex items-center justify-center mb-4">
+                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                        </svg>
+                                    </div>
+                                    <h4 class="font-semibold text-trust-navy mb-2">Pay Fees</h4>
+                                    <p class="text-sm text-gray-600">Pay the required fees at the cashier and keep your official receipt.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8 bg-yellow-50 border-l-4 border-warning-amber p-6">
+                                <div class="flex items-start">
+                                    <svg class="w-6 h-6 text-warning-amber mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                    </svg>
+                                    <div>
+                                        <h4 class="font-semibold text-warning-amber mb-2">Important Reminders</h4>
+                                        <ul class="text-sm text-gray-700 space-y-1">
+                                            <li>• Keep your receipt safe - you'll need it for claiming</li>
+                                            <li>• Ask for estimated processing time and claiming schedule</li>
+                                            <li>• Get contact information for follow-up inquiries</li>
+                                            <li>• Verify if you need to return for biometrics or photo capture</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 3: Processing -->
+                    <div id="processing" class="timeline-item pl-16 scroll-reveal">
+                        <div class="timeline-dot"></div>
+                        <div class="bg-white rounded-xl shadow-lg p-8">
+                            <div class="flex items-center mb-6">
+                                <div class="step-number w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
+                                    3
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-inter font-bold text-trust-navy">Processing & Verification</h3>
+                                    <p class="text-gray-600">Government agencies verify your information and process your application</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div>
+                                    <h4 class="text-lg font-semibold text-trust-navy mb-4">What Happens During Processing</h4>
+                                    <div class="space-y-4">
+                                        <div class="flex items-start">
+                                            <div class="w-8 h-8 bg-government-blue rounded-full flex items-center justify-center text-white text-sm font-bold mr-4 mt-1">
+                                                1
+                                            </div>
+                                            <div>
+                                                <h5 class="font-semibold text-trust-navy">Document Verification</h5>
+                                                <p class="text-sm text-gray-600">Officers verify authenticity of submitted documents and cross-check information.</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-start">
+                                            <div class="w-8 h-8 bg-government-blue rounded-full flex items-center justify-center text-white text-sm font-bold mr-4 mt-1">
+                                                2
+                                            </div>
+                                            <div>
+                                                <h5 class="font-semibold text-trust-navy">Background Checks</h5>
+                                                <p class="text-sm text-gray-600">For clearances, police/background checks are conducted through appropriate agencies.</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-start">
+                                            <div class="w-8 h-8 bg-government-blue rounded-full flex items-center justify-center text-white text-sm font-bold mr-4 mt-1">
+                                                3
+                                            </div>
+                                            <div>
+                                                <h5 class="font-semibold text-trust-navy">Data Encoding</h5>
+                                                <p class="text-sm text-gray-600">Your information is entered into government databases and systems.</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-start">
+                                            <div class="w-8 h-8 bg-government-blue rounded-full flex items-center justify-center text-white text-sm font-bold mr-4 mt-1">
+                                                4
+                                            </div>
+                                            <div>
+                                                <h5 class="font-semibold text-trust-navy">Quality Control</h5>
+                                                <p class="text-sm text-gray-600">Final review and approval by authorized personnel before printing/issuance.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="text-lg font-semibold text-trust-navy mb-4">Processing Times by Document Type</h4>
+                                    <div class="space-y-3">
+                                        <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                                            <div class="flex justify-between items-center">
+                                                <span class="font-medium text-success-green">Same Day</span>
+                                                <span class="text-sm text-gray-600">Barangay Clearance, Cedula</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                                            <div class="flex justify-between items-center">
+                                                <span class="font-medium text-government-blue">1-3 Days</span>
+                                                <span class="text-sm text-gray-600">Police Clearance, NBI Clearance</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                                            <div class="flex justify-between items-center">
+                                                <span class="font-medium text-warning-amber">3-7 Days</span>
+                                                <span class="text-sm text-gray-600">Mayor's Permit, Birth Certificate</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                                            <div class="flex justify-between items-center">
+                                                <span class="font-medium text-red-600">1-2 Weeks</span>
+                                                <span class="text-sm text-gray-600">Passport, Complex Permits</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-6 bg-gray-50 p-4 rounded-lg">
+                                        <h5 class="font-semibold text-trust-navy mb-2">⚡ Expedited Processing</h5>
+                                        <p class="text-sm text-gray-600">Some documents offer rush processing for additional fees. Ask about express services if you need documents urgently.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 4: Completion -->
+                    <div id="completion" class="timeline-item pl-16 scroll-reveal">
+                        <div class="timeline-dot"></div>
+                        <div class="bg-white rounded-xl shadow-lg p-8">
+                            <div class="flex items-center mb-6">
+                                <div class="step-number w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
+                                    4
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-inter font-bold text-trust-navy">Claiming & Completion</h3>
+                                    <p class="text-gray-600">Receive your completed documents and verify all information</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div>
+                                    <h4 class="text-lg font-semibold text-trust-navy mb-4">Claiming Process</h4>
+                                    <div class="space-y-4">
+                                        <div class="bg-blue-50 p-4 rounded-lg">
+                                            <h5 class="font-semibold text-government-blue mb-2">📋 Present Requirements</h5>
+                                            <p class="text-sm text-gray-600">Bring your official receipt, valid ID, and any claim stubs provided during application.</p>
+                                        </div>
+                                        
+                                        <div class="bg-green-50 p-4 rounded-lg">
+                                            <h5 class="font-semibold text-success-green mb-2">✅ Verification</h5>
+                                            <p class="text-sm text-gray-600">Officers will verify your identity and check the status of your application.</p>
+                                        </div>
+                                        
+                                        <div class="bg-yellow-50 p-4 rounded-lg">
+                                            <h5 class="font-semibold text-warning-amber mb-2">📄 Document Release</h5>
+                                            <p class="text-sm text-gray-600">Receive your completed document and verify all information is correct.</p>
+                                        </div>
+                                        
+                                        <div class="bg-purple-50 p-4 rounded-lg">
+                                            <h5 class="font-semibold text-purple-600 mb-2">📝 Sign Acknowledgment</h5>
+                                            <p class="text-sm text-gray-600">Sign the release form to acknowledge receipt of your document.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="text-lg font-semibold text-trust-navy mb-4">Important Checks</h4>
+                                    <div class="bg-gray-50 p-6 rounded-lg">
+                                        <h5 class="font-semibold text-trust-navy mb-4">Verify Document Information</h5>
+                                        <div class="space-y-3">
+                                            <label class="flex items-center">
+                                                <input type="checkbox" class="mr-3 text-government-blue">
+                                                <span class="text-sm">Name spelling is correct</span>
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" class="mr-3 text-government-blue">
+                                                <span class="text-sm">Birth date is accurate</span>
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" class="mr-3 text-government-blue">
+                                                <span class="text-sm">Address information is complete</span>
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" class="mr-3 text-government-blue">
+                                                <span class="text-sm">Document number is present</span>
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" class="mr-3 text-government-blue">
+                                                <span class="text-sm">Official seal/stamp is visible</span>
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" class="mr-3 text-government-blue">
+                                                <span class="text-sm">Signature of issuing officer is present</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-6 bg-red-50 border-l-4 border-red-400 p-4">
+                                        <h5 class="font-semibold text-red-600 mb-2">⚠️ Error Reporting</h5>
+                                        <p class="text-sm text-gray-700">If you find any errors in your document, report them immediately to the issuing office. Do not leave the premises without verifying your document.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Checklist -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 scroll-reveal">
+                <h2 class="text-3xl font-inter font-bold text-trust-navy mb-4">Application Checklist</h2>
+                <p class="text-lg text-gray-600">Track your progress through the application process</p>
+            </div>
+            
+            <div class="bg-gray-50 rounded-xl p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Preparation Phase -->
+                    <div class="bg-white rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-trust-navy mb-4 flex items-center">
+                            <span class="w-8 h-8 bg-government-blue rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">1</span>
+                            Preparation
+                        </h3>
+                        <div class="space-y-3">
+                            <label class="checklist-item flex items-start p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" class="mt-1 mr-3 text-government-blue">
+                                <span class="text-sm">Research document requirements</span>
+                            </label>
+                            <label class="checklist-item flex items-start p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" class="mt-1 mr-3 text-government-blue">
+                                <span class="text-sm">Gather valid IDs</span>
+                            </label>
+                            <label class="checklist-item flex items-start p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" class="mt-1 mr-3 text-government-blue">
+                                <span class="text-sm">Prepare supporting documents</span>
+                            </label>
+                            <label class="checklist-item flex items-start p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" class="mt-1 mr-3 text-government-blue">
+                                <span class="text-sm">Download application forms</span>
+                            </label>
+                            <label class="checklist-item flex items-start p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" class="mt-1 mr-3 text-government-blue">
+                                <span class="text-sm">Prepare application fees</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Application Phase -->
+                    <div class="bg-white rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-trust-navy mb-4 flex items-center">
+                            <span class="w-8 h-8 bg-government-blue rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">2</span>
+                            Application
+                        </h3>
+                        <div class="space-y-3">
+                            <label class="checklist-item flex items-start p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" class="mt-1 mr-3 text-government-blue">
+                                <span class="text-sm">Arrive early at office</span>
+                            </label>
+                            <label class="checklist-item flex items-start p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" class="mt-1 mr-3 text-government-blue">
+                                <span class="text-sm">Complete application forms</span>
+                            </label>
+                            <label class="checklist-item flex items-start p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" class="mt-1 mr-3 text-government-blue">
+                                <span class="text-sm">Submit documents for verification</span>
+                            </label>
+                            <label class="checklist-item flex items-start p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" class="mt-1 mr-3 text-government-blue">
+                                <span class="text-sm">Pay required fees</span>
+                            </label>
+                            <label class="checklist-item flex items-start p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" class="mt-1 mr-3 text-government-blue">
+                                <span class="text-sm">Get official receipt</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Processing Phase -->
+                    <div class="bg-white rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-trust-navy mb-4 flex items-center">
+                            <span class="w-8 h-8 bg-government-blue rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">3</span>
+                            Processing
+                        </h3>
+                        <div class="space-y-3">
+                            <label class="checklist-item flex items-start p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" class="mt-1 mr-3 text-government-blue">
+                                <span class="text-sm">Wait for processing period</span>
+                            </label>
+                            <label class="checklist-item flex items-start p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" class="mt-1 mr-3 text-government-blue">
+                                <span class="text-sm">Track application status</span>
+                            </label>
+                            <label class="checklist-item flex items-start p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" class="mt-1 mr-3 text-government-blue">
+                                <span class="text-sm">Prepare for biometrics (if needed)</span>
+                            </label>
+                            <label class="checklist-item flex items-start p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" class="mt-1 mr-3 text-government-blue">
+                                <span class="text-sm">Note claiming schedule</span>
+                            </label>
+                            <label class="checklist-item flex items-start p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" class="mt-1 mr-3 text-government-blue">
+                                <span class="text-sm">Set calendar reminder</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Completion Phase -->
+                    <div class="bg-white rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-trust-navy mb-4 flex items-center">
+                            <span class="w-8 h-8 bg-government-blue rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">4</span>
+                            Completion
+                        </h3>
+                        <div class="space-y-3">
+                            <label class="checklist-item flex items-start p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" class="mt-1 mr-3 text-government-blue">
+                                <span class="text-sm">Bring receipt and valid ID</span>
+                            </label>
+                            <label class="checklist-item flex items-start p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" class="mt-1 mr-3 text-government-blue">
+                                <span class="text-sm">Present claim stub</span>
+                            </label>
+                            <label class="checklist-item flex items-start p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" class="mt-1 mr-3 text-government-blue">
+                                <span class="text-sm">Verify document information</span>
+                            </label>
+                            <label class="checklist-item flex items-start p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" class="mt-1 mr-3 text-government-blue">
+                                <span class="text-sm">Sign release form</span>
+                            </label>
+                            <label class="checklist-item flex items-start p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" class="mt-1 mr-3 text-government-blue">
+                                <span class="text-sm">Make copies for backup</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 text-center">
+                    <div class="bg-government-blue text-white p-4 rounded-lg inline-block">
+                        <div class="flex items-center">
+                            <span class="font-semibold mr-2">Progress:</span>
+                            <span id="checklist-progress" class="font-bold">0%</span>
+                            <span class="ml-2">Complete</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Common Issues & Solutions -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 scroll-reveal">
+                <h2 class="text-3xl font-inter font-bold text-trust-navy mb-4">Common Issues & Solutions</h2>
+                <p class="text-lg text-gray-600">Troubleshooting guide for typical application problems</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-xl shadow-lg p-8 scroll-reveal">
+                    <h3 class="text-xl font-semibold text-trust-navy mb-6">❌ Common Problems</h3>
+                    <div class="space-y-6">
+                        <div class="border-l-4 border-red-400 pl-4">
+                            <h4 class="font-semibold text-red-600 mb-2">Incomplete Requirements</h4>
+                            <p class="text-sm text-gray-600">Missing documents or incorrect information on application forms.</p>
+                        </div>
+                        
+                        <div class="border-l-4 border-red-400 pl-4">
+                            <h4 class="font-semibold text-red-600 mb-2">Long Processing Delays</h4>
+                            <p class="text-sm text-gray-600">Applications taking longer than the estimated processing time.</p>
+                        </div>
+                        
+                        <div class="border-l-4 border-red-400 pl-4">
+                            <h4 class="font-semibold text-red-600 mb-2">Document Errors</h4>
+                            <p class="text-sm text-gray-600">Incorrect information printed on the final document.</p>
+                        </div>
+                        
+                        <div class="border-l-4 border-red-400 pl-4">
+                            <h4 class="font-semibold text-red-600 mb-2">Lost Receipts</h4>
+                            <p class="text-sm text-gray-600">Misplaced official receipts needed for claiming documents.</p>
+                        </div>
+                        
+                        <div class="border-l-4 border-red-400 pl-4">
+                            <h4 class="font-semibold text-red-600 mb-2">System Issues</h4>
+                            <p class="text-sm text-gray-600">Online systems down or technical problems with applications.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg p-8 scroll-reveal">
+                    <h3 class="text-xl font-semibold text-trust-navy mb-6">✅ Solutions & Prevention</h3>
+                    <div class="space-y-6">
+                        <div class="border-l-4 border-success-green pl-4">
+                            <h4 class="font-semibold text-success-green mb-2">Double-Check Requirements</h4>
+                            <p class="text-sm text-gray-600">Use our document wizard to get a complete checklist before applying.</p>
+                        </div>
+                        
+                        <div class="border-l-4 border-success-green pl-4">
+                            <h4 class="font-semibold text-success-green mb-2">Apply Early</h4>
+                            <p class="text-sm text-gray-600">Submit applications well before deadlines to account for potential delays.</p>
+                        </div>
+                        
+                        <div class="border-l-4 border-success-green pl-4">
+                            <h4 class="font-semibold text-success-green mb-2">Verify Before Leaving</h4>
+                            <p class="text-sm text-gray-600">Check all information on your document before leaving the office.</p>
+                        </div>
+                        
+                        <div class="border-l-4 border-success-green pl-4">
+                            <h4 class="font-semibold text-success-green mb-2">Keep Digital Copies</h4>
+                            <p class="text-sm text-gray-600">Take photos of receipts and important documents as backup.</p>
+                        </div>
+                        
+                        <div class="border-l-4 border-success-green pl-4">
+                            <h4 class="font-semibold text-success-green mb-2">Have Backup Plans</h4>
+                            <p class="text-sm text-gray-600">Know alternative offices or online options in case of system issues.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Stories -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 scroll-reveal">
+                <h2 class="text-3xl font-inter font-bold text-trust-navy mb-4">Success Stories</h2>
+                <p class="text-lg text-gray-600">Real experiences from citizens who successfully obtained their documents</p>
+            </div>
+            
+            <div class="splide" id="success-stories-slider">
+                <div class="splide__track">
+                    <ul class="splide__list">
+                        <li class="splide__slide">
+                            <div class="bg-gray-50 rounded-xl p-8 mx-4">
+                                <div class="flex items-center mb-6">
+                                    <div class="w-16 h-16 bg-government-blue rounded-full flex items-center justify-center text-white font-bold text-xl mr-4">
+                                        MR
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-trust-navy">Maria Rodriguez</h3>
+                                        <p class="text-sm text-gray-600">Quezon City</p>
+                                    </div>
+                                </div>
+                                <blockquote class="text-gray-700 italic mb-4">
+                                    "The police clearance application was so smooth! I used the online appointment system and was done in just 30 minutes. The step-by-step guide here really helped me prepare all the requirements."
+                                </blockquote>
+                                <div class="flex items-center text-sm text-gray-500">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    Police Clearance - 1 Day Processing
+                                </div>
+                            </div>
+                        </li>
+                        
+                        <li class="splide__slide">
+                            <div class="bg-gray-50 rounded-xl p-8 mx-4">
+                                <div class="flex items-center mb-6">
+                                    <div class="w-16 h-16 bg-success-green rounded-full flex items-center justify-center text-white font-bold text-xl mr-4">
+                                        JL
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-trust-navy">Jose Lim</h3>
+                                        <p class="text-sm text-gray-600">Makati City</p>
+                                    </div>
+                                </div>
+                                <blockquote class="text-gray-700 italic mb-4">
+                                    "Getting my business permit seemed overwhelming, but following the guide made it manageable. The fee calculator helped me budget properly, and I got everything done in 4 days!"
+                                </blockquote>
+                                <div class="flex items-center text-sm text-gray-500">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    Mayor's Permit - 4 Days Processing
+                                </div>
+                            </div>
+                        </li>
+                        
+                        <li class="splide__slide">
+                            <div class="bg-gray-50 rounded-xl p-8 mx-4">
+                                <div class="flex items-center mb-6">
+                                    <div class="w-16 h-16 bg-official-gold rounded-full flex items-center justify-center text-white font-bold text-xl mr-4">
+                                        AS
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-trust-navy">Anna Santos</h3>
+                                        <p class="text-sm text-gray-600">Manila</p>
+                                    </div>
+                                </div>
+                                <blockquote class="text-gray-700 italic mb-4">
+                                    "The checklist feature was a lifesaver! I tracked my progress through each step and never missed any requirements. Got my cedula in just 20 minutes."
+                                </blockquote>
+                                <div class="flex items-center text-sm text-gray-500">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    Community Tax Certificate - 20 Minutes
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-trust-navy text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p class="text-gray-300">
+                    © 2025 Philippine Municipal Services Portal. All rights reserved.
+                </p>
+                <p class="text-sm text-gray-400 mt-2">
+                    Official government website for citizen services and document processing.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+    <script>
+        // Guide page specific functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeGuidePage();
+            initializeChecklist();
+            initializeSuccessStoriesSlider();
+            initializeScrollReveal();
+        });
+
+        function initializeGuidePage() {
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Mobile menu functionality
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+        }
+
+        function initializeChecklist() {
+            const checkboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+            const progressElement = document.getElementById('checklist-progress');
+            
+            // Load saved progress
+            const savedProgress = JSON.parse(localStorage.getItem('checklist-progress') || '{}');
+            
+            checkboxes.forEach((checkbox, index) => {
+                // Restore saved state
+                if (savedProgress[index]) {
+                    checkbox.checked = true;
+                    checkbox.closest('.checklist-item').classList.add('completed');
+                }
+                
+                checkbox.addEventListener('change', function() {
+                    const item = this.closest('.checklist-item');
+                    
+                    if (this.checked) {
+                        item.classList.add('completed');
+                        
+                        // Animate completion
+                        anime({
+                            targets: item,
+                            backgroundColor: '#f0f9ff',
+                            borderColor: '#1B365D',
+                            duration: 300,
+                            easing: 'easeOutQuad'
+                        });
+                    } else {
+                        item.classList.remove('completed');
+                        
+                        anime({
+                            targets: item,
+                            backgroundColor: '#ffffff',
+                            borderColor: '#e5e7eb',
+                            duration: 300,
+                            easing: 'easeOutQuad'
+                        });
+                    }
+                    
+                    updateProgress();
+                    saveProgress();
+                });
+            });
+            
+            updateProgress();
+            
+            function updateProgress() {
+                const total = checkboxes.length;
+                const completed = document.querySelectorAll('.checklist-item input[type="checkbox"]:checked').length;
+                const percentage = Math.round((completed / total) * 100);
+                
+                progressElement.textContent = percentage + '%';
+                
+                // Animate progress update
+                anime({
+                    targets: progressElement,
+                    scale: [1.2, 1],
+                    duration: 300,
+                    easing: 'easeOutQuad'
+                });
+            }
+            
+            function saveProgress() {
+                const progress = {};
+                checkboxes.forEach((checkbox, index) => {
+                    progress[index] = checkbox.checked;
+                });
+                localStorage.setItem('checklist-progress', JSON.stringify(progress));
+            }
+        }
+
+        function initializeSuccessStoriesSlider() {
+            if (typeof Splide !== 'undefined') {
+                new Splide('#success-stories-slider', {
+                    type: 'loop',
+                    perPage: 3,
+                    perMove: 1,
+                    gap: '2rem',
+                    autoplay: true,
+                    interval: 5000,
+                    pauseOnHover: true,
+                    breakpoints: {
+                        1024: {
+                            perPage: 2,
+                        },
+                        768: {
+                            perPage: 1,
+                        }
+                    }
+                }).mount();
+            }
+        }
+
+        function initializeScrollReveal() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                        
+                        // Animate timeline items with stagger
+                        if (entry.target.classList.contains('timeline-item')) {
+                            anime({
+                                targets: entry.target.querySelector('.timeline-dot'),
+                                scale: [0, 1],
+                                duration: 400,
+                                easing: 'easeOutBack'
+                            });
+                            
+                            anime({
+                                targets: entry.target.querySelector('.bg-white'),
+                                opacity: [0, 1],
+                                translateX: [-30, 0],
+                                duration: 600,
+                                delay: 200,
+                                easing: 'easeOutQuad'
+                            });
+                        } else {
+                            anime({
+                                targets: entry.target,
+                                opacity: [0, 1],
+                                translateY: [30, 0],
+                                duration: 600,
+                                easing: 'easeOutQuad'
+                            });
+                        }
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.scroll-reveal').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Add some interactive animations
+        document.querySelectorAll('.step-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                anime({
+                    targets: this,
+                    scale: 1.02,
+                    duration: 300,
+                    easing: 'easeOutQuad'
+                });
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                anime({
+                    targets: this,
+                    scale: 1,
+                    duration: 300,
+                    easing: 'easeOutQuad'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

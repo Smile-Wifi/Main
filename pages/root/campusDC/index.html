@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Learning Hubs — Smile Wifi School Portal</title>
+  <meta name="description" content="For School partners" />
+  <style>
+    :root {
+      --bg1:#f4f7fb;
+      --bg2:#e8f0ff;
+      --bg3:#f4f7fb;
+      --accent:#0b74ff;
+      --card:#fff;
+      --muted:#6b7280;
+    }
+
+    *{box-sizing:border-box}
+   body {
+  margin: 0;
+  padding-top: 40px; /* adds blank space at the top */
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(-45deg, var(--bg1), var(--bg2), var(--bg3), #dfeaff);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+  color: #0f1724;
+  min-height: 100vh;
+}
+    @keyframes gradient {
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
+    }
+
+    header {
+      background:rgba(255,255,255,0.8);
+      backdrop-filter:blur(8px);
+      padding:14px 18px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      border-bottom:1px solid #e6edf6;
+      box-shadow:0 2px 10px rgba(0,0,0,0.05);
+    }
+    .logo{width:44px;height:44px;border-radius:10px;overflow:hidden;flex:0 0 44px}
+    .brand{font-weight:700;font-size:1.1rem}
+    .subtitle{font-size:.85rem;color:var(--muted)}
+
+    .banner {
+      background:#fffbcc;
+      text-align:center;
+      padding:10px;
+      font-size:.9rem;
+    }
+
+    .container{max-width:1100px;margin:20px auto;padding:0 16px}
+
+    .welcome {
+      text-align:center;
+      margin:20px 0;
+    }
+    .welcome h2 {
+      margin:0;
+      font-size:1.6rem;
+    }
+    .welcome p {color:#555;font-size:.95rem;margin:6px 0 0}
+
+    #quoteBox {
+      text-align:center;
+      margin:10px 0 20px;
+      color:#666;
+      font-style:italic;
+      font-size:.9rem;
+    }
+
+    /* controls */
+    .controls{display:flex;gap:12px;align-items:center;margin-bottom:18px;flex-wrap:wrap;justify-content:center}
+    .search{flex:1;min-width:180px;max-width:350px}
+    input[type="search"]{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #dbe7fb;background:rgba(255,255,255,0.6)}
+    .filter{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+    .btn{padding:10px 14px;border-radius:10px;border:none;background:var(--accent);color:white;font-weight:600;cursor:pointer}
+    .btn:hover{background:#005ee6}
+
+    /* grid */
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+    .card{
+      background: #dfc6f9;
+      border-radius:12px;
+      padding:14px;
+      border:1px solid #e6eef9;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      box-shadow:0 6px 18px rgba(9,30,66,0.04);
+      transition:transform .25s ease, box-shadow .3s ease;
+    }
+    .card:hover{
+      transform:translateY(-5px);
+      box-shadow:0 10px 24px rgba(0,0,0,0.08);
+    }
+    .card img{width:70px;height:70px;object-fit:contain;border-radius:0px;rgba(0, 0, 0, 0.05)}
+    .meta{flex:1}
+    .school-name{font-size:1.05rem;font-weight:700;margin:0}
+    .school-desc{margin:6px 0 0;color:var(--muted);font-size:.9rem}
+    .actions{display:flex;gap:8px;flex-direction:column}
+    .link{display:inline-block;padding:8px 12px;border-radius:10px;text-decoration:none;border:1px solid #dbe9ff;background:#fff;color:var(--accent);font-weight:600;text-align:center}
+    .primary{background:var(--accent);color:#fff;border:none}
+    .link:hover{background:var(--accent);color:white}
+
+    /* bottom carousel */
+    .carousel {
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:24px;
+      margin:40px auto;
+      padding:10px 0;
+      flex-wrap:wrap;
+    }
+    .carousel-item img {
+      width:80px;
+      height:80px;
+      object-fit:contain;
+      border-radius:50%;
+      border:3px solid #dbe9ff;
+      background:#fff;
+      box-shadow:0 4px 10px rgba(0,0,0,0.1);
+      transition:transform .3s ease;
+    }
+    .carousel-item img:hover {
+      transform:scale(1.1);
+    }
+
+    /* back to top */
+    #topBtn{
+      position:fixed;
+      bottom:20px;
+      right:20px;
+      background:var(--accent);
+      color:white;
+      border:none;
+      border-radius:50%;
+      width:44px;
+      height:44px;
+      font-size:20px;
+      cursor:pointer;
+      display:none;
+      box-shadow:0 4px 12px rgba(0,0,0,0.2);
+    }
+    #topBtn:hover{background:#005ee6}
+
+    @media (max-width:520px){
+      header{padding:10px}
+      .card{padding:12px;flex-direction:column;text-align:center}
+      .card img{margin-bottom:8px}
+      .actions{flex-direction:row;justify-content:center}
+      .carousel-item img{width:70px;height:70px;}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo"><img src="assets/campusDC.png" alt="Portal logo" width="44" height="44"></div>
+    <div>
+      <div class="brand">School Hubs — SMILE WIFI Portal</div>
+      <div class="subtitle">Landing page for partner schools.</div>
+    </div>
+  </header>
+
+  <main class="container" role="main">
+    <section class="welcome">
+      <h2>School Partners</h2>
+    </section>
+
+    <div id="quoteBox"></div>
+
+    <section class="controls" aria-label="Search and filters">
+      <div class="search">
+        <input id="q" type="search" placeholder="Search schools, programmes or location..." aria-label="Search schools">
+      </div>
+      <div class="filter">
+        <button class="btn" data-filter="all">All</button>
+        <button class="btn" data-filter="college">Colleges</button>
+        <button class="btn" data-filter="high">High Schools</button>
+        <button class="btn" data-filter="vocational">Vocational</button>
+        <button class="btn" id="reset">Reset</button>
+      </div>
+    </section>
+
+    <section>
+      <h2 style="margin:0 0 12px;text-align:center;">Participating Schools</h2>
+      <div class="grid" id="schools">
+
+        <!-- School 1 -->
+        <article class="card" data-name="saint michael college cantilan" data-tags="college local">
+          <img src="assets/smcci.png" alt="Saint Michael College logo">
+          <div class="meta">
+            <h3 class="school-name">Saint Michael College, Cantilan, Inc.</h3>
+          </div>
+          <div class="actions">
+            <a class="link primary" href="school/smcci2/index.html">Explore Hub</a>
+          </div>
+        </article>
+
+        <!-- School 2 -->
+        <article class="card" data-name="cantilan montessori school" data-tags="high school academic">
+          <img src="assets/montessori.png" alt="Cantilan Montessori School logo">
+          <div class="meta">
+            <h3 class="school-name">Cantilan Montessori School</h3>
+            <div class="school-desc">Honors programmes, online library and blended learning options.</div>
+          </div>
+          <div class="actions">
+            <a class="link" href="schools/montclair/index.html">Visit Hub</a>
+            <a class="link primary" href="schools/montclair/courses.html">Courses</a>
+          </div>
+        </article>
+
+        <!-- School 3 -->
+        <article class="card" data-name="north eastern mindanao state university" data-tags="college tertiary research">
+          <img src="assets/NEMSU.png" alt="NEMSU logo">
+          <div class="meta">
+            <h3 class="school-name">North Eastern Mindanao State University</h3>
+            <div class="school-desc">Tertiary courses with research labs and community outreach.</div>
+          </div>
+          <div class="actions">
+            <a class="link" href="schools/augustine/index.html">Visit Hub</a>
+            <a class="link primary" href="schools/augustine/admissions.html">Admissions</a>
+          </div>
+        </article>
+
+        <!-- School 4 -->
+        <article class="card" data-name="cantilan national high school" data-tags="high vocational technical skills">
+          <img src="assets/CNHS.png" alt="CNHS logo">
+          <div class="meta">
+            <h3 class="school-name">Cantilan National High School</h3>
+            <div class="school-desc">Hands-on vocational training and apprenticeship partners.</div>
+          </div>
+          <div class="actions">
+            <a class="link" href="schools/greenfield/index.html">Visit Hub</a>
+            <a class="link primary" href="schools/greenfield/programs.html">Programs</a>
+          </div>
+        </article>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- Fixed Carousel – Home button now matches the others -->
+  <section class="carousel" aria-label="Quick navigation">
+    <div class="carousel-item"><a href="earth.html"><img src="GIF/earth.gif" alt="Earth"></a></div>
+
+    <!-- Home button – wrapped, local, accessible -->
+    <div class="carousel-item">
+      <a href="https://smile-wifi.github.io/Main" title="Back to Home" aria-label="Back to Home">
+        <img src="GIF/Home.png" alt="Home">
+      </a>
+    </div>
+
+    <div class="carousel-item"><a href="cribble.html"><img src="GIF/mars.gif" alt="Mars"></a></div>
+  </section>
+
+  <button id="topBtn" aria-label="Back to top">↑</button>
+
+  <script>
+    // random motivational quotes
+    const quotes = [
+      "“Education is the passport to the future.” — Malcolm X",
+      "“Dream big, study hard, stay kind.”",
+      "“Your future is created by what you do today, not tomorrow.”",
+      "“Knowledge is power — and WiFi helps too!”",
+      "“Stay curious. Keep learning. Inspire others.”"
+    ];
+    document.getElementById('quoteBox').innerText = quotes[Math.floor(Math.random() * quotes.length)];
+
+    // search + filter
+    const q = document.getElementById('q');
+    const reset = document.getElementById('reset');
+    const cards = Array.from(document.querySelectorAll('.card'));
+
+    function normalize(s){return s.trim().toLowerCase()}
+    function doSearch(){
+      const v = normalize(q.value);
+      cards.forEach(c=>{
+        const name = normalize(c.dataset.name || '');
+        const tags = normalize(c.dataset.tags || '');
+        const text = name + ' ' + tags + ' ' + c.innerText.toLowerCase();
+        c.style.display = text.includes(v) ? 'flex' : 'none';
+      });
+    }
+    q.addEventListener('input', doSearch);
+    reset.addEventListener('click', ()=>{q.value=''; doSearch(); q.focus();});
+
+    // category filters
+    document.querySelectorAll('.filter .btn[data-filter]').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const f=btn.dataset.filter;
+        cards.forEach(c=>{
+          const tags=normalize(c.dataset.tags||'');
+          c.style.display=(f==='all'||tags.includes(f))?'flex':'none';
+        });
+      });
+    });
+
+    // keyboard accessibility
+    cards.forEach(card=>{
+      card.tabIndex=0;
+      card.addEventListener('keydown',e=>{
+        if(e.key==='Enter'){
+          const a=card.querySelector('a');
+          if(a) a.click();
+        }
+      });
+    });
+
+    // back to top button
+    const topBtn=document.getElementById('topBtn');
+    window.addEventListener('scroll',()=>{topBtn.style.display=window.scrollY>100?'block':'none';});
+    topBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+  </script>
+</body>
+</html>
+
+

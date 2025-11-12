@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shenhab | Get Your Quote</title>
+  <meta name="description" content="Request a custom quote for Shenhab deep-ocean desalination technology."/>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['"Playfair Display"', 'serif']
+          },
+          colors: {
+            primary: '#0A6DC2',
+            'primary-dark': '#085295',
+            accent: '#00D1FF',
+            ocean: '#E6F7FF',
+            deep: '#001F3F'
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
+
+  <!-- AOS Animation -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+  <style>
+    .video-bg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -10;
+      overflow: hidden;
+    }
+    .video-bg video {
+      position: absolute;
+      top: 50%; left: 50%;
+      min-width: 100%; min-height: 100%;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+    }
+    .video-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, rgba(0,31,63,0.7) 0%, rgba(10,109,194,0.55) 50%, rgba(0,209,255,0.45) 100%);
+      z-index: -9;
+    }
+  </style>
+</head>
+<body class="bg-white text-deep font-sans">
+
+  <!-- Video Background -->
+  <div class="video-bg">
+    <video autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80">
+      <source src="https://assets.mixkit.co/videos/preview/mixkit-underwater-view-with-bubbles-3202-large.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="video-overlay"></div>
+
+  <!-- Header -->
+  <header class="fixed top-0 w-full bg-white/95 backdrop-blur-sm z-40 shadow-sm">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <nav class="flex items-center justify-between h-16 lg:h-20">
+        <a href="index.html" class="flex items-center space-x-2">
+          <svg class="w-10 h-10 text-primary" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 2L2 12L20 22L38 12L20 2Z" fill="currentColor"/>
+            <path d="M2 28L20 38L38 28V12L20 22L2 12V28Z" fill="url(#gradient)"/>
+            <defs>
+              <linearGradient id="gradient" x1="20" y1="12" x2="20" y2="38">
+                <stop stop-color="#00D1FF"/><stop offset="1" stop-color="#0A6DC2"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <span class="text-xl lg:text-2xl font-bold text-deep">Shenhab</span>
+        </a>
+        <a href="index.html" class="text-deep hover:text-primary font-medium">Back to Home</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="relative z-10 pt-24 pb-20">
+    <section class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mx-auto text-center text-white mb-16" data-aos="fade-up">
+        <h1 class="text-4xl sm:text-5xl font-display font-bold mb-6">
+          Get Your Quote in 3–5 Days
+        </h1>
+        <p class="text-xl opacity-90">
+          Fill out the form below and we’ll send you a detailed proposal.
+        </p>
+      </div>
+
+      <div class="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-8 lg:p-12 max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="200">
+        <form action="https://formspree.io/f/mjkjbegd" method="POST" id="quoteForm">
+          <div class="grid md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <label for="name" class="block text-deep font-medium mb-2">Full Name *</label>
+              <input type="text" name="name" id="name" required
+                     class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-4 focus:ring-primary/20 transition"
+                     placeholder="John Doe">
+            </div>
+            <div>
+              <label for="company" class="block text-deep font-medium mb-2">Company</label>
+              <input type="text" name="company" id="company"
+                     class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-4 focus:ring-primary/20 transition"
+                     placeholder="Acme Corp">
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <label for="email" class="block text-deep font-medium mb-2">Email *</label>
+              <input type="email" name="email" id="email" required
+                     class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-4 focus:ring-primary/20 transition"
+                     placeholder="john@example.com">
+            </div>
+            <div>
+              <label for="phone" class="block text-deep font-medium mb-2">Phone *</label>
+              <input type="tel" name="phone" id="phone" required
+                     class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-4 focus:ring-primary/20 transition"
+                     placeholder="+65 9123 4567">
+            </div>
+          </div>
+
+          <div class="mb-6">
+            <label for="location" class="block text-deep font-medium mb-2">Project Location *</label>
+            <input type="text" name="location" id="location" required
+                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-4 focus:ring-primary/20 transition"
+                   placeholder="Singapore, UAE, California…">
+          </div>
+
+          <div class="mb-6">
+            <label for="volume" class="block text-deep font-medium mb-2">Daily Volume Needed (m³/day) *</label>
+            <input type="number" name="volume" id="volume" required min="1"
+                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-4 focus:ring-primary/20 transition"
+                   placeholder="5000">
+          </div>
+
+          <div class="mb-8">
+            <label for="message" class="block text-deep font-medium mb-2">Additional Details</label>
+            <textarea name="message" id="message" rows="4"
+                      class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-4 focus:ring-primary/20 transition"
+                      placeholder="Timeline, budget, special requirements…"></textarea>
+          </div>
+
+          <!-- Honeypot + Formspree extras -->
+          <input type="text" name="_gotcha" style="display:none" />
+          <input type="hidden" name="_subject" value="New Quote Request - Shenhab" />
+          <input type="hidden" name="_next" value="https://shenhab.com/thanks.html" />
+
+          <button type="submit"
+                  class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-4 rounded-lg transition shadow-lg flex items-center justify-center space-x-2 text-lg">
+            <span>Send Request</span>
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+          </button>
+
+          <div id="formMessage" class="mt-6 text-center font-medium text-lg"></div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="relative bg-deep/90 backdrop-blur-md text-white py-12 z-20">
+    <div class="container mx-auto px-4 text-center">
+      <p class="text-ocean text-sm">© 2025 Shenhab Pte Ltd. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, once: true });
+
+    const form = document.getElementById('quoteForm');
+    form.addEventListener('submit', function() {
+      document.getElementById('formMessage').innerHTML = '<span class="text-green-600">Sending…</span>';
+    });
+
+    // Formspree success message (keeps user on page)
+    window.addEventListener("message", (event) => {
+      if (event.origin !== "https://formspree.io") return;
+      if (event.data.type === "formspree_success") {
+        document.getElementById('formMessage').innerHTML = 
+          '<span class="text-green-600">Thank you! We’ll send your quote within 3–5 days.</span>';
+        form.reset();
+      }
+    });
+  </script>
+</body>
+</html>

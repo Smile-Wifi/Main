@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Freedom 104.1 — Live Radio Stream (Offline)</title>
+<style>
+* {box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:#000;color:#fff;font-family:system-ui,"Poppins",sans-serif;padding-bottom:80px}
+
+/* HEADER */
+header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#0d0d0d;position:sticky;top:0;z-index:1000;border-bottom:1px solid #222;}
+.brand{display:flex;align-items:center;gap:10px;}
+header img{width:42px;height:42px;border-radius:50%}
+header h1{font-size:1rem}
+.dj-name{font-size:0.85rem;color:#ff6600;margin-top:2px}
+
+/* HAMBURGER */
+.hamburger{width:30px;height:22px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer}
+.hamburger div{height:4px;background:#fff;border-radius:2px;transition:0.3s}
+
+/* SIDEBAR */
+.sidebar{
+  position:fixed;top:0;left:-250px;width:250px;height:100%;
+  background:#111;transition:left 0.3s ease;z-index:2000;
+  padding-top:70px
+}
+.sidebar.active{left:0}
+.sidebar a{display:block;color:#ccc;text-decoration:none;padding:15px 25px;border-bottom:1px solid #222;transition:0.3s}
+.sidebar a:hover{background:#222;color:#ff6600}
+
+main{padding:80px 16px 16px;max-width:900px;margin:auto}
+
+/* VIDEO PLAYER */
+.video-card{background:#0e0e0e;border-radius:12px;padding:12px;border:1px solid #222;box-shadow:0 6px 22px rgba(0,0,0,0.6)}
+.video-wrap{position:relative;border-radius:10px;overflow:hidden}
+video{width:100%;background:#000;border-radius:10px;max-height:62vh}
+.live-badge{
+  position:absolute;top:12px;left:12px;
+  display:flex;align-items:center;gap:8px;
+  background:rgba(0,0,0,0.45);padding:6px 10px;border-radius:999px;
+  backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.06);
+  font-weight:600;font-size:0.9rem
+}
+.live-dot{width:10px;height:10px;border-radius:50%;background:#ff3b30;box-shadow:0 0 8px rgba(255,59,48,0.9);animation:livePulse 1.6s infinite}
+@keyframes livePulse{0%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.6}100%{transform:scale(1);opacity:1}}
+.viewer-count{
+  position:absolute;top:12px;right:12px;
+  background:rgba(0,0,0,0.45);
+  padding:6px 10px;border-radius:999px;font-size:0.85rem;
+  border:1px solid rgba(255,255,255,0.1)
+}
+.playlist{margin-top:10px;text-align:left;font-size:0.85rem;color:#aaa}
+.playlist ul{list-style:none;margin-top:6px}
+.playlist li{padding:6px 8px;border-radius:6px;cursor:pointer}
+.playlist li.active{background:#222;color:#ff6600}
+.playlist li:hover{background:#1a1a1a}
+
+/* COMMENTS */
+.comments{margin-top:16px;text-align:left;display:flex;flex-direction:column;gap:12px}
+.comments-header{display:flex;justify-content:space-between;align-items:center}
+.comments-box{
+  background:#0b0b0b;border:1px solid #1b1b1b;padding:12px;border-radius:10px;
+  max-height:46vh;overflow:auto
+}
+.comment{
+  display:flex;gap:10px;align-items:flex-start;padding:8px 6px;border-radius:8px;
+  border-bottom:1px dashed rgba(255,255,255,0.03)
+}
+.avatar{
+  width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#444,#222);
+  display:flex;align-items:center;justify-content:center;font-weight:700
+}
+.comment-body{flex:1}
+.comment-meta{font-size:0.78rem;color:#9a9a9a;margin-bottom:6px;display:flex;gap:10px}
+.comment-text{color:#eaeaea}
+.comment-input-wrap{position:sticky;bottom:8px;display:flex;gap:8px}
+.comment-input{flex:1;display:flex;gap:8px;background:#0b0b0b;border:1px solid #1b1b1b;padding:8px;border-radius:10px}
+.comment-input input[type="text"]{background:transparent;border:none;outline:none;color:#fff;font-size:0.95rem;width:100%}
+.comment-input button{background:#ff6600;border:none;color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600}
+footer{text-align:center;color:#666;font-size:0.78rem;padding:18px 8px;margin-top:18px}
+
+/* === WELCOME OVERLAY === */
+#welcomeOverlay{
+  position:fixed;
+  top:0;left:0;width:100%;height:100%;
+  background:#000;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;
+  z-index:3000;
+  transition:opacity 0.6s ease, transform 0.6s ease;
+}
+#welcomeOverlay img{
+  width:120px;height:120px;border-radius:50%;
+  animation:pulse 2s infinite ease-in-out;
+  cursor:pointer;
+}
+@keyframes pulse{
+  0%,100%{transform:scale(1);opacity:1}
+  50%{transform:scale(1.1);opacity:0.8}
+}
+#welcomeOverlay span{
+  margin-top:16px;color:#ff6600;font-size:1.1rem;font-weight:600;animation:fadeBlink 1.4s infinite;
+}
+@keyframes fadeBlink{
+  0%,100%{opacity:1}
+  50%{opacity:0.4}
+}
+#welcomeOverlay.hide{opacity:0;transform:scale(1.2);pointer-events:none}
+</style>
+</head>
+<body>
+
+<!-- WELCOME LOGO -->
+<div id="welcomeOverlay">
+  <img src="freedom.png" alt="Welcome Logo" id="welcomeLogo">
+  <span>Tap to Start</span>
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <a href="../../../index.html">🏠 Home</a>
+  <a href="#">🎧 Live Radio</a>
+  <a href="#">📅 Schedule</a>
+  <a href="#">ℹ️ About</a>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="brand">
+    <img src="freedom.png" alt="Freedom">
+    <div>
+      <h1>Freedom 104.1 — Live</h1>
+      <div class="dj-name" id="djName">DJ Mark</div>
+    </div>
+  </div>
+  <div class="hamburger" id="menuBtn"><div></div><div></div><div></div></div>
+</header>
+
+<!-- MAIN -->
+<main>
+  <div class="video-card">
+    <div class="video-wrap">
+      <video id="liveVideo" playsinline muted preload="metadata" poster="freedom.png" controls>
+        <source id="videoSource" src="video/live1.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+      <div class="viewer-count" id="viewerCount">👁️ 0 watching</div>
+    </div>
+
+    <div class="playlist">
+      <strong>Up Next:</strong>
+      <ul id="playlistList"></ul>
+    </div>
+
+    <div class="comments">
+      <div class="comments-header">
+        <strong>Live Comments</strong>
+        <div id="commentsCount">0 comments</div>
+      </div>
+      <div class="comments-box" id="commentsBox"></div>
+      <div class="comment-input-wrap">
+        <div class="comment-input">
+          <input id="usernameInput" type="text" placeholder="Your name (optional)" maxlength="30"/>
+          <input id="commentInput" type="text" placeholder="Write a comment..." maxlength="250"/>
+          <button id="sendBtn">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>© 2025 Freedom 104.1 — Offline Demo</footer>
+</main>
+
+<script>
+// === SIDEBAR ===
+const sidebar = document.getElementById('sidebar');
+document.getElementById('menuBtn').onclick = () => sidebar.classList.toggle('active');
+
+// === WELCOME OVERLAY ===
+const welcomeOverlay = document.getElementById('welcomeOverlay');
+const welcomeLogo = document.getElementById('welcomeLogo');
+const video = document.getElementById('liveVideo');
+
+// Auto-close after 3 seconds
+setTimeout(() => {
+  video.muted = false;
+  video.volume = 1.0;
+  video.play().then(() => {
+    welcomeOverlay.classList.add('hide');
+    setTimeout(() => welcomeOverlay.remove(), 600);
+  }).catch(err => {
+    console.warn("Autoplay blocked:", err);
+    video.controls = true;
+    welcomeOverlay.classList.add('hide');
+    setTimeout(() => welcomeOverlay.remove(), 600);
+  });
+}, 3000);
+
+// User click → enable sound + play (optional, for immediate action)
+welcomeLogo.addEventListener('click', () => {
+  video.muted = false;
+  video.volume = 1.0;
+  video.play().then(() => {
+    welcomeOverlay.classList.add('hide');
+    setTimeout(() => welcomeOverlay.remove(), 600);
+  }).catch(err => {
+    console.warn("Autoplay blocked:", err);
+    video.controls = true;
+    welcomeOverlay.classList.add('hide');
+    setTimeout(() => welcomeOverlay.remove(), 600);
+  });
+});
+
+// === VIEWERS ===
+const viewerCount = document.getElementById('viewerCount');
+let viewers = 50 + Math.floor(Math.random() * 50);
+viewerCount.textContent = `👁️ ${viewers} watching`;
+setInterval(() => {
+  const change = Math.floor(Math.random() * 7) - 3;
+  viewers = Math.max(50, viewers + change);
+  viewerCount.textContent = `👁️ ${viewers} watching`;
+}, 4000);
+
+// === DJ NAME ===
+const djs = ["DJ Mark", "DJ Lara", "DJ Kyle", "DJ Ella", "DJ Renz", "DJ Mika"];
+document.getElementById('djName').textContent = djs[Math.floor(Math.random() * djs.length)];
+
+// === PLAYLIST ===
+const playlist = [
+  { title: "Morning Groove", file: "video/live1.mp4" },
+  { title: "Afternoon Beat", file: "video/live2.mp4" },
+  { title: "Evening Chill", file: "video/live3.mp4" },
+  { title: "Late Night Vibes", file: "video/live4.mp4" }
+];
+const playlistList = document.getElementById("playlistList");
+const videoSource = document.getElementById("videoSource");
+let currentIndex = 0;
+function renderPlaylist() {
+  playlistList.innerHTML = "";
+  playlist.forEach((v, i) => {
+    const li = document.createElement("li");
+    li.textContent = (i + 1) + ". " + v.title;
+    li.className = i === currentIndex ? "active" : "";
+    li.onclick = () => { currentIndex = i; loadVideo(); };
+    playlistList.appendChild(li);
+  });
+}
+function loadVideo() {
+  videoSource.src = playlist[currentIndex].file;
+  video.load();
+  video.muted = false;
+  video.play().catch(() => video.controls = true);
+  renderPlaylist();
+}
+video.addEventListener('ended', () => {
+  currentIndex = (currentIndex + 1) % playlist.length;
+  loadVideo();
+});
+renderPlaylist();
+
+// === COMMENTS ===
+const commentsBox = document.getElementById("commentsBox");
+const commentInput = document.getElementById("commentInput");
+const usernameInput = document.getElementById("usernameInput");
+const sendBtn = document.getElementById("sendBtn");
+const commentsCount = document.getElementById("commentsCount");
+const LOCAL_KEY = 'freedom_live_comments_v2';
+let comments = [];
+
+function loadComments() {
+  try {
+    const raw = localStorage.getItem(LOCAL_KEY);
+    comments = raw ? JSON.parse(raw) : [];
+  } catch {
+    comments = [];
+  }
+  renderComments();
+}
+function saveComments() {
+  localStorage.setItem(LOCAL_KEY, JSON.stringify(comments));
+}
+function renderComments() {
+  commentsBox.innerHTML = '';
+  if (comments.length === 0) {
+    commentsBox.innerHTML = '<div style="color:#777;padding:12px;">No comments yet</div>';
+  } else {
+    comments.forEach(c => {
+      const el = document.createElement('div');
+      el.className = 'comment';
+      el.innerHTML = `
+        <div class="avatar">${c.name.charAt(0).toUpperCase()}</div>
+        <div class="comment-body">
+          <div class="comment-meta">${c.name} • ${timeAgo(c.ts)}</div>
+          <div class="comment-text">${c.text}</div>
+        </div>`;
+      commentsBox.appendChild(el);
+    });
+  }
+  commentsCount.textContent = `${comments.length} comment${comments.length !== 1 ? 's' : ''}`;
+  commentsBox.scrollTop = commentsBox.scrollHeight;
+}
+function timeAgo(ts) {
+  const diff = (Date.now() - ts) / 1000;
+  if (diff < 60) return Math.floor(diff) + 's ago';
+  const m = Math.floor(diff / 60);
+  if (m < 60) return m + 'm ago';
+  const h = Math.floor(m / 60);
+  return h + 'h ago';
+}
+function sendComment() {
+  const name = usernameInput.value.trim() || 'User';
+  const text = commentInput.value.trim();
+  if (!text) return;
+  comments.push({ name, text, ts: Date.now() });
+  saveComments();
+  renderComments();
+  commentInput.value = '';
+}
+sendBtn.onclick = sendComment;
+commentInput.onkeydown = e => { if (e.key === 'Enter') sendComment(); };
+loadComments();
+
+// === DUMMY COMMENTS ===
+const dummyNames = ['DJ Mark', 'Lara', 'Jay', 'Ella', 'Chris', 'Renz', 'Mika', 'Paolo', 'Joyce', 'Kyle', 'Lea', 'Zane', 'Marco', 'Tina', 'Ryan'];
+const dummyMessages = [
+  'Awesome broadcast 🔥', 'Loving this song!', 'Greetings from Cebu!', 'Keep it up!',
+  'Nice vibes here!', 'Who’s listening now?', 'Best radio ever 📻', 'Request next song 🎶',
+  'LOL this is fun', 'Peace & love ❤️', 'Great playlist today!', 'That drop! 😎',
+  'Volume maxed!', 'Chill beats ✨', 'Old but gold!', 'Nice mic quality', 'Love this DJ!',
+  'Repeat please!', 'Perfect for my mood', 'Respect ✊'
+];
+function addDummyComment() {
+  const name = dummyNames[Math.floor(Math.random() * dummyNames.length)];
+  const text = dummyMessages[Math.floor(Math.random() * dummyMessages.length)];
+  comments.push({ name, text, ts: Date.now() });
+  if (comments.length > 60) comments.shift();
+  renderComments();
+}
+setInterval(() => addDummyComment(), 2000 + Math.random() * 4000);
+</script>
+</body>
+</html>

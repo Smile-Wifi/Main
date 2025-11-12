@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Municipal Services Portal - Philippine Government Documents</title>
+    <meta name="description" content="Complete guide to obtaining Philippine municipal documents including police clearance, cedula, mayor's permit, and barangay clearance.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Core Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/splitting@1.0.6/dist/splitting.css">
+    <script src="https://unpkg.com/splitting@1.0.6/dist/splitting.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'government-blue': '#1B365D',
+                        'trust-navy': '#2C3E50',
+                        'official-gold': '#B8860B',
+                        'success-green': '#28A745',
+                        'warning-amber': '#FFC107'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                        'source': ['Source Sans Pro', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .hero-bg {
+            background: linear-gradient(135deg, rgba(27, 54, 93, 0.9), rgba(44, 62, 80, 0.8)), url('resources/hero-municipal-building.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .status-indicator {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .typing-cursor {
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="font-source text-trust-navy bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-xl font-inter font-bold text-government-blue">
+                            Smile Wifi
+                        </h1>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#" class="text-government-blue hover:text-official-gold px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a>
+                        <a href="services.html" class="text-gray-600 hover:text-government-blue px-3 py-2 rounded-md text-sm font-medium transition-colors">Services</a>
+                        <a href="guide.html" class="text-gray-600 hover:text-government-blue px-3 py-2 rounded-md text-sm font-medium transition-colors">Guide</a>
+                        <a href="#contact" class="text-gray-600 hover:text-government-blue px-3 py-2 rounded-md text-sm font-medium transition-colors">Contact</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-government-blue hover:text-official-gold">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
+                <a href="#" class="text-government-blue block px-3 py-2 rounded-md text-base font-medium">Home</a>
+                <a href="services.html" class="text-gray-600 hover:text-government-blue block px-3 py-2 rounded-md text-base font-medium">Services</a>
+                <a href="guide.html" class="text-gray-600 hover:text-government-blue block px-3 py-2 rounded-md text-base font-medium">Guide</a>
+                <a href="#contact" class="text-gray-600 hover:text-government-blue block px-3 py-2 rounded-md text-base font-medium">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg min-h-screen flex items-center justify-center pt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="max-w-4xl mx-auto">
+                <h1 class="text-4xl md:text-6xl font-inter font-bold text-white mb-6 leading-tight">
+                    <span class="block" data-splitting>Philippine Municipal</span>
+                    <span class="block text-official-gold" data-splitting>Services Portal</span>
+                </h1>
+                <div class="text-xl md:text-2xl text-gray-200 mb-8 font-light">
+                    <span id="typed-text"></span>
+                </div>
+                <p class="text-lg text-gray-300 mb-12 max-w-2xl mx-auto leading-relaxed">
+                    Your comprehensive guide to obtaining government documents including police clearance, cedula, 
+                    mayor's permit, barangay clearance, and more. Streamline your application process with our 
+                    step-by-step assistance.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button id="start-wizard" class="bg-official-gold hover:bg-yellow-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all transform hover:scale-105">
+                        Start Document Wizard
+                    </button>
+                    <a href="services.html" class="bg-transparent border-2 border-white text-white hover:bg-white hover:text-government-blue px-8 py-4 rounded-lg font-semibold text-lg transition-all">
+                        Browse All Services
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Access Panel -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 scroll-reveal">
+                <h2 class="text-3xl font-inter font-bold text-trust-navy mb-4">Popular Services</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Quick access to the most requested municipal documents and services
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover scroll-reveal">
+                    <div class="w-16 h-16 bg-government-blue rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-inter font-semibold text-trust-navy mb-2 text-center">Police Clearance</h3>
+                    <p class="text-gray-600 text-center mb-4">National police clearance certificate for employment and legal purposes</p>
+                    <div class="text-center">
+                        <span class="text-sm text-success-green font-medium">₱150 • 1 day</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover scroll-reveal">
+                    <div class="w-16 h-16 bg-official-gold rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-inter font-semibold text-trust-navy mb-2 text-center">Cedula (CTC)</h3>
+                    <p class="text-gray-600 text-center mb-4">Community tax certificate required for various transactions</p>
+                    <div class="text-center">
+                        <span class="text-sm text-success-green font-medium">₱5-500 • 15 min</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover scroll-reveal">
+                    <div class="w-16 h-16 bg-success-green rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-inter font-semibold text-trust-navy mb-2 text-center">Mayor's Permit</h3>
+                    <p class="text-gray-600 text-center mb-4">Business permit and license to operate within the municipality</p>
+                    <div class="text-center">
+                        <span class="text-sm text-success-green font-medium">₱200-2000 • 3-5 days</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover scroll-reveal">
+                    <div class="w-16 h-16 bg-warning-amber rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-inter font-semibold text-trust-navy mb-2 text-center">Barangay Clearance</h3>
+                    <p class="text-gray-600 text-center mb-4">Local clearance certifying residency and good standing</p>
+                    <div class="text-center">
+                        <span class="text-sm text-success-green font-medium">₱50-500 • 1 day</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Document Requirements Wizard -->
+    <section id="wizard-section" class="py-16 bg-gray-50 hidden">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-inter font-bold text-trust-navy mb-4">Document Requirements Wizard</h2>
+                    <p class="text-lg text-gray-600">Answer a few questions to get your personalized document checklist</p>
+                </div>
+                
+                <div id="wizard-content">
+                    <!-- Wizard steps will be dynamically generated here -->
+                </div>
+                
+                <div id="wizard-results" class="hidden">
+                    <div class="bg-government-blue text-white p-6 rounded-lg mb-6">
+                        <h3 class="text-xl font-semibold mb-4">Your Personalized Checklist</h3>
+                        <div id="checklist-content"></div>
+                    </div>
+                    
+                    <div class="flex justify-between">
+                        <button id="restart-wizard" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                            Start Over
+                        </button>
+                        <button id="save-checklist" class="bg-success-green hover:bg-green-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                            Save Checklist
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Status Dashboard -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 scroll-reveal">
+                <h2 class="text-3xl font-inter font-bold text-trust-navy mb-4">Office Status Dashboard</h2>
+                <p class="text-lg text-gray-600">Real-time information about government office operations</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-gray-50 rounded-xl p-6 scroll-reveal">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-trust-navy">Municipal Hall</h3>
+                        <div class="status-indicator w-3 h-3 bg-success-green rounded-full"></div>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-2">Operating Hours: 8:00 AM - 5:00 PM</p>
+                    <p class="text-sm text-gray-600 mb-2">Current Status: <span class="text-success-green font-medium">Open</span></p>
+                    <p class="text-sm text-gray-600">Estimated Wait: <span class="text-warning-amber font-medium">15-30 minutes</span></p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-xl p-6 scroll-reveal">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-trust-navy">Police Station</h3>
+                        <div class="status-indicator w-3 h-3 bg-success-green rounded-full"></div>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-2">Operating Hours: 24/7</p>
+                    <p class="text-sm text-gray-600 mb-2">Current Status: <span class="text-success-green font-medium">Open</span></p>
+                    <p class="text-sm text-gray-600">Estimated Wait: <span class="text-success-green font-medium">10-20 minutes</span></p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-xl p-6 scroll-reveal">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-trust-navy">Treasurer's Office</h3>
+                        <div class="status-indicator w-3 h-3 bg-warning-amber rounded-full"></div>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-2">Operating Hours: 8:00 AM - 5:00 PM</p>
+                    <p class="text-sm text-gray-600 mb-2">Current Status: <span class="text-warning-amber font-medium">Busy</span></p>
+                    <p class="text-sm text-gray-600">Estimated Wait: <span class="text-warning-amber font-medium">30-45 minutes</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Updates -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 scroll-reveal">
+                <h2 class="text-3xl font-inter font-bold text-trust-navy mb-4">Latest Updates</h2>
+                <p class="text-lg text-gray-600">Important announcements and policy changes</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <article class="bg-white rounded-xl shadow-lg p-6 card-hover scroll-reveal">
+                    <div class="flex items-center mb-4">
+                        <span class="bg-success-green text-white text-xs px-3 py-1 rounded-full font-medium">New</span>
+                        <span class="text-gray-500 text-sm ml-3">October 17, 2025</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-trust-navy mb-3">Online Police Clearance System</h3>
+                    <p class="text-gray-600 mb-4">PNP now offers online appointment scheduling for police clearance applications. Reduce waiting time and streamline your application process.</p>
+                    <a href="#" class="text-government-blue hover:text-official-gold font-medium transition-colors">Learn More →</a>
+                </article>
+                
+                <article class="bg-white rounded-xl shadow-lg p-6 card-hover scroll-reveal">
+                    <div class="flex items-center mb-4">
+                        <span class="bg-warning-amber text-white text-xs px-3 py-1 rounded-full font-medium">Update</span>
+                        <span class="text-gray-500 text-sm ml-3">October 15, 2025</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-trust-navy mb-3">Business Permit Fee Changes</h3>
+                    <p class="text-gray-600 mb-4">Updated fee structure for mayor's permits and business licenses. Check the new rates before applying for your business permits.</p>
+                    <a href="#" class="text-government-blue hover:text-official-gold font-medium transition-colors">Learn More →</a>
+                </article>
+                
+                <article class="bg-white rounded-xl shadow-lg p-6 card-hover scroll-reveal">
+                    <div class="flex items-center mb-4">
+                        <span class="bg-government-blue text-white text-xs px-3 py-1 rounded-full font-medium">Info</span>
+                        <span class="text-gray-500 text-sm ml-3">October 12, 2025</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-trust-navy mb-3">Extended Office Hours</h3>
+                    <p class="text-gray-600 mb-4">Selected government offices now offer extended hours on Saturdays to accommodate more citizens needing document processing.</p>
+                    <a href="#" class="text-government-blue hover:text-official-gold font-medium transition-colors">Learn More →</a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Information -->
+    <section id="contact" class="py-16 bg-government-blue text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-inter font-bold mb-4">Contact Information</h2>
+                <p class="text-xl text-blue-200">Get in touch with our municipal offices</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-official-gold rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Municipal Hall</h3>
+                    <p class="text-blue-200">(02) 8988-4242</p>
+                    <p class="text-blue-200">info@municipality.gov.ph</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-official-gold rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Office Hours</h3>
+                    <p class="text-blue-200">Monday - Friday</p>
+                    <p class="text-blue-200">8:00 AM - 5:00 PM</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-official-gold rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Email Support</h3>
+                    <p class="text-blue-200">support@municipality.gov.ph</p>
+                    <p class="text-blue-200">Response within 24 hours</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-trust-navy text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p class="text-gray-300">
+                    © 2025 Philippine Municipal Services Portal. All rights reserved.
+                </p>
+                <p class="text-sm text-gray-400 mt-2">
+                    Official government website for citizen services and document processing.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>

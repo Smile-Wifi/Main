@@ -1,0 +1,211 @@
+/* Tablet Styles */
+@media (min-width: 768px) {
+    .mobile-header {
+        padding: 15px 30px;
+    }
+    
+    .main-content {
+        padding: 0 30px;
+    }
+    
+    .categories-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+    
+    .products-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .hero-banner img {
+        height: 300px;
+    }
+    
+    .dashboard-stats {
+        grid-template-columns: repeat(3, 1fr);
+        padding: 30px;
+    }
+    
+    .products-management {
+        padding: 30px;
+    }
+}
+
+/* Desktop Styles */
+@media (min-width: 1024px) {
+    .mobile-header {
+        display: none;
+    }
+    
+    .main-content {
+        margin-top: 0;
+        margin-left: 300px;
+        margin-bottom: 0;
+        padding: 30px;
+    }
+    
+    .side-panel {
+        left: 0;
+        position: fixed;
+    }
+    
+    .bottom-nav {
+        display: none;
+    }
+    
+    .categories-grid {
+        grid-template-columns: repeat(8, 1fr);
+    }
+    
+    .products-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .hero-banner img {
+        height: 400px;
+    }
+    
+    .search-container {
+        position: static;
+        transform: none;
+        margin-bottom: 30px;
+        padding: 0;
+    }
+    
+    .search-bar {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .dashboard-stats {
+        grid-template-columns: repeat(4, 1fr);
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .products-management {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+}
+
+/* Large Desktop */
+@media (min-width: 1440px) {
+    .main-content {
+        margin-left: 350px;
+    }
+    
+    .side-panel {
+        width: 350px;
+    }
+    
+    .products-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+/* Mobile Landscape */
+@media (max-height: 600px) and (orientation: landscape) {
+    .bottom-nav {
+        padding: 4px 0;
+    }
+    
+    .nav-item {
+        padding: 4px 8px;
+    }
+    
+    .nav-item i {
+        font-size: 16px;
+    }
+    
+    .nav-item span {
+        font-size: 10px;
+    }
+}
+
+/* High DPI Displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .product-image,
+    .hero-banner img,
+    .category-card img {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dark-color: #ECF0F1;
+        --light-color: #2C3E50;
+    }
+    
+    body {
+        background-color: #1a1a1a;
+        color: var(--dark-color);
+    }
+    
+    .mobile-header,
+    .side-panel,
+    .search-container,
+    .category-card,
+    .product-card,
+    .stat-card,
+    .seller-product-card,
+    .modal-content {
+        background: #2d2d2d;
+        color: var(--dark-color);
+    }
+    
+    .search-bar {
+        background: #3d3d3d;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        background: #3d3d3d;
+        border-color: #4d4d4d;
+        color: var(--dark-color);
+    }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .hamburger-btn,
+    .search-btn-mobile,
+    .nav-item,
+    .category-card,
+    .product-card {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    .action-btn {
+        min-height: 40px;
+        min-width: 40px;
+    }
+}
+
+/* Safe Area for Notched Devices */
+@supports (padding-top: env(safe-area-inset-top)) {
+    .mobile-header {
+        padding-top: calc(12px + env(safe-area-inset-top));
+    }
+    
+    .side-panel {
+        padding-top: env(safe-area-inset-top);
+    }
+    
+    .bottom-nav {
+        padding-bottom: calc(8px + env(safe-area-inset-bottom));
+    }
+}

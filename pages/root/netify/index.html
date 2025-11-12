@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drama Stream</title>
+
+  <style>
+    /* Basic reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: #141414;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: #000;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #e50914;
+    }
+
+    .main-banner {
+      position: relative;
+      background: url("https://images.unsplash.com/photo-1606112219348-204d7d8b94ee?auto=format&fit=crop&w=1400&q=80") center/cover no-repeat;
+      height: 60vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .banner-content {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 2rem;
+      border-radius: 10px;
+      max-width: 90%;
+    }
+
+    .banner-content h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .banner-content p {
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      color: #ccc;
+    }
+
+    .watch-btn {
+      background: #e50914;
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .watch-btn:hover {
+      background: #f40612;
+    }
+
+    /* Recommended Section */
+    .section {
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+
+    .section h2 {
+      font-size: 1.8em;
+      color: #e50914;
+      margin-bottom: 1.5rem;
+    }
+
+    .row {
+      display: flex;
+      overflow-x: auto;
+      gap: 1rem;
+      scroll-behavior: smooth;
+      padding-bottom: 1rem;
+    }
+
+    .row::-webkit-scrollbar {
+      height: 6px;
+    }
+    .row::-webkit-scrollbar-thumb {
+      background: #333;
+      border-radius: 3px;
+    }
+
+    .card {
+      flex: 0 0 auto;
+      width: 180px;
+      border-radius: 10px;
+      overflow: hidden;
+      background-color: #222;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    /* Video modal overlay */
+    .video-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.9);
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .video-content {
+      position: relative;
+      width: 90%;
+      max-width: 800px;
+    }
+
+    .video-content iframe {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border: none;
+      border-radius: 10px;
+    }
+
+    .close {
+      position: absolute;
+      top: -35px;
+      right: 0;
+      color: #fff;
+      font-size: 2em;
+      cursor: pointer;
+      background: rgba(0,0,0,0.5);
+      border-radius: 50%;
+      padding: 0 10px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      color: #777;
+      font-size: 0.9rem;
+      margin-top: 2rem;
+    }
+
+    /* Mobile-friendly adjustments */
+    @media (max-width: 768px) {
+      .banner-content h1 {
+        font-size: 1.5rem;
+      }
+      .banner-content p {
+        font-size: 0.9rem;
+      }
+      .card {
+        width: 140px;
+      }
+      .section h2 {
+        font-size: 1.4em;
+      }
+      .close {
+        top: -25px;
+        font-size: 1.5em;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo">Smile Flix Drama</div>
+  </header>
+
+  <section class="main-banner">
+    <div class="banner-content">
+      <h1>Watch Your Favorite Drama</h1>
+      <p>Start streaming now in HD quality — just one click away.</p>
+      <a href="https://m.mydramawave.com/series/jfYqrhG2Co/jBYoCT0npx?return_to=/&from_page=home"
+         target="_blank"
+         class="watch-btn">▶ Watch Now</a>
+    </div>
+  </section>
+
+<section class="section">
+  <h2>Recommended For You</h2>
+  <div class="row">
+
+    <div class="card">
+      <a href="https://m.mydramawave.com/series/46XCeNSPCG/r6GD8LukR8?return_to=/&from_page=home" target="_blank">
+        <img src="images/drama1.jpg" alt="Sleeping for 30 Years, My Brothers Regret" />
+      </a>
+    </div>
+
+    <div class="card">
+      <a href="https://m.mydramawave.com/series/utIY1faQ7f/sK5KW7IRZr?return_to=/&from_page=home" target="_blank">
+        <img src="images/drama2.jpg" alt="The Billionaire Heir She Dumped (Dubbed)" />
+      </a>
+    </div>
+
+    <div class="card">
+      <a href="https://m.mydramawave.com/series/pXkVaWtbGi/f9hgvleZar?return_to=/&from_page=home" target="_blank">
+        <img src="images/drama3.jpg" alt="My CEO, My Miracle (Dubbed)" />
+      </a>
+    </div>
+
+    <!-- Optional extra cards -->
+    <div class="card">
+      <a href="https://m.mydramawave.com/series/SGO2BiPeDE/KjXJAZQxvk?return_to=/&from_page=home" target="_blank">
+        <img src="images/drama4.jpg" alt="Karma Shuffle" />
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+    <!-- Modal video player -->
+    <div class="video-modal" id="videoModal">
+      <div class="video-content">
+        <span class="close">&times;</span>
+        <iframe id="videoFrame" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+
+  <footer>© 2025 MyDrama. All rights reserved.</footer>
+
+  <script>
+    const cards = document.querySelectorAll('.card');
+    const modal = document.getElementById('videoModal');
+    const frame = document.getElementById('videoFrame');
+    const closeBtn = document.querySelector('.close');
+
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        const videoURL = card.getAttribute('data-video');
+        frame.src = videoURL;
+        modal.style.display = 'flex';
+      });
+    });
+
+    closeBtn.addEventListener('click', () => {
+      modal.style.display = 'none';
+      frame.src = ''; // stop video
+    });
+
+    window.addEventListener('click', e => {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+        frame.src = '';
+      }
+    });
+  </script>
+</body>
+</html>
