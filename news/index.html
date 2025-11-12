@@ -3,35 +3,209 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smile News</title>
+  <title>📰 Smile News</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
+    :root {
+      --bg: #f5f5f5;
+      --fg: #222;
+      --card-bg: #fff;
+      --shadow: rgba(0,0,0,0.1);
+      --accent: #0078ff;
+    }
+
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      transition: background 0.3s, color 0.3s;
+      overflow-x: hidden;
+    }
+
     body.dark {
-      background: #121212;
+      --bg: #121212;
+      --fg: #f5f5f5;
+      --card-bg: #1e1e1e;
+      --shadow: rgba(255,255,255,0.1);
+    }
+
+    /* HEADER */
+    header {
+      text-align: center;
+      padding: 40px 10px;
+      background: var(--card-bg);
+      box-shadow: 0 2px 5px var(--shadow);
+      position: relative;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin: 0;
+    }
+
+    /* HAMBURGER */
+    .hamburger {
+      position: absolute;
+      left: 20px;
+      top: 20px;
+      cursor: pointer;
+      font-size: 28px;
+      background: none;
+      border: none;
+      color: var(--fg);
+      z-index: 1001;
+    }
+
+    /* SIDE PANEL */
+    .side-panel {
+      position: fixed;
+      top: 0;
+      left: -250px;
+      width: 250px;
+      height: 100%;
+      background: var(--card-bg);
+      box-shadow: 2px 0 10px var(--shadow);
+      transition: left 0.3s ease;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      padding: 60px 20px;
+    }
+
+    .side-panel.open {
+      left: 0;
+    }
+
+    .side-panel a {
+      text-decoration: none;
+      color: var(--fg);
+      font-size: 1.1rem;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+
+    .side-panel a:hover {
+      background: var(--accent);
       color: #fff;
     }
+
+    /* CLOSE AREA */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.3);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease;
+      z-index: 999;
+    }
+
+    .overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* MAIN CONTENT */
+    main#news-container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .news-item {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 14px;
+      box-shadow: 0 2px 8px var(--shadow);
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+    }
+
+    .news-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 10px var(--shadow);
+    }
+
+    .news-item h2 {
+      margin-top: 0;
+      font-size: 1.5rem;
+      color: var(--accent);
+      word-wrap: break-word;
+    }
+
+    .news-item p {
+      margin: 10px 0;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .news-item img,
+    .news-item video {
+      width: 100%;
+      border-radius: 10px;
+      margin-top: 10px;
+      object-fit: cover;
+      max-height: 400px;
+    }
+
+    .news-item video { background: #000; }
+
+    .news-item small {
+      display: block;
+      margin-top: 8px;
+      color: gray;
+      font-size: 0.9rem;
+    }
+
+    /* THEME TOGGLE */
     .toggle-btn {
       position: fixed;
       top: 10px;
       right: 10px;
-      padding: 5px 10px;
-      cursor: pointer;
-    }
-    .news-item {
-      margin: 20px auto;
-      max-width: 600px;
-      padding: 15px;
-      border-bottom: 1px solid #ccc;
-    }
-    img, video {
-      max-width: 100%;
+      padding: 8px 14px;
+      border: none;
       border-radius: 8px;
-      margin-top: 10px;
+      cursor: pointer;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 2px 6px var(--shadow);
+      z-index: 1002;
+    }
+
+    body.dark .toggle-btn {
+      background: #fff;
+      color: var(--accent);
+    }
+
+    @media (max-width: 600px) {
+      .news-item { padding: 15px; }
+      .news-item h2 { font-size: 1.2rem; }
     }
   </style>
 </head>
 <body>
   <button class="toggle-btn" id="theme-toggle">🌙 Dark</button>
+  <button class="hamburger" id="hamburger">☰</button>
+
+  <div class="side-panel" id="sidePanel">
+    <a href="/">🏠 Home</a>
+    <a href="/login.html">🔑 Login</a>
+    <a href="/admin.html">🧑‍💼 Admin</a>
+    <a href="/about.html">ℹ️ About</a>
+    <a href="/contact.html">📩 Contact</a>
+  </div>
+  <div class="overlay" id="overlay"></div>
 
   <header>
     <h1>📰 Smile News</h1>
@@ -41,18 +215,73 @@
     <p>Loading news...</p>
   </main>
 
-  <!-- Firebase SDK v8 -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
-  <script src="js/firebase.js"></script>
-  <script src="js/main.js"></script>
-
   <script>
-    // 🌙 Dark Mode Toggle
-    const btn = document.getElementById('theme-toggle');
-    btn.addEventListener('click', () => {
+    // 🌙 Theme toggle
+    const themeBtn = document.getElementById('theme-toggle');
+    themeBtn.addEventListener('click', () => {
       document.body.classList.toggle('dark');
-      btn.textContent = document.body.classList.contains('dark') ? '☀️ Light' : '🌙 Dark';
+      themeBtn.textContent = document.body.classList.contains('dark') ? '☀️ Light' : '🌙 Dark';
     });
-  </script
+
+    // 🍔 Hamburger panel toggle
+    const hamburger = document.getElementById('hamburger');
+    const sidePanel = document.getElementById('sidePanel');
+    const overlay = document.getElementById('overlay');
+
+    hamburger.addEventListener('click', () => {
+      sidePanel.classList.add('open');
+      overlay.classList.add('show');
+    });
+
+    overlay.addEventListener('click', () => {
+      sidePanel.classList.remove('open');
+      overlay.classList.remove('show');
+    });
+
+    // 🔄 Fetch news posts
+    const NEWS_URL = "https://raw.githubusercontent.com/Smile-Wifi/Main/main/news/data/news.json";
+    const container = document.getElementById("news-container");
+
+    async function loadNews() {
+      try {
+        const res = await fetch(NEWS_URL + "?_=" + Date.now());
+        if (!res.ok) throw new Error("Failed to load news.json");
+        const news = await res.json();
+
+        container.innerHTML = "";
+        if (!news.length) {
+          container.innerHTML = "<p>No news available yet.</p>";
+          return;
+        }
+
+        news.forEach(item => {
+          const div = document.createElement("div");
+          div.className = "news-item";
+          let mediaHTML = "";
+
+          if (item.mediaUrl) {
+            if (item.mediaUrl.match(/\.(mp4|webm|ogg)$/i)) {
+              mediaHTML = `<video controls src="${item.mediaUrl}"></video>`;
+            } else {
+              mediaHTML = `<img src="${item.mediaUrl}" alt="${item.title}">`;
+            }
+          }
+
+          div.innerHTML = `
+            <h2>${item.title}</h2>
+            <p>${item.content}</p>
+            ${mediaHTML}
+            <small>${new Date(item.date).toLocaleString()}</small>
+          `;
+          container.appendChild(div);
+        });
+      } catch (err) {
+        container.innerHTML = `<p style="color:red;">❌ Error loading news: ${err.message}</p>`;
+      }
+    }
+
+    loadNews();
+    setInterval(loadNews, 60000);
+  </script>
+</body>
+</html>
