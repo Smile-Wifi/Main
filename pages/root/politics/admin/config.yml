@@ -1,0 +1,27 @@
+backend:
+  name: github
+  repo: yourusername/your-news-site  # 👈 your repo
+  branch: main
+  open_authoring: true
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "news"
+    label: "News Articles"
+    folder: "news"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime" }
+      - { label: "Media Type", name: "media_type", widget: "select", options: ["image", "video"], default: "image" }
+      - { label: "Media URL", name: "media_url", widget: "image" }
+      - { label: "Article Body", name: "body", widget: "markdown" }
+      - label: "Related Links"
+        name: "links"
+        widget: "list"
+        fields:
+          - { label: "Label", name: "label", widget: "string" }
+          - { label: "URL", name: "url", widget: "string" }

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My News Portal</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>My News Portal</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="/admin/">Admin</a>
+  </nav>
+</header>
+
+<main>
+  <section class="news-grid" id="news-container"></section>
+</main>
+
+<footer>
+  <p>© 2025 My News Portal — Powered by GitHub & Decap CMS</p>
+</footer>
+
+<script>
+async function loadNews() {
+  const container = document.getElementById("news-container");
+  const files = ["news/sample-post.md"]; // add more filenames or use GitHub API later
+  for (let file of files) {
+    const res = await fetch(file);
+    const text = await res.text();
+    const title = text.match(/title:\s*["']?(.*?)["']?\n/);
+    const date = text.match(/date:\s*["']?(.*?)["']?\n/);
+    const mediaType = text.match(/media_type:\s*["']?(.*?)["']?\n/);
+    const mediaUrl = text.match(/media_url:\s*["']?(.*?)["']?\n/);
+    const body = text.split('---').pop().trim().split('\n').slice(0,4).join(' ');
+    const links = [...text.matchAll(/- { label: "(.*?)", url: "(.*?)" }/g)];
+
+    let mediaHTML = "";
+    if (mediaType && mediaType[1] === "video") {
+      mediaHTML = `<video src="${mediaUrl ? mediaUrl[1] : ''}" controls></video>`;
+    } else if (mediaUrl) {
+      mediaHTML = `<img src="${mediaUrl[1]}" alt="${title ? title[1] : ''}">`;
+    }
+
+    let linksHTML = "";
+    if (links.length) {
+      linksHTML = `<div class="links"><h4>Related Links</h4><ul>` +
+        links.map(l => `<li><a href="${l[2]}" target="_blank">${l[1]}</a></li>`).join('') +
+        `</ul></div>`;
+    }
+
+    container.innerHTML += `
+      <article>
+        <div class="media">${mediaHTML}</div>
+        <div class="content">
+          <h2>${title ? title[1] : 'Untitled'}</h2>
+          <small>${date ? date[1] : ''}</small>
+          <p>${body}...</p>
+          ${linksHTML}
+        </div>
+      </article>
+    `;
+  }
+}
+loadNews();
+</script>
+
+</body>
+</html>
