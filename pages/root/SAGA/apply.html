@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Apply to Academy — S.A.G.A³</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <canvas id="bgCanvas"></canvas>
+<header>
+  <button class="hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+<div class="overlay" id="overlay"></div>
+<aside class="side-panel" id="sidePanel">
+  <button class="close-btn" id="closeBtn" aria-label="Close menu">×</button>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#news">News</a>
+    <a href="apply.html">Academy</a>
+    <a href="alliance.html">Alliance</a>
+    <a href="admin.html">Admin</a>
+    <a href="alliance.html" class="btn" style="margin-top:20px; width:100%; justify-content:center;">Join</a>
+  </nav>
+</aside>
+
+  <main class="container">
+    <section style="padding:80px 0">
+      <div class="grid">
+        <div class="card">
+          <h3>Academy Programs</h3>
+          <p>Bootcamps, fellowships, and PhD tracks with NUS, NTU, and A*STAR. Scholarships available.</p>
+        </div>
+        <div class="card" id="academyForm">
+          <h3>Apply Now</h3>
+          <form>
+            <div class="form-group"><label>Full Name *</label><input id="appName" required /></div>
+            <div class="form-group"><label>Email *</label><input id="appEmail" type="email" required /></div>
+            <div class="form-group"><label>Program *</label>
+              <select id="appProgram">
+                <option>AI Bootcamp (6 weeks)</option>
+                <option>Research Fellowship (1 year)</option>
+                <option>PhD Fellowship</option>
+              </select>
+            </div>
+            <button type="button" class="btn" style="width:100%" onclick="applyAcademy()">Submit Application</button>
+            <div id="appMsg" class="small" style="margin-top:10px; min-height:20px"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="container small">© 2025 S.A.G.A³</div></footer>
+  <script src="script.js"></script>
+</body>
+</html>

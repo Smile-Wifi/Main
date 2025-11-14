@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard — S.A.G.A³</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+<canvas id="bgCanvas"></canvas>
+<header>
+  <button class="hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+<div class="overlay" id="overlay"></div>
+<aside class="side-panel" id="sidePanel">
+  <button class="close-btn" id="closeBtn" aria-label="Close menu">×</button>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#news">News</a>
+    <a href="apply.html">Academy</a>
+    <a href="alliance.html">Alliance</a>
+    <a href="admin.html">Admin</a>
+    <a href="alliance.html" class="btn" style="margin-top:20px; width:100%; justify-content:center;">Join</a>
+  </nav>
+</aside>
+
+  <main class="container" style="padding:40px 0">
+    <div id="adminModal" style="display:block">
+      <div class="modal-header" style="margin-bottom:24px">
+        <h2>Admin Dashboard</h2>
+        <button class="btn" onclick="exportAll()">Export All Data</button>
+      </div>
+      <div class="split">
+        <div>
+          <div class="card">
+            <h3>Create Post</h3>
+            <div class="form-group"><label>Title *</label><input id="postTitle" /></div>
+            <div class="form-group"><label>Thumbnail URL</label><input id="postThumb" /></div>
+            <div class="form-group"><label>Content *</label><textarea id="postContent"></textarea></div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center">
+              <input id="uploadImg" type="file" accept="image/*" style="flex:1; min-width:200px" />
+              <button class="btn" onclick="createPost()">Publish</button>
+              <button class="ghost" onclick="clearPostForm()">Clear</button>
+            </div>
+          </div>
+          <div class="card" style="margin-top:16px">
+            <h3>Members</h3>
+            <div class="form-group"><label>Export Filename</label><input id="exportName" value="saga3-members" /></div>
+            <div style="display:flex; gap:8px">
+              <button class="btn" onclick="exportMembers()">Export CSV</button>
+              <button class="ghost" onclick="clearMembers()">Clear All</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:16px">
+            <h3>Posts</h3>
+            <div id="adminPosts" style="max-height:400px; overflow-y:auto"></div>
+          </div>
+          <div class="card">
+            <h3>Members</h3>
+            <div style="overflow:auto; max-height:400px">
+              <table id="memberTable">
+                <thead><tr><th>Name</th><th>Org</th><th>Tier</th><th>Email</th><th>Action</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer><div class="container small">© 2025 S.A.G.A³ — LocalStorage CMS</div></footer>
+  <script src="script.js"></script>
+  <script>
+    // Auto-open admin if password correct
+    if (localStorage.getItem('saga_posts_v1')) renderAdminPanels();
+  </script>
+</body>
+</html>

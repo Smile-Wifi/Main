@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>S.A.G.A³ — Nexus of AI Excellence</title>
+  <meta name="description" content="Singapore AI Giga Assembly Academy Alliance" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Futuristic Background Canvas -->
+  <canvas id="bgCanvas"></canvas>
+
+  <!-- Header with Hamburger -->
+  <header>
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <!-- Side Panel -->
+  <div class="overlay" id="overlay"></div>
+  <aside class="side-panel" id="sidePanel">
+    <button class="close-btn" id="closeBtn" aria-label="Close menu">×</button>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#news">News</a>
+      <a href="apply.html">Academy</a>
+      <a href="alliance.html">Alliance</a>
+      <a href="admin.html">Admin</a>
+      <a href="alliance.html" class="btn" style="margin-top:20px; width:100%; justify-content:center;">Join</a>
+    </nav>
+  </aside>
+
+  <!-- Hero -->
+  <main class="container">
+    <section class="hero">
+      <div class="inner">
+        <div class="hero-left">
+          <div class="kicker">Interactive “AI Economy by 2030” Infographic</div>
+          <h2>S.A.G.A³ — The Nexus of AI Excellence in Asia</h2>
+          <p class="lead">Democratizing gigascale AI compute, building a world-class talent pipeline, and powering a SGD 1 trillion regional digital economy by 2030.</p>
+          <div class="hero-ctas">
+            <a href="alliance.html" class="btn">Join the Alliance</a>
+            <a href="#news" class="ghost">Read News</a>
+            <a href="admin.html" class="ghost">Admin Login</a>
+          </div>
+
+          <!-- Muted Video Player -->
+          <div class="video-player">
+            <video controls muted poster="assets/video-thumb.jpg" preload="metadata">
+              <source src="assets/video-presentation.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+
+          <div class="stats-grid" style="margin-top:32px">
+            <div class="stat-card"><div class="label">Compute</div><strong>100+ petaFLOPS</strong></div>
+            <div class="stat-card"><div class="label">Academy</div><strong>5,000 trained / year</strong></div>
+            <div class="stat-card"><div class="label">Alliance</div><strong>50+ partners</strong></div>
+          </div>
+        </div>
+
+        <aside>
+          <div class="card">
+            <h3>Latest News</h3>
+            <div id="newsPreview" class="news-list small">Loading…</div>
+            <div style="margin-top:12px; text-align:right"><a href="#news">View all</a></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about">
+      <div class="grid">
+        <div class="card">
+          <h3>About S.A.G.A³</h3>
+          <p>S.A.G.A³ integrates large-scale AI compute infrastructure, talent development, and industry collaboration into a unified ecosystem based in Singapore.</p>
+        </div>
+        <div class="card">
+          <h3>Giga Assembly</h3>
+          <ul class="small">
+            <li>1GW green data center</li>
+            <li>100+ petaFLOPS</li>
+            <li>20% cheaper than AWS/GCP</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- News -->
+    <section id="news">
+      <div class="grid">
+        <div class="card">
+          <h3>News & Insights</h3>
+          <p class="small">Latest updates from S.A.G.A³. Managed via <a href="admin.html">Admin Panel</a>.</p>
+          <div id="posts" style="margin-top:16px"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container small">© 2025 S.A.G.A³ — Built with love in Singapore</div>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
