@@ -1,4 +1,3 @@
-/* style.css */
 :root {
   --bg: #071024;
   --bg-dark: #041022;
@@ -54,7 +53,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding: 0 20px;
+  padding: 50px 20px; /* UPDATED */
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--glass-border);
   background-color: #000;
