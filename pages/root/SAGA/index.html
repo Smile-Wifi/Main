@@ -2,120 +2,732 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>S.A.G.A³ — Nexus of AI Excellence</title>
-  <meta name="description" content="Singapore AI Giga Assembly Academy Alliance" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S.A.G.A³ — Asia’s AI Nexus</title>
+  <meta name="description" content="Join S.A.G.A³ — Powering a SGD 1T AI-driven digital economy across Asia. Governments, labs, startups, educators." />
+  <link rel="icon" href="logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #eef1f7;
+      --muted: #9ca3af;
+      --accent: #2563eb;
+      --accent-light: #dbeafe;
+      --success: #059669;
+      --border: #e5e7eb;
+      --card: #3d4e5f;
+      --radius: 8px;
+      --maxw: 1200px;
+      --gap: 24px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background: rgba(0, 40, 100, 0.7);
+    }
+    .container {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+    /* Header - No border */
+    header {
+      padding: 20px 0;
+      position: sticky;
+      top: 0;
+      background: #5a4c5d;
+      z-index: 100;
+    }
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+    .logo img {
+      width: 100px;
+      height: 40px;
+      border-radius: 8px;
+      object-fit: contain;
+    }
+    nav {
+      display: flex;
+      gap: 16px;
+    }
+    .btn {
+      padding: 10px 16px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s;
+      font-size: 0.95rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-primary {
+      background: rgba(255, 255, 255, 0.3);
+      color:  #efeef5;
+    }
+    .btn-primary:hover { background: #1d4ed8; color: white; }
+    .btn-ghost { background: transparent; color: #ffffff; }
+    .btn-ghost:hover { background: var(--accent-light); }
+    /* Highlight Style */
+    .highlight {
+      color: #7bf1ff;
+      font-weight: 800;
+      background: linear-gradient(90deg, #7bf1ff, #00d4ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    /* Hero with Background Image */
+    .hero {
+      position: relative;
+      color: white;
+      text-align: center;
+      padding: 140px 0;
+      background: linear-gradient(135deg, rgba(0, 20, 60, 0.85), rgba(0, 40, 100, 0.7)),
+                  url('bg.jpg') center/cover no-repeat;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 80%, rgba(0, 212, 255, 0.12) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, rgba(100, 150, 255, 0.1) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .hero h1 {
+      font-size: 3.2rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 2;
+    }
+    .hero p {
+      font-size: 1.3rem;
+      max-width: 700px;
+      margin: 0 auto 2rem;
+      opacity: 0.95;
+      font-weight: 400;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 2;
+    }
+    .hero .btn-primary {
+      background: white;
+      color: #003366;
+      font-weight: 700;
+      padding: 14px 28px;
+      font-size: 1.1rem;
+      box-shadow: 0 8px 25px rgba(255,255,255,0.3);
+    }
+    .hero .btn-ghost {
+      border: 2px solid white;
+      color: white;
+      padding: 12px 26px;
+      font-weight: 600;
+    }
+    /* Platform Overview */
+    .platform {
+      padding: 80px 0;
+      background: var(--card);
+    }
+    .platform h2 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+      color: white;
+    }
+    .platform p {
+      text-align: center;
+      color: #c9d2e5;
+      margin-bottom: 48px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .platform-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--gap);
+    }
+    .hub-card {
+      background: white;
+      padding: 24px;
+      border-radius: var(--radius);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    .hub-card:hover {
+      transform: translateY(-4px);
+    }
+    .hub-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+    .hub-card p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    /* Integrations */
+    .integrations {
+      padding: 80px 0;
+      text-align: center;
+    }
+    .integrations h2 {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      color: white;
+    }
+    .integrations p {
+      color: #c9d2e5;
+      margin-bottom: 32px;
+    }
+    .logos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.8rem;
+    }
+    .logo-item {
+      color: #c9d2e5;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    /* Case Studies */
+    .cases {
+      padding: 80px 0;
+      background: var(--card);
+    }
+    .cases h2 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+      color: white;
+    }
+    .cases > p {
+      text-align: center;
+      color: #f2f5fb;
+      margin-bottom: 48px;
+    }
+    .case-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: var(--gap);
+    }
+    .case-card {
+      background: white;
+      padding: 32px;
+      border-radius: var(--radius);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .case-card blockquote {
+      font-style: italic;
+      margin-bottom: 24px;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #1f2937;
+    }
+    .case-author {
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #1f2937;
+    }
+    .case-title {
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-bottom: 16px;
+    }
+    .case-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .metrics {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .metric {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      color: var(--success);
+    }
+    /* Awards */
+    .awards {
+      padding: 80px 0;
+      text-align: center;
+    }
+    .awards h2 {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      color: white;
+    }
+    .awards-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      align-items: center;
+    }
+    .award-badge {
+      background: var(--accent-light);
+      color: var(--accent);
+      padding: 8px 16px;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    /* Apply Section */
+    .apply {
+      padding: 80px 0;
+      background: var(--accent-light);
+      text-align: center;
+    }
+    .apply h2 {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+      color: #1f2937;
+    }
+    .apply p {
+      color: #4b5563;
+      margin-bottom: 32px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      max-width: 700px;
+      margin: 0 auto 32px;
+    }
+    input, select {
+      padding: 12px 16px;
+      border: 1px solid #d1d5db;
+      border-radius: var(--radius);
+      font-size: 1rem;
+      width: 100%;
+      background: white;
+    }
+    .form-status {
+      margin-top: 1rem;
+      font-weight: 600;
+    }
+    .success { color: var(--success); }
+    .error { color: #ef4444; }
+    /* Modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      visibility: hidden;
+      opacity: 0;
+      transition: all 0.3s;
+    }
+    .modal.open {
+      visibility: visible;
+      opacity: 1;
+    }
+    .modal-content {
+      background: white;
+      width: 95%;
+      max-width: 900px;
+      max-height: 85vh;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+    .modal-header {
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f9fafb;
+    }
+    .modal-body {
+      padding: 2rem;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    th, td {
+      padding: 12px 8px;
+      text-align: left;
+      border-bottom: 1px dashed #e5e7eb;
+    }
+    th {
+      color: #6b7280;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+    }
+    .delete-btn {
+      background: #fee2e2;
+      color: #dc2626;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    .modal-footer {
+      padding: 1.5rem 2rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      background: #f9fafb;
+    }
+    /* Footer */
+    footer {
+      padding: 40px 0;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      color: #9ca3af;
+      font-size: 0.9rem;
+      background: #f9fafb;
+    }
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero {
+        padding: 100px 0;
+      }
+      .hero h1 { font-size: 2.4rem; }
+      .hero p { font-size: 1.1rem; }
+      .hero-cta { flex-direction: column; align-items: center; }
+      .platform-grid, .case-grid { grid-template-columns: 1fr; }
+      .logos { gap: 16px; font-size: 1.5rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      .header-inner { flex-direction: column; gap: 12px; }
+      nav { width: 100%; justify-content: center; }
+    }
+  </style>
 </head>
 <body>
-
-  <!-- Futuristic Background Canvas -->
-  <canvas id="bgCanvas"></canvas>
-
-  <!-- Header with Hamburger -->
-  <header>
-    <button class="hamburger" id="hamburger" aria-label="Open menu">
-      <span></span><span></span><span></span>
-    </button>
+  <!-- Header -->
+  <header class="container">
+    <div class="header-inner">
+      <a href="#" class="logo">
+        <img src="logo.png" alt="S.A.G.A³ Logo">
+      </a>
+      <nav>
+        <button class="btn btn-ghost" id="openDashboard">Dashboard</button>
+        <a href="#apply" class="btn btn-primary">Join Alliance</a>
+      </nav>
+    </div>
   </header>
 
-  <!-- Side Panel -->
-  <div class="overlay" id="overlay"></div>
-  <aside class="side-panel" id="sidePanel">
-    <button class="close-btn" id="closeBtn" aria-label="Close menu">×</button>
-    <nav>
-      <a href="#about">About</a>
-      <a href="#news">News</a>
-      <a href="apply.html">Academy</a>
-      <a href="alliance.html">Alliance</a>
-      <a href="admin.html">Admin</a>
-      <a href="alliance.html" class="btn" style="margin-top:20px; width:100%; justify-content:center;">Join</a>
-    </nav>
-  </aside>
+  <!-- Hero with Background Image -->
+  <section class="hero container">
+    <h1>S.A.G.A³<span class="highlight"></span></h1>
+    <p>Unite governments, labs, startups, and educators on one <span class="highlight">AI-powered alliance platform</span> that accelerates regional growth fast.</p>
+    <div class="hero-cta">
+      <a href="#apply" class="btn btn-primary">Apply Now</a>
+      <button class="btn btn-ghost" id="learnMore">Learn More</button>
+    </div>
+  </section>
 
-  <!-- Hero -->
-   <main class="container">
-    <section class="hero">
-      <div class="inner">
-        <div class="hero-left">
-          <div class="kicker">Interactive “AI Economy by 2030” Infographic</div>
-          <h2>S.A.G.A³ — The Nexus of AI Excellence in Asia</h2>
-          <p class="lead">Democratizing gigascale AI compute, building a world-class talent pipeline, and powering a SGD 1 trillion regional digital economy by 2030.</p>
-          <div class="hero-ctas">
-            <a href="alliance.html" class="btn">Join the Alliance</a>
-            <a href="#news" class="ghost">Read News</a>
-            <a href="admin.html" class="ghost">Admin Login</a>
-          </div>
-
-          <!-- Autoplay Muted Video Player -->
-          <div class="video-player">
-            <video 
-              autoplay 
-              muted 
-              loop 
-              playsinline
-              poster="assets/video-thumb.jpg" 
-              preload="metadata"
-              style="width:100%; border-radius:12px;">
-              <source src="assets/video-presentation.mp4" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-          </div>
-
-          <div class="stats-grid" style="margin-top:32px">
-            <div class="stat-card"><div class="label">Compute</div><strong>100+ petaFLOPS</strong></div>
-            <div class="stat-card"><div class="label">Academy</div><strong>5,000 trained / year</strong></div>
-            <div class="stat-card"><div class="label">Alliance</div><strong>50+ partners</strong></div>
-          </div>
-        </div>
-
-
-        <aside>
-          <div class="card">
-            <h3>Latest News</h3>
-            <div id="newsPreview" class="news-list small">Loading…</div>
-            <div style="margin-top:12px; text-align:right"><a href="#news">View all</a></div>
-          </div>
-        </aside>
+  <!-- Platform -->
+  <section class="platform container">
+    <h2>The <span class="highlight">S.A.G.A³ Alliance Platform</span></h2>
+    <p>Connected resources and tools make it easier to <span class="highlight">innovate</span>, <span class="highlight">collaborate</span>, and <span class="highlight">scale AI</span> across Asia.</p>
+    <div class="platform-grid">
+      <div class="hub-card">
+        <h3>Compute Hub ®</h3>
+        <p>Access <span class="highlight">shared high-scale GPU</span> and storage for AI research and deployment.</p>
       </div>
-    </section>
-
-    <!-- About -->
-    <section id="about">
-      <div class="grid">
-        <div class="card">
-          <h3>About S.A.G.A³</h3>
-          <p>S.A.G.A³ integrates large-scale AI compute infrastructure, talent development, and industry collaboration into a unified ecosystem based in Singapore.</p>
-        </div>
-        <div class="card">
-          <h3>Giga Assembly</h3>
-          <ul class="small">
-            <li>1GW green data center</li>
-            <li>100+ petaFLOPS</li>
-            <li>20% cheaper than AWS/GCP</li>
-          </ul>
-        </div>
+      <div class="hub-card">
+        <h3>Talent Hub ®</h3>
+        <p>Build pipelines with <span class="highlight">joint curricula</span>, certifications, and upskilling programs.</p>
       </div>
-    </section>
+      <div class="hub-card">
+        <h3>Policy Hub ®</h3>
+        <p>Align regulations and secure <span class="highlight">funding</span> through regional consortiums.</p>
+      </div>
+      <div class="hub-card">
+        <h3>Innovation Hub ™</h3>
+        <p>Accelerate startups with <span class="highlight">grants</span>, mentorship, and ecosystem integration.</p>
+      </div>
+      <div class="hub-card">
+        <h3>Data Hub ™</h3>
+        <p>Unify scattered datasets into <span class="highlight">actionable intelligence</span> for all members.</p>
+      </div>
+      <div class="hub-card">
+        <h3>Impact Hub ™</h3>
+        <p>Track and amplify measurable outcomes in <span class="highlight">economy</span>, society, and sustainability.</p>
+      </div>
+      <div class="hub-card">
+        <h3>Smart Network ™</h3>
+        <p>Centralized <span class="highlight">member directory</span> and collaboration tools.</p>
+      </div>
+      <div class="hub-card">
+        <h3>Breeze AI ™</h3>
+        <p>AI agents for <span class="highlight">advisory</span>, matching, and predictive insights.</p>
+      </div>
+      <div class="hub-card">
+        <h3>Starter Bundle</h3>
+        <p>Entry-level access to <span class="highlight">all hubs</span> at one accessible price point.</p>
+      </div>
+    </div>
+  </section>
 
-    <!-- News -->
-    <section id="news">
-      <div class="grid">
-        <div class="card">
-          <h3>News & Insights</h3>
-          <p class="small">Latest updates from S.A.G.A³. Managed via <a href="admin.html">Admin Panel</a>.</p>
-          <div id="posts" style="margin-top:16px"></div>
+  <!-- Integrations -->
+  <section class="integrations container">
+    <h2>Works with the ecosystems you already use. <span class="highlight">500+ integrations</span>.</h2>
+    <p>Seamless connections to tools powering <span class="highlight">Asia's AI landscape</span>.</p>
+    <div class="logos">
+      <div class="logo-item"><i class="fab fa-aws"></i> AWS</div>
+      <div class="logo-item"><i class="fab fa-google-cloud"></i> Google Cloud</div>
+      <div class="logo-item"><i class="fab fa-microsoft"></i> Azure</div>
+      <div class="logo-item"><i class="fab fa-tensorflow"></i> TensorFlow</div>
+      <div class="logo-item"><i class="fab fa-python"></i> Python</div>
+    </div>
+    <a href="#" style="color: var(--accent); text-decoration: none; margin-top: 16px; display: inline-block;">See all integrations</a>
+  </section>
+
+  <!-- Case Studies -->
+  <section class="cases container">
+    <h2><span class="highlight">Remarkable impact</span> for every scale of organization.</h2>
+    <p>Scale your AI initiatives with S.A.G.A³. The proof is in our <span class="highlight">members’ success</span>.</p>
+    <div class="case-grid">
+      <div class="case-card">
+        <blockquote>“S.A.G.A³ provided the <span class="highlight">shared compute</span> we needed to prototype our climate AI model in weeks, not months. The policy advisory was invaluable for cross-border deployment.”</blockquote>
+        <div class="case-author">Dr. Li Wei</div>
+        <div class="case-title">Lead Researcher, GreenTech Lab</div>
+        <a href="#" class="case-link">Read full case study</a>
+        <div class="metrics">
+          <div class="metric"><i class="fas fa-chart-line"></i> 300% faster model training</div>
+          <div class="metric"><i class="fas fa-users"></i> 50+ new collaborators</div>
+          <div class="metric"><i class="fas fa-dollar-sign"></i> SGD 2M in grants</div>
         </div>
       </div>
-    </section>
+      <div class="case-card">
+        <blockquote>"The <span class="highlight">talent pipeline</span> from S.A.G.A³ scaled our team's AI expertise overnight. Now we're training 500 engineers annually with certified curricula."</blockquote>
+        <div class="case-author">Priya Singh</div>
+        <div class="case-title">CTO, AI Startup Inc.</div>
+        <a href="#" class="case-link">Read full case study</a>
+        <div class="metrics">
+          <div class="metric"><i class="fas fa-graduation-cap"></i> 500 engineers trained</div>
+          <div class="metric"><i class="fas fa-rocket"></i> 200% growth in deployments</div>
+          <div class="metric"><i class="fas fa-star"></i> 4.8/5 member satisfaction</div>
+        </div>
+      </div>
+      <div class="case-card">
+        <blockquote>"<span class="highlight">Breeze AI agents</span> handle our regulatory queries with 90% accuracy, freeing our team for high-impact innovation. Human oversight is seamless."</blockquote>
+        <div class="case-author">Prof. Tanaka</div>
+        <div class="case-title">Director, National AI Lab</div>
+        <a href="#" class="case-link">Read full case study</a>
+        <div class="metrics">
+          <div class="metric"><i class="fas fa-robot"></i> 90% query automation</div>
+          <div class="metric"><i class="fas fa-clock"></i> 60% faster responses</div>
+          <div class="metric"><i class="fas fa-chart-bar"></i> 25% efficiency gain</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <!-- Footer -->
-    <footer>
-      <div class="container small">© 2025 S.A.G.A³ — Built with love in Singapore</div>
-    </footer>
-  </main>
+  <!-- Awards -->
+  <section class="awards container">
+    <h2><span class="highlight">Voted #1</span> in 150+ Industry Reports</h2>
+    <div class="awards-grid">
+      <div class="award-badge">AI Alliance Leader (Asia)</div>
+      <div class="award-badge">Most Collaborative Platform</div>
+      <div class="award-badge">Best for Startups</div>
+      <div class="award-badge">Easiest to Scale</div>
+      <div class="award-badge">Top Impact Results</div>
+      <div class="award-badge">Highest Usability</div>
+    </div>
+  </section>
 
-  <script src="script.js"></script>
+  <!-- Apply -->
+  <section id="apply" class="apply container">
+    <h2>Ready to Power <span class="highlight">Asia's AI Future</span>?</h2>
+    <p>Join the S.A.G.A³ alliance today. Applications reviewed in <span class="highlight">48 hours</span>.</p>
+    <form id="applyForm">
+      <div class="form-grid">
+        <input type="text" id="org" placeholder="Organization / Startup" required>
+        <input type="text" id="name" placeholder="Full Name" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="text" id="country" placeholder="Country" required>
+        <select id="tier" required>
+          <option value="">Select Tier</option>
+          <option value="Founding">Founding</option>
+          <option value="Core">Core</option>
+          <option value="Affiliate">Affiliate</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width: 220px; margin: 0 auto; display: block;">Submit Application</button>
+      <div id="formStatus" class="form-status"></div>
+    </form>
+  </section>
+
+  <!-- Footer -->
+  <footer class="container">
+    <div>S.A.G.A³ — Singapore AI Giga Assembly Academy Alliance • © <span id="year"></span></div>
+    <div style="margin-top: 8px;">Hosted on GitHub Pages • Add <code>logo.png</code> and <code>bg.jpg</code> to root</div>
+  </footer>
+
+  <!-- Dashboard Modal -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h3>Alliance Dashboard</h3>
+          <p style="font-size:0.85rem; color:#6b7280;">Demo: Data stored in your browser</p>
+        </div>
+        <button class="btn btn-ghost" id="closeModal">Close</button>
+      </div>
+      <div class="modal-body">
+        <table id="membersTable">
+          <thead>
+            <tr>
+              <th>Org</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Tier</th>
+              <th>Country</th>
+              <th>Joined</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" id="exportCsv">Export CSV</button>
+        <button class="btn btn-ghost" id="clearAll">Clear All</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const $ = s => document.querySelector(s);
+    const $$ = s => document.querySelectorAll(s);
+    $('#year').textContent = new Date().getFullYear();
+    const STORAGE_KEY = 'saga3_members_v2';
+    const loadMembers = () => JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    const saveMembers = (arr) => localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+    const escapeHtml = (str) => String(str || '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m]);
+    const renderTable = () => {
+      const tbody = $('#membersTable tbody');
+      tbody.innerHTML = '';
+      const members = loadMembers();
+      members.forEach((m, i) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${escapeHtml(m.org)}</td>
+          <td>${escapeHtml(m.name)}</td>
+          <td><a href="mailto:${m.email}" style="color:var(--accent); text-decoration:none;">${escapeHtml(m.email)}</a></td>
+          <td>${escapeHtml(m.tier)}</td>
+          <td>${escapeHtml(m.country)}</td>
+          <td style="font-size:0.8rem; color:#6b7280;">${new Date(m.ts).toLocaleDateString()}</td>
+          <td><button class="delete-btn" data-id="${i}">Delete</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+      $$('.delete-btn').forEach(btn => {
+        btn.onclick = () => {
+          const i = btn.dataset.id;
+          const arr = loadMembers();
+          arr.splice(i, 1);
+          saveMembers(arr);
+          renderTable();
+        };
+      });
+    };
+    $('#applyForm').onsubmit = (e) => {
+      e.preventDefault();
+      const data = {
+        org: $('#org').value.trim(),
+        name: $('#name').value.trim(),
+        email: $('#email').value.trim(),
+        tier: $('#tier').value,
+        country: $('#country').value.trim(),
+        ts: Date.now()
+      };
+      if (!data.org || !data.name || !data.email || !data.tier || !data.country) {
+        $('#formStatus').innerHTML = '<span class="error">Please fill all fields.</span>';
+        return;
+      }
+      const members = loadMembers();
+      members.unshift(data);
+      saveMembers(members);
+      $('#formStatus').innerHTML = '<span class="success">Application saved! (Demo)</span>';
+      $('#org').value = $('#name').value = $('#email').value = $('#country').value = '';
+      $('#tier').value = '';
+      setTimeout(() => $('#formStatus').innerHTML = '', 5000);
+      renderTable();
+    };
+    $('#openDashboard').onclick = () => {
+      $('#modal').classList.add('open');
+      renderTable();
+    };
+    $('#closeModal').onclick = () => $('#modal').classList.remove('open');
+    window.onclick = (e) => { if (e.target === $('#modal')) $('#modal').classList.remove('open'); };
+    $('#exportCsv').onclick = () => {
+      const members = loadMembers();
+      if (!members.length) return alert('No members to export.');
+      const csv = [
+        ['Org', 'Name', 'Email', 'Tier', 'Country', 'Joined'],
+        ...members.map(m => [m.org, m.name, m.email, m.tier, m.country, new Date(m.ts).toLocaleString()])
+      ].map(row => row.map(v => `"${(v+'').replace(/"/g, '""')}"`).join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'saga3_members.csv'; a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    };
+    $('#clearAll').onclick = () => {
+      if (confirm('Delete all member data?')) {
+        localStorage.removeItem(STORAGE_KEY);
+        renderTable();
+      }
+    };
+    $('#learnMore').onclick = () => document.querySelector('.platform').scrollIntoView({ behavior: 'smooth' });
+    renderTable();
+  </script>
 </body>
 </html>
