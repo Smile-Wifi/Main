@@ -1,60 +1,102 @@
-// sw.js  (place in the site root, same level as index.html)
-const CACHE_NAME = 'smile-wifi-v1';
+// ===============================
+// Smile Wifi Cache System
+// GitHub Pages Compatible
+// ===============================
 
-// Pre-cache the shell (HTML + critical assets)
-const PRECACHE = [
-  '/',
-  '/index.html',
-  '/sw.js',
-  '/media/background/bg.mp4',
-  '/media/icons/banner.png',
-  '/media/icons/nest.png',
-  '/media/icons/crible.png',
-  '/media/video-player/ad3.mp4',
-  '/audio/intro.mp3',
-  // Add more critical files here if you want
+const CACHE_NAME = "smile-wifi-v1";
+
+// IMPORTANT: Add your asset folders here
+const ASSETS = [
+  "/", 
+  "index.html",
+
+  // Media
+  "media/background/bg.mp4",
+  "media/icons/nest.png",
+  "media/icons/banner.png",
+  
+  // Add folders (GitHub won’t auto cache folders)
+  // Icons
+  "media/icons/CampusDC.png",
+  "media/icons/smileflex.png",
+  "media/icons/wecantilan.png",
+  "media/icons/band.png",
+  "media/icons/videoke.png",
+  "media/icons/musify.png",
+  "media/icons/reeltalk.png",
+  "media/icons/sports.png",
+  "media/icons/jollibee.png",
+  "media/icons/NSPYR.png",
+  "media/icons/tools.png",
+  "media/icons/smileshop.png",
+  "media/icons/freedom.png",
+  "media/icons/wikipedia.png",
+  "media/icons/shop2.png",
+  "media/icons/AWDT.png",
+  "media/icons/politics.png",
+  "media/icons/emergency.png",
+  "media/icons/hbo.png",
+  "media/icons/news.png",
+  "media/icons/youtube.png",
+  "media/icons/netflex.png",
+  "media/icons/x.png",
+  "media/icons/saga.png",
+  "media/icons/Home.png",
+
+  // GIFs
+  "media/GIF/earth.gif",
+  "media/GIF/Mars.gif",
+
+  // Videos
+  "media/video-player/ad3.mp4",
+
+  // Audio
+  "audio/intro.mp3"
 ];
 
-// Install → cache the shell
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(PRECACHE))
-  );
-});
-
-// Fetch → cache-first, then network + cache
-self.addEventListener('fetch', e => {
-  if (e.request.method !== 'GET') return;
-  e.respondWith(
-    caches.match(e.request).then(cached => {
-      // Return cached version if we have it
-      if (cached) return cached;
-
-      // Otherwise fetch from network
-      return fetch(e.request).then(netRes => {
-        // Cache successful GET responses (status 200)
-        if (netRes && netRes.status === 200 && netRes.type === 'basic') {
-          const clone = netRes.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
-        }
-        return netRes;
-      }).catch(() => {
-        // Offline fallback (optional)
-        if (e.request.destination === 'document') {
-          return caches.match('/index.html');
-        }
-      });
+// ===============================
+// INSTALL — cache all assets
+// ===============================
+self.addEventListener("install", (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => {
+      console.log("Caching assets...");
+      return cache.addAll(ASSETS);
     })
   );
+  self.skipWaiting();
 });
 
-// Activate → delete old caches
-self.addEventListener('activate', e => {
-  const expected = [CACHE_NAME];
-  e.waitUntil(
-    caches.keys().then(keys => Promise.all(
-      keys.filter(k => !expected.includes(k)).map(k => caches.delete(k))
-    ))
+// ===============================
+// ACTIVATE — cleanup old cache
+// ===============================
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(
+        keys
+          .filter(key => key !== CACHE_NAME)
+          .map(key => caches.delete(key))
+      )
+    )
   );
+  self.clients.claim();
+});
 
+// ===============================
+// FETCH — network first, fallback to cache
+// ===============================
+self.addEventListener("fetch", (event) => {
+  event.respondWith(
+    fetch(event.request)
+      .then((response) => {
+        // update cache
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then(cache => {
+          cache.put(event.request, clone);
+        });
+        return response;
+      })
+      .catch(() => caches.match(event.request))
+  );
 });
