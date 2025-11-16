@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Users</title>
+  <script type="module" src="../shared/app.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen font-sans">
+
+<header class="bg-red-600 text-white p-4 flex justify-between items-center">
+  <h1 class="text-xl font-bold">Manage Users</h1>
+  <a href="dashboard.html" class="bg-white text-red-600 px-3 py-1 rounded">Back</a>
+</header>
+
+<main class="p-6">
+  <div id="userList" class="space-y-4"></div>
+
+  <script type="module">
+    import { supabase } from '../shared/app.js';
+
+    async function renderUsers() {
+      const { data: users, error } = await supabase.from('profiles').select('*');
+      if (error) return console.error(error);
+
+      const list = document.getElementById('userList');
+      list.innerHTML = users.map(u => `
+        <div class="bg-white p-4 rounded shadow flex justify-between items-center">
+          <div>
+            <p><strong>${u.full_name}</strong> (${u.email})</p>
+            <p class="text-sm text-gray-600">Role: ${u.role}</p>
+          </div>
+          <div class="space-x-2">
+            <button onclick="changeRole('${u.id}')" class="bg-yellow-500 text-white px-2 py-1 rounded">Change Role</button>
+            <button onclick="disableUser('${u.id}')" class="bg-red-600 text-white px-2 py-1 rounded">Disable</button>
+            <button onclick="resetPassword('${u.id}')" class="bg-indigo-600 text-white px-2 py-1 rounded">Reset Password</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function changeRole(id) {
+      const newRole = prompt('Enter new role (student, teacher, admin):');
+      if (!newRole) return;
+      const { error } = await supabase.from('profiles').update({ role: newRole }).eq('id', id);
+      if (error) return alert(error.message);
+      renderUsers();
+    }
+
+    async function disableUser(id) {
+      if (!confirm('Disable this user?')) return;
+      await supabase.auth.admin.disableUser(id);
+      renderUsers();
+    }
+
+    async function resetPassword(id) {
+      if (!confirm('Reset password for this user?')) return;
+      await supabase.auth.admin.resetUserPassword(id);
+      alert('Password reset link sent');
+    }
+
+    renderUsers();
+  </script>
+</main>
+</body>
+</html>

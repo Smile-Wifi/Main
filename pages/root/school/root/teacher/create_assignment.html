@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Assignment</title>
+  <script type="module" src="../shared/app.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen font-sans">
+
+  <header class="bg-indigo-600 text-white p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">Create Assignment</h1>
+    <a href="dashboard.html" class="bg-white text-indigo-600 px-3 py-1 rounded">Back</a>
+  </header>
+
+  <main class="p-6">
+    <form id="createForm" class="bg-white p-6 rounded shadow max-w-lg mx-auto space-y-4">
+      <label class="block">
+        Title
+        <input type="text" id="titleInput" class="w-full border p-2 rounded" required>
+      </label>
+      <label class="block">
+        Description
+        <textarea id="descInput" class="w-full border p-2 rounded"></textarea>
+      </label>
+      <label class="block">
+        Due Date
+        <input type="date" id="dueInput" class="w-full border p-2 rounded" required>
+      </label>
+      <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded">Create</button>
+    </form>
+  </main>
+</body>
+</html>

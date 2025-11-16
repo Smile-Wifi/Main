@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messages</title>
+  <script type="module" src="../shared/app.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen font-sans">
+
+  <header class="bg-indigo-600 text-white p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">Messages</h1>
+    <a href="dashboard.html" class="bg-white text-indigo-600 px-3 py-1 rounded">Back</a>
+  </header>
+
+  <main class="p-6 flex flex-col h-[80vh]">
+    <div id="messageList" class="flex-1 overflow-y-auto space-y-2 mb-4"></div>
+    <form id="messageForm" class="flex">
+      <input type="text" id="messageInput" placeholder="Type message..."
+        class="flex-1 p-2 border rounded-l" required>
+      <button type="submit" class="bg-indigo-600 text-white px-4 rounded-r">Send</button>
+    </form>
+  </main>
+
+  <script type="module">
+    import { supabase } from './app.js';
+    const form = document.getElementById('messageForm');
+    const input = document.getElementById('messageInput');
+    const list = document.getElementById('messageList');
+    const user = supabase.auth.user();
+
+    async function fetchMessages() {
+      const { data } = await supabase.from('messages').select('*').order('created_at');
+      list.innerHTML = data.map(m => `<div class="bg-white p-2 rounded shadow">${m.content}</div>`).join('');
+    }
+
+    fetchMessages();
+
+    supabase.from('messages').on('INSERT', payload => {
+      list.innerHTML += `<div class="bg-white p-2 rounded shadow">${payload.new.content}</div>`;
+      list.scrollTop = list.scrollHeight;
+    }).subscribe();
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      await supabase.from('messages').insert([{ content: input.value, user_id: user.id }]);
+      input.value = '';
+    });
+  </script>
+
+</body>
+</html>

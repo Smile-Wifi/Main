@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login – Academix</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 grid place-items-center min-h-screen">
+  <div class="bg-white p-8 rounded shadow w-full max-w-sm">
+    <h2 class="text-2xl font-bold mb-6 text-center">Who are you?</h2>
+    <button onclick="login('student')"
+            class="w-full mb-4 bg-indigo-600 text-white py-2 rounded">
+      Student
+    </button>
+    <button onclick="login('teacher')"
+            class="w-full bg-green-600 text-white py-2 rounded">
+      Teacher
+    </button>
+  </div>
+
+  <script>
+    function login(role) {
+      localStorage.setItem('role', role);
+      location.href = role === 'student'
+        ? '../student/dashboard.html'
+        : '../teacher/dashboard.html';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics</title>
+  <script type="module" src="../shared/app.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen font-sans">
+
+<header class="bg-red-600 text-white p-4 flex justify-between items-center">
+  <h1 class="text-xl font-bold">Analytics</h1>
+  <a href="dashboard.html" class="bg-white text-red-600 px-3 py-1 rounded">Back</a>
+</header>
+
+<main class="p-6">
+  <div id="stats" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+
+  <script type="module">
+    import { supabase } from '../shared/app.js';
+
+    async function renderAnalytics() {
+      const { data: assignments } = await supabase.from('assignments').select('*');
+      const { data: submissions } = await supabase.from('submissions').select('*');
+      const { data: grades } = await supabase.from('grades').select('*');
+
+      const stats = document.getElementById('stats');
+      stats.innerHTML = `
+        <div class="bg-white p-6 rounded shadow">
+          <h2 class="font-semibold text-lg">Total Assignments</h2>
+          <p class="text-2xl">${assignments.length}</p>
+        </div>
+        <div class="bg-white p-6 rounded shadow">
+          <h2 class="font-semibold text-lg">Total Submissions</h2>
+          <p class="text-2xl">${submissions.length}</p>
+        </div>
+        <div class="bg-white p-6 rounded shadow">
+          <h2 class="font-semibold text-lg">Total Grades Recorded</h2>
+          <p class="text-2xl">${grades.length}</p>
+        </div>
+      `;
+    }
+
+    renderAnalytics();
+  </script>
+</main>
+</body>
+</html>

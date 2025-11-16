@@ -1,0 +1,3 @@
+/* tiny custom tweaks – Tailwind does the heavy lifting */
+html { scroll-behavior: smooth; }
+body { -webkit-font-smoothing: antialiased; }
