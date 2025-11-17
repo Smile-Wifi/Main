@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saint Michael College, Cantilan, Inc. - Touching Lives Through The Years</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1e3a8a;
+            --secondary-color: #fbbf24;
+            --accent-color: #dc2626;
+            --text-color: #1f2937;
+            --light-bg: #f9fafb;
+            --white: #ffffff;
+        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;line-height:1.6;color:var(--text-color);overflow-x:hidden}
+
+        /* HEADER (unchanged) */
+        header{position:fixed;top:0;width:100%;background:var(--white);box-shadow:0 2px 10px rgba(0,0,0,.1);z-index:1000;padding:40px 0;transition:all .3s ease}
+        .header-container{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
+        .logo{display:flex;align-items:center;gap:15px}
+        .logo img{width:60px;height:60px;border-radius:50%;background:var(--primary-color);display:flex;align-items:center;justify-content:center;color:var(--white);font-weight:bold;font-size:24px}
+        .logo-text h1{font-size:1.5rem;color:var(--primary-color)}
+        .logo-text p{font-size:.9rem;color:#6b7280}
+        nav ul{display:flex;list-style:none;gap:30px}
+        nav a{text-decoration:none;color:var(--text-color);font-weight:500;position:relative}
+        nav a::after{content:'';position:absolute;bottom:-5px;left:0;width:0;height:2px;background:var(--primary-color);transition:.3s}
+        nav a:hover{color:var(--primary-color)}
+        nav a:hover::after{width:100%}
+        .hamburger{display:none;flex-direction:column;gap:4px;cursor:pointer}
+        .hamburger span{width:25px;height:3px;background:var(--primary-color);transition:.3s}
+
+        /* HERO (unchanged) */
+        .hero{height:100vh;background:linear-gradient(rgba(30,58,138,.7),rgba(30,58,138,.7)),url('bg.jpg') center/cover;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--white)}
+        .hero-content h1{font-size:3.5rem;margin-bottom:20px;animation:fadeInUp 1s ease}
+        .hero-content p{font-size:1.3rem;margin-bottom:30px;animation:fadeInUp 1s ease .2s both}
+        .cta-button{display:inline-block;padding:15px 30px;background:var(--secondary-color);color:var(--primary-color);border-radius:50px;font-weight:bold;text-decoration:none;transition:all .3s ease;animation:fadeInUp 1s ease .4s both}
+        .cta-button:hover{transform:translateY(-3px);box-shadow:0 10px 20px rgba(0,0,0,.2)}
+
+        /* NEW UPDATES BAR */
+        .updates-bar{background:var(--white);padding:25px 20px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+        .updates-container{max-width:1200px;margin:0 auto;display:flex;gap:15px;justify-content:center}
+        .update-btn{flex:1 1 0;text-align:center;padding:14px 10px;background:var(--primary-color);color:var(--white);border-radius:8px;font-weight:600;text-decoration:none;transition:background .3s,transform .3s;letter-spacing:.5px}
+        .update-btn:hover{background:#152c6e;transform:translateY(-2px)}
+        .update-btn i{margin-right:8px;font-size:1.1rem}
+
+        /* MAIN SECTIONS (unchanged) */
+        main{margin-top:0}
+        .section{padding:80px 20px;max-width:1200px;margin:0 auto}
+        .section-title{text-align:center;font-size:2.5rem;color:var(--primary-color);margin-bottom:50px;position:relative}
+        .section-title::after{content:'';position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);width:80px;height:4px;background:var(--secondary-color)}
+        .about{background:var(--light-bg)}
+        .about-content{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
+        .about-text h3{font-size:1.8rem;color:var(--primary-color);margin-bottom:20px}
+        .about-text p{margin-bottom:15px;line-height:1.8}
+        .about-stats{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:30px}
+        .stat{background:var(--white);padding:20px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,.1);text-align:center}
+        .stat-number{font-size:2.5rem;font-weight:bold;color:var(--primary-color)}
+        .stat-label{color:#6b7280;margin-top:5px}
+        .programs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px}
+        .program-card{background:var(--white);border-radius:15px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.1);transition:transform .3s}
+        .program-card:hover{transform:translateY(-10px)}
+        .program-header{background:var(--primary-color);color:var(--white);padding:20px;text-align:center}
+        .program-header i{font-size:2.5rem;margin-bottom:10px}
+        .program-body{padding:25px}
+        .program-body h4{color:var(--primary-color);margin-bottom:15px;font-size:1.3rem}
+        .program-body ul{list-style:none;padding:0}
+        .program-body li{padding:5px 0;padding-left:20px;position:relative}
+        .program-body li::before{content:'✓';position:absolute;left:0;color:var(--secondary-color);font-weight:bold}
+        .contact{background:var(--primary-color);color:var(--white)}
+        .contact-content{display:grid;grid-template-columns:1fr 1fr;gap:50px}
+        .contact-info h3{font-size:1.8rem;margin-bottom:20px}
+        .contact-item{display:flex;align-items:center;gap:15px;margin-bottom:20px}
+        .contact-item i{font-size:1.2rem;color:var(--secondary-color)}
+        .contact-form{background:rgba(255,255,255,.1);padding:30px;border-radius:15px;backdrop-filter:blur(10px)}
+        .form-group{margin-bottom:20px}
+        .form-group label{display:block;margin-bottom:5px;font-weight:500}
+        .form-group input,.form-group textarea{width:100%;padding:12px;border:none;border-radius:8px;background:rgba(255,255,255,.9);color:var(--text-color)}
+        .form-group textarea{resize:vertical;min-height:100px}
+        .submit-btn{background:var(--secondary-color);color:var(--primary-color);padding:12px 30px;border:none;border-radius:50px;font-weight:bold;cursor:pointer;transition:all .3s ease}
+        .submit-btn:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(0,0,0,.2)}
+        footer{background:#1e293b;color:var(--white);text-align:center;padding:40px 20px}
+        .social-links a{color:var(--white);font-size:1.5rem;margin:0 15px;transition:color .3s}
+        .social-links a:hover{color:var(--secondary-color)}
+
+        /* ANIMATIONS */
+        @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+        /* MOBILE RESPONSIVE */
+        @media(max-width:768px){
+            header{padding:20px 0}
+            .hamburger{display:flex}
+            nav{position:fixed;top:0;right:-100%;width:80%;max-width:300px;height:100vh;background:var(--white);box-shadow:-5px 0 15px rgba(0,0,0,.1);transition:right .3s;z-index:1001}
+            nav.active{right:0}
+            nav ul{flex-direction:column;padding:80px 30px 30px;gap:20px}
+            .hero-content h1{font-size:2.5rem}
+            .hero-content p{font-size:1.1rem}
+            .updates-container{flex-direction:column}
+            .about-content,.contact-content{grid-template-columns:1fr;gap:30px}
+            .about-stats{grid-template-columns:1fr}
+            .programs-grid{grid-template-columns:1fr}
+            .section{padding:60px 20px}
+            .section-title{font-size:2rem}
+        }
+        .overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:1000;opacity:0;visibility:hidden;transition:all .3s ease}
+        .overlay.active{opacity:1;visibility:visible}
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="smcci.png" alt="SMCCI Logo">
+                <div class="logo-text">
+                    <h1>Saint Michael College</h1>
+                    <p>Cantilan, Inc.</p>
+                </div>
+            </div>
+            <nav id="navbar">
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#academics">Academics</a></li>
+                    <li><a href="#admissions">Admissions</a></li>
+                    <li><a href="#campus-life">Campus Life</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="root/login.html">Teacher Login</a></li>
+                    <li><a href="root/login.html">Student Login</a></li>
+                </ul>
+            </nav>
+            <div class="hamburger" id="hamburger">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </header>
+    <div class="overlay" id="overlay"></div>
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Welcome to Saint Michael College</h1>
+            <p>Touching Lives Through The Years - Molding Minds, Forming Hearts</p>
+            <a href="#about" class="cta-button">Discover Our Legacy</a>
+        </div>
+    </section>
+
+    <!-- NEW UPDATES BAR -->
+    <section class="updates-bar">
+        <div class="updates-container">
+            <a href="announcements.html" class="update-btn"><i class="fas fa-bullhorn"></i>Announcements</a>
+            <a href="monthly-activity.html" class="update-btn"><i class="fas fa-calendar-alt"></i>Monthly Activity</a>
+            <a href="gallery.html" class="update-btn"><i class="fas fa-images"></i>Gallery</a>
+            <a href="dashboard.html" class="update-btn"><i class="fas fa-tachometer-alt"></i>Dashboard</a>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT (rest of your original sections) -->
+    <main>
+        <section class="section about" id="about">
+            <h2 class="section-title">About SMCCI</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>A Century of Excellence in Catholic Education</h3>
+                    <p>Founded in 1915 by Rev. Fr. Joseph Menken, MSC, Saint Michael College, Cantilan, Inc. is a private Catholic higher education institution dedicated to providing integral, quality, Catholic education.</p>
+                    <p>Located in the quiet lush green municipality of Cantilan, Surigao del Sur, we stand as a lighthouse guiding the young to the safe shores of knowledge and faith, committed to proclaiming Jesus Christ as the Good News to all.</p>
+                    <p>Our motto "Caritas Christi Urget Nos" (The Charity of Christ Impels Us) inspires us to develop competent, socially responsible professionals and lifelong learners who will serve the Church and society.</p>
+                </div>
+                <div class="about-stats">
+                    <div class="stat"><div class="stat-number">109</div><div class="stat-label">Years of Excellence</div></div>
+                    <div class="stat"><div class="stat-number">14</div><div class="stat-label">PAASCU Accredited Programs</div></div>
+                    <div class="stat"><div class="stat-number">1000+</div><div class="stat-label">Students Enrolled</div></div>
+                    <div class="stat"><div class="stat-number">1915</div><div class="stat-label">Year Established</div></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="academics">
+            <h2 class="section-title">Academic Programs</h2>
+            <div class="programs-grid">
+                <div class="program-card">
+                    <div class="program-header"><i class="fas fa-graduation-cap"></i><h3>Basic Education</h3></div>
+                    <div class="program-body">
+                        <h4>Elementary & High School</h4>
+                        <ul><li>Kindergarten to Grade 6</li><li>Junior High School (Grades 7-10)</li><li>Senior High School (Grades 11-12)</li><li>STEM, ABM, HUMSS, TVL Tracks</li></ul>
+                    </div>
+                </div>
+                <div class="program-card">
+                    <div class="program-header"><i class="fas fa-user-graduate"></i><h3>College Programs</h3></div>
+                    <div class="program-body">
+                        <h4>Bachelor's Degrees</h4>
+                        <ul><li>Elementary Education (BEEd)</li><li>Secondary Education (BSEd)</li><li>Business Administration</li><li>Arts Major in English</li></ul>
+                    </div>
+                </div>
+                <div class="program-card">
+                    <div class="program-header"><i class="fas fa-church"></i><h3>Christian Formation</h3></div>
+                    <div class="program-body">
+                        <h4>Spiritual Development</h4>
+                        <ul><li>Catechism Classes</li><li>Mass & Sacraments</li><li>Retreat & Recollections</li><li>Community Outreach</li></ul>
+                    </div>
+                </div>
+                <div class="program-card">
+                    <div class="program-header"><i class="fas fa-users"></i><h3>Student Services</h3></div>
+                    <div class="program-body">
+                        <h4>Support Programs</h4>
+                        <ul><li>Guidance & Counseling</li><li>Library Services</li><li>Sports & Athletics</li><li>Clubs & Organizations</li></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section contact" id="contact">
+            <h2 class="section-title">Contact Us</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Get in Touch</h3>
+                    <div class="contact-item"><i class="fas fa-map-marker-alt"></i><div><strong>Address:</strong><br>National Highway, Brgy. 2, Cantilan, Surigao del Sur 8312</div></div>
+                    <div class="contact-item"><i class="fas fa-phone"></i><div><strong>Phone:</strong><br>(086) 214-3456</div></div>
+                    <div class="contact-item"><i class="fas fa-envelope"></i><div><strong>Email:</strong><br>info@smcci.edu.ph</div></div>
+                    <div class="contact-item"><i class="fas fa-globe"></i><div><strong>Website:</strong><br>www.smcci.edu.ph</div></div>
+                </div>
+                <form class="contact-form" id="contactForm">
+                    <h3>Send us a Message</h3>
+                    <div class="form-group"><label>Full Name</label><input type="text" name="name" required></div>
+                    <div class="form-group"><label>Email Address</label><input type="email" name="email" required></div>
+                    <div class="form-group"><label>Subject</label><input type="text" name="subject" required></div>
+                    <div class="form-group"><label>Message</label><textarea name="message" required></textarea></div>
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <h3>Saint Michael College, Cantilan, Inc.</h3>
+            <p>"Caritas Christi Urget Nos" - The Charity of Christ Impels Us</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+            <p>&copy; 2024 Saint Michael College, Cantilan, Inc. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        /* ===== ORIGINAL SCRIPTS (unchanged) ===== */
+        const hamburger = document.getElementById('hamburger');
+        const navbar    = document.getElementById('navbar');
+        const overlay   = document.getElementById('overlay');
+
+        hamburger.addEventListener('click', () => {
+            navbar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = navbar.classList.contains('active') ? 'hidden' : '';
+        });
+        overlay.addEventListener('click', () => {
+            navbar.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                navbar.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            header.style.padding   = window.scrollY > 100 ? '20px 0' : '40px 0';
+            header.style.boxShadow = window.scrollY > 100 ? '0 2px 20px rgba(0,0,0,.1)' : '0 2px 10px rgba(0,0,0,.1)';
+        });
+        document.getElementById('contactForm').addEventListener('submit', e => {
+            e.preventDefault();
+            const data = Object.fromEntries(new FormData(e.target));
+            alert(`Thank you for your message, ${data.name}! We'll get back to you soon at ${data.email}.`);
+            e.target.reset();
+        });
+
+        /* ===== FADE-IN ON SCROLL ===== */
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.section').forEach(sec => {
+            sec.style.opacity = '0';
+            sec.style.transform = 'translateY(30px)';
+            sec.style.transition = 'opacity .6s ease, transform .6s ease';
+            observer.observe(sec);
+        });
+
+        /* ===== PAGE LOAD FADE-IN ===== */
+        document.body.style.opacity = '0';
+        document.body.style.transition = 'opacity .5s ease';
+        window.addEventListener('load', () => document.body.style.opacity = '1');
+    </script>
+</body>
+</html>
