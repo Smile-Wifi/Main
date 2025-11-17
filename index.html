@@ -8,6 +8,7 @@
   <link rel="preload" as="video" href="media/background/bg.webm" type="video/webm">
   <link rel="preload" as="video" href="media/background/bg.mp4" type="video/mp4">
   <link rel="icon" href="media/icons/nest.png" type="image/png">
+  <link rel="manifest" href="manifest.json">
 
   <meta name="theme-color" content="#00d1ff">
   <meta name="description" content="Smile Wifi — your offline local portal for apps, media, weather, and fun.">
@@ -15,21 +16,13 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <meta http-equiv="Cache-Control" content="public, max-age=3600, must-revalidate">
-  <meta http-equiv="Expires" content="Thu, 01 Jan 1970 00:00:00 GMT">
-
   <style>
-    * { box-sizing: border-box; margin:0; padding:0; }
+    * { box-sizing: border-box; margin:-3px; padding:0; }
     html,body { height:100%; font-family:Arial, Helvetica, sans-serif; color:#fff; overflow-x:hidden; }
     :root { --accent:#00d1ff; }
     a { text-decoration:none; color:#fff; }
 
     #bg-video { position:fixed; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:-2; pointer-events:none; }
-
-    #welcomeOverlay { position:fixed; inset:0; background:rgba(0,0,0,0.9); display:flex; justify-content:center; align-items:center; flex-direction:column; z-index:9999; text-align:center; transition:opacity .5s ease; }
-    #welcomeOverlay img { width:160px; animation:pulse 2s infinite; cursor:pointer; }
-    #welcomeOverlay p { margin-top:20px; font-size:18px; color:var(--accent); opacity:.9; }
-    @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
 
     .navbar { position:fixed; top:12px; left:-20px; z-index:1300; padding:20px; }
     .hamburger { background:rgba(0,0,0,.5); color:#fff; border:0; font-size:1.6rem; padding:8px 12px; border-radius:8px; cursor:pointer; }
@@ -39,8 +32,8 @@
     .nav-link:hover { background:rgba(255,255,255,.08); color:#fff; }
     .nav-icon { width:20px; height:20px; object-fit:contain; }
 
-    main { padding-bottom:100px; position:relative; z-index:1; }
-    .local-player { margin-top:80px; width:100%; display:flex; justify-content:center; align-items:center; flex-direction:column; padding:0 10px; }
+    main { padding-bottom:10px; position:relative; z-index:1; }
+    .local-player { margin-top:80px; width:100%; display:flex; justify-content:center; align-items:center; flex-direction:column; }
     .player-box { width:100%; max-width:720px; background:rgba(0,0,0,.8); border-radius:12px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,.6); }
     .player-box video { width:100%; height:auto; display:block; border:none; outline:none; }
 
@@ -62,7 +55,7 @@
     .dot { width:8px; height:8px; border-radius:999px; background:rgba(255,255,255,.35); border:0; cursor:pointer; }
     .dot.active { background:var(--accent); }
 
-    .carousel { position:absolute; bottom:2px; left:0; right:0; display:flex; justify-content:center; gap:18px; padding:10px 12px; z-index:1000; }
+    .carousel { position:relative; bottom:2px; left:0; right:0; display:flex; justify-content:center; gap:18px; padding:10px 12px; z-index:1000; }
     .carousel-item img { width:100px; height:80px; border-radius:8px; object-fit:contain; transition:transform .2s ease; }
     .carousel-item img:hover { transform:scale(1.1); }
 
@@ -78,7 +71,12 @@
     .close-overlay { position:absolute; top:16px; right:16px; background:rgba(255,255,255,.15); color:#fff; border:0; width:44px; height:44px; border-radius:50%; cursor:pointer; font-size:20px; font-weight:bold; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(4px); transition:all .3s ease; z-index:1600; }
     .close-overlay:hover { background:var(--accent); transform:scale(1.1); }
 
-    @media(max-width:480px){ #allAppsGrid{grid-template-columns:repeat(3,1fr); gap:16px;} .all-app-item img{width:60px;height:60px;} .close-overlay{top:12px;right:12px;width:40px;height:40px;font-size:18px;} }
+    @media(max-width:480px){
+      #allAppsGrid{grid-template-columns:repeat(3,1fr); gap:16px;}
+      .all-app-item img{width:60px;height:60px;}
+      .icon-item img { width:50px; height:50px; }
+      .close-overlay{top:12px;right:12px;width:40px;height:40px;font-size:18px;}
+    }
   </style>
 </head>
 <body>
@@ -103,25 +101,23 @@
 
   <main>
     <section class="local-player">
-    <div class="player-box">
-      <video id="localVideo" playsinline autoplay muted loop preload="metadata" poster="media/icons/nest.png">
-        <source src="media/video-player/ad3.mp4" type="video/mp4">
-      </video>
-    </div>
-  </section>
+      <div class="player-box">
+        <video id="localVideo" playsinline autoplay muted loop preload="metadata" poster="media/icons/nest.png">
+          <source src="media/video-player/ad3.mp4" type="video/mp4">
+        </video>
+      </div>
+    </section>
 
-  <!-- Search -->
-  <section class="search-section">
-    <a href="index.html">
-      <img src="media/icons/crible.png" alt="Nest Logo" class="logo-img" loading="lazy">
-      <p>Cached response on Intranet based bandwidth linked ecosystem</p>
-    </a>
-    <input type="search" class="search-box" placeholder="Search..." id="searchInput">
-  </section>
+    <section class="search-section">
+      <a href="index.html">
+        <img src="media/icons/crible.png" alt="Nest Logo" class="logo-img" loading="lazy">
+        <p>Cached response on Intranet based bandwidth linked ecosystem</p>
+      </a>
+      <input type="search" class="search-box" placeholder="Search..." id="searchInput">
+    </section>
 
     <section class="icon-section">
       <div class="icon-wrapper" id="iconWrapper">
-        <!-- All slides copied from your previous code (with lazy loading) -->
         <!-- Slide 1 -->
         <div class="icon-grid">
           <div class="icon-item"><a href="pages/root/campusDC/index.html"><img src="media/icons/CampusDC.png" alt="CampusDC" loading="lazy"><p>CampusDC</p></a></div>
@@ -169,23 +165,58 @@
   </main>
 
   <div id="allAppsOverlay">
-    <button class="close-overlay" id="closeOverlay">&times;</button>
+    <button class="close-overlay" id="closeOverlay" aria-label="Close overlay">&times;</button>
     <div id="allAppsGrid"></div>
   </div>
-  
-   <section class="carousel">
+
+  <section class="carousel">
     <div class="carousel-item"><a href="http://google.com"><img src="media/GIF/earth.gif" alt="Earth"></a></div>
     <div class="carousel-item" id="homeBtn"><img src="media/icons/Home.png" alt="All Apps"></div>
     <div class="carousel-item"><a href="cribble.html"><img src="media/GIF/Mars.gif" alt="Mars"></a></div>
   </section>
-</main>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Welcome overlay
-      const overlay = document.getElementById('welcomeOverlay');
-      document.getElementById('welcomeLogo').addEventListener('click', () => overlay.style.display='none');
+    const allAppsData = [
+      { href: "pages/root/campusDC/index.html", img: "media/icons/campusDC.png", name: "CampusDC" },
+      { href: "pages/root/smileflix/index.php", img: "media/icons/smileflix.png", name: "SmileFlix" },
+      { href: "pages/root/documents/index.html", img: "media/icons/wecantilan.png", name: "PublicDoc" },
+      { href: "pages/root/gradio/index.html", img: "media/icons/gradio.png", name: "Gradio" },
+      { href: "pages/root/karaoke/index.php", img: "media/icons/videoke.png", name: "Karaoke" },
+      { href: "pages/root/musify/index.php", img: "media/icons/musify.png", name: "Musify" },
+      { href: "pages/root/reeltalk/index.php", img: "media/icons/reeltalk.png", name: "ReelTalk" },
+      { href: "pages/root/sports/index.php", img: "media/icons/sports.png", name: "Sports" },
+      { href: "pages/root/jollibee/index.html", img: "media/icons/jollibee.png", name: "Jollibee" },
+      { href: "pages/root/showtime/index.php", img: "media/icons/showtime.png", name: "Showtime" },
+      { href: "pages/root/smiletools/index.html", img: "media/icons/tools.png", name: "SmileTools" },
+      { href: "pages/root/dashboard/index.html", img: "media/icons/dashboard.png", name: "Dashboard" },
+      { href: "pages/root/freedom/index.html", img: "media/icons/freedom.png", name: "Freedom" },
+      { href: "https://en.wikipedia.org/", img: "media/icons/wikipedia.png", name: "Wikipedia", external: true },
+      { href: "pages/root/shop/index.html", img: "media/icons/shop2.png", name: "LocalBiz" },
+      { href: "pages/root/skits/index.html", img: "media/icons/skits.png", name: "Skits" },
+      { href: "pages/root/politics/index.html", img: "media/icons/politics.png", name: "Politics" },
+      { href: "pages/root/ebooks/index.html", img: "media/icons/ebooks.png", name: "eBooks" }
+    ];
 
+    function showAllApps() {
+      const grid = document.getElementById('allAppsGrid');
+      grid.innerHTML = allAppsData.map(app => `
+        <div class="all-app-item">
+          <a href="${app.href}" ${app.external ? 'target="_blank"' : ''}>
+            <img src="${app.img}" alt="${app.name}">
+            <p>${app.name}</p>
+          </a>
+        </div>
+      `).join('');
+      document.getElementById('allAppsOverlay').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function hideAllApps() {
+      document.getElementById('allAppsOverlay').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
       // Nav toggle
       const navToggle = document.getElementById('nav-toggle');
       const sideNav = document.getElementById('side-nav');
@@ -194,17 +225,40 @@
       // Slide dots
       const iconWrapper = document.getElementById('iconWrapper');
       const dots = document.querySelectorAll('.dot');
+
+      function updateActiveDot() {
+        const slideWidth = iconWrapper.querySelector('.icon-grid').clientWidth;
+        const index = Math.round(iconWrapper.scrollLeft / slideWidth);
+        dots.forEach(d => d.classList.remove('active'));
+        if(dots[index]) dots[index].classList.add('active');
+      }
+
       dots.forEach(dot=>{
         dot.addEventListener('click', ()=> {
+          const slideWidth = iconWrapper.querySelector('.icon-grid').clientWidth;
           const index = parseInt(dot.dataset.index);
-          iconWrapper.scrollTo({left: index*iconWrapper.clientWidth, behavior:'smooth'});
-          dots.forEach(d=>d.classList.remove('active'));
-          dot.classList.add('active');
+          iconWrapper.scrollTo({left: index*slideWidth, behavior:'smooth'});
         });
       });
 
-      // Lazy-load other sections if needed...
+      iconWrapper.addEventListener('scroll', updateActiveDot);
+
+      // All Apps Overlay
+      const homeBtn = document.getElementById('homeBtn');
+      const closeOverlay = document.getElementById('closeOverlay');
+
+      homeBtn.addEventListener('click', showAllApps);
+      closeOverlay.addEventListener('click', hideAllApps);
     });
+
+    // PWA: Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('SW registered', reg))
+          .catch(err => console.error('SW registration failed', err));
+      });
+    }
   </script>
 </body>
 </html>
