@@ -87,11 +87,6 @@
     <source src="media/background/bg.mp4" type="video/mp4">
   </video>
 
-  <div id="welcomeOverlay">
-    <img src="media/icons/banner.png" alt="Welcome Logo" id="welcomeLogo" loading="lazy">
-    <p>Tap the logo to start</p>
-  </div>
-
   <nav class="navbar">
     <button id="nav-toggle" class="hamburger">Menu</button>
     <div id="side-nav" class="side-nav">
@@ -108,20 +103,21 @@
 
   <main>
     <section class="local-player">
-      <div class="player-box">
-        <video id="localVideo" playsinline controls preload="metadata" poster="media/icons/nest.png" muted>
-          <source src="media/video-player/ad3.mp4" type="video/mp4">
-        </video>
-      </div>
-    </section>
+    <div class="player-box">
+      <video id="localVideo" playsinline autoplay muted loop preload="metadata" poster="media/icons/nest.png">
+        <source src="media/video-player/ad3.mp4" type="video/mp4">
+      </video>
+    </div>
+  </section>
 
-    <section class="search-section">
-      <a href="index.html">
-        <img src="media/icons/crible.png" alt="Nest Logo" class="logo-img" loading="lazy">
-        <p>Cached response on Intranet based bandwidth linked ecosystem</p>
-      </a>
-      <input type="search" class="search-box" placeholder="Search..." id="searchInput">
-    </section>
+  <!-- Search -->
+  <section class="search-section">
+    <a href="index.html">
+      <img src="media/icons/crible.png" alt="Nest Logo" class="logo-img" loading="lazy">
+      <p>Cached response on Intranet based bandwidth linked ecosystem</p>
+    </a>
+    <input type="search" class="search-box" placeholder="Search..." id="searchInput">
+  </section>
 
     <section class="icon-section">
       <div class="icon-wrapper" id="iconWrapper">
@@ -176,6 +172,13 @@
     <button class="close-overlay" id="closeOverlay">&times;</button>
     <div id="allAppsGrid"></div>
   </div>
+  
+   <section class="carousel">
+    <div class="carousel-item"><a href="http://google.com"><img src="media/GIF/earth.gif" alt="Earth"></a></div>
+    <div class="carousel-item" id="homeBtn"><img src="media/icons/Home.png" alt="All Apps"></div>
+    <div class="carousel-item"><a href="cribble.html"><img src="media/GIF/Mars.gif" alt="Mars"></a></div>
+  </section>
+</main>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
