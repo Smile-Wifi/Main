@@ -1,35 +1,27 @@
-// musify/sw.js
-const CACHE_NAME = 'musify-cache-v1';
-const CORE_ASSETS = [
+// ✅ Musify Service Worker — caches GitHub raw assets
+const CACHE_NAME = 'musify-cache-v4';
+const OFFLINE_URLS = [
   './',
   './index.html',
   './manifest.json',
+  './style.css',
+  './app.js',
   './sw.js',
-  // add local assets you actually have in this folder (icons, poster etc)
-  './icons/icon-192.png',
-  './icons/icon-512.png'
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css'
 ];
 
-// Helpers
-function isSameOrigin(url) {
-  try {
-    const u = new URL(url);
-    return u.origin === self.location.origin;
-  } catch (e) {
-    return false;
-  }
-}
-
-self.addEventListener('install', (event) => {
+// 🧩 INSTALL — Cache core assets
+self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(CORE_ASSETS))
-      .catch(err => console.warn('SW install error', err))
+      .then(cache => cache.addAll(OFFLINE_URLS))
+      .catch(err => console.warn('SW Install failed:', err))
   );
   self.skipWaiting();
 });
 
-self.addEventListener('activate', (event) => {
+// ♻️ ACTIVATE — Remove old caches
+self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
@@ -38,72 +30,40 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-self.addEventListener('fetch', (event) => {
+// ⚡ FETCH — Network first for navigation, cache first for static assets
+self.addEventListener('fetch', event => {
   const req = event.request;
   const url = new URL(req.url);
 
-  // 1) Do not interfere with external APIs or external video hosts (raw.githubusercontent.com)
-  const blockedHosts = ['api.github.com', 'raw.githubusercontent.com', 'facebook.com', 'twitter.com', 'api.whatsapp.com'];
-  if (blockedHosts.some(h => url.hostname.includes(h))) {
-    return; // let the browser handle it directly
-  }
+  // Skip caching external APIs
+  if (url.hostname.includes('api.github.com') || url.hostname.includes('facebook.com') ||
+      url.hostname.includes('twitter.com') || url.hostname.includes('whatsapp.com')) return;
 
-  // 2) Navigation requests -> network-first with fallback to cached index.html
-  if (req.mode === 'navigate') {
+  // Navigation requests → Network first
+  if (req.mode === 'navigate' || req.destination === 'document') {
     event.respondWith(
       fetch(req)
-        .then((res) => {
-          // cache a clone (only same-origin navigation responses)
-          if (isSameOrigin(req.url)) {
-            const copy = res.clone();
-            caches.open(CACHE_NAME).then(cache => cache.put(req, copy));
-          }
+        .then(res => {
+          const resClone = res.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(req, resClone));
           return res;
         })
-        .catch(() => caches.match('./index.html'))
+        .catch(() => caches.match(req).then(res => res || caches.match('./index.html')))
     );
     return;
   }
 
-  // 3) For same-origin static files (CSS/JS/images/icons etc) use cache-first
-  if (isSameOrigin(req.url) && (req.destination === 'style' || req.destination === 'script' || req.destination === 'image' || req.destination === 'font')) {
+  // Static assets → Cache first
+  if (req.destination === 'style' || req.destination === 'script' || req.destination === 'image' ||
+      req.url.endsWith('.mp4') || req.url.endsWith('.webm') || req.url.endsWith('.mov')) {
     event.respondWith(
-      caches.match(req).then(cached => cached || fetch(req).then(res => {
-        // store only same origin assets
-        caches.open(CACHE_NAME).then(cache => cache.put(req, res.clone()));
-        return res;
-      }).catch(() => cached))
+      caches.match(req).then(
+        cached => cached || fetch(req).then(res => {
+          const resClone = res.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(req, resClone));
+          return res;
+        })
+      )
     );
-    return;
   }
-
-  // 4) For video files served from same origin: prefer network (stream) but cache head responses (and file if small)
-  if (isSameOrigin(req.url) && (req.url.endsWith('.mp4') || req.url.endsWith('.webm') || req.url.endsWith('.mov'))) {
-    // network-first, but fall back to cache if offline
-    event.respondWith(
-      fetch(req).then(res => {
-        // Only cache if response is valid and content-length is reasonable
-        try {
-          const contentLength = res.headers.get('content-length');
-          const maxCacheBytes = 10 * 1024 * 1024; // 10MB — avoid storing huge files
-          if (contentLength && Number(contentLength) < maxCacheBytes) {
-            caches.open(CACHE_NAME).then(cache => cache.put(req, res.clone()));
-          }
-        } catch (e) { /* ignore */ }
-        return res;
-      }).catch(() => caches.match(req))
-    );
-    return;
-  }
-
-  // 5) Default behavior: try cache first then network
-  event.respondWith(
-    caches.match(req).then(cached => cached || fetch(req).then(res => {
-      // cache same-origin responses
-      if (isSameOrigin(req.url)) {
-        caches.open(CACHE_NAME).then(cache => cache.put(req, res.clone()));
-      }
-      return res;
-    }))
-  );
 });
