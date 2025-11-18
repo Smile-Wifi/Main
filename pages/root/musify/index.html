@@ -12,106 +12,44 @@
 <link rel="manifest" href="manifest.json">
 
 <style>
-  :root {
-    --primary: #ff0050;
-    --bg: #000;
-    --text: #fff;
-    --shadow: rgba(0,0,0,0.6);
-  }
+  :root { --primary: #ff0050; --bg: #000; --text: #fff; --shadow: rgba(0,0,0,0.6); }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body,html { height:100%; overflow:hidden; background:var(--bg); font-family:'Segoe UI',sans-serif; color:var(--text); }
+  html, body { height:100%; overflow:hidden; background:var(--bg); font-family:'Segoe UI',sans-serif; color:var(--text); }
 
-  /* screen-reader only */
   .sr-only{ position:absolute!important; width:1px!important; height:1px!important; padding:0!important; margin:-1px!important; overflow:hidden!important; clip:rect(0,0,0,0)!important; white-space:nowrap!important; border:0!important; }
-
-  /* Skip link */
   .skip-link{ position:absolute; left:8px; top:8px; background:#fff; color:#000; padding:8px 12px; z-index:9999; border-radius:6px; transform:translateY(-120%); transition:transform .15s; }
   .skip-link:focus{ transform:none; }
 
-  /* Main layout */
-  #videoContainer {
-    position:absolute; top:0; left:0; width:100%; height:100%;
-    display:flex; align-items:center; justify-content:center;
-    background: linear-gradient(135deg, #1a1a1a, #000);
-  }
+  #videoContainer { position:absolute; top:0; left:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; background: linear-gradient(135deg, #1a1a1a, #000); }
   video { max-height:100vh; max-width:100vw; object-fit:contain; background:#000; }
 
-  /* Volume Button */
-  #volumeBtn {
-    position:absolute; top:20px; right:20px;
-    width:44px; height:44px;
-    background:rgba(0,0,0,0.5);
-    border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    font-size:20px; color:#fff;
-    cursor:pointer; z-index:10;
-    transition:all .2s;
-    backdrop-filter:blur(8px);
-    border:0;
-  }
+  #volumeBtn { position:absolute; top:20px; right:20px; width:44px; height:44px; background:rgba(0,0,0,0.5); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; color:#fff; cursor:pointer; z-index:10; transition:all .2s; backdrop-filter:blur(8px); border:0; }
   #volumeBtn:active { transform:scale(0.9); }
 
-  /* Info Panel */
-  #infoPanel {
-    position:absolute; bottom:80px; left:20px; right:80px;
-    color:#fff; text-shadow:0 1px 3px var(--shadow);
-    pointer-events:none;
-  }
+  #infoPanel { position:absolute; bottom:80px; left:20px; right:80px; color:#fff; text-shadow:0 1px 3px var(--shadow); pointer-events:none; }
   #username { font-weight:700; font-size:18px; margin-bottom:4px; }
   #caption { font-size:14px; opacity:0.95; }
 
-  /* Action Bar */
-  #actionBar {
-    position:absolute; right:15px; bottom:90px;
-    display:flex; flex-direction:column; gap:20px;
-    align-items:center; z-index:5;
-  }
+  #actionBar { position:absolute; right:15px; bottom:90px; display:flex; flex-direction:column; gap:20px; align-items:center; z-index:5; }
   .action-item { text-align:center; color:#fff; transition:transform .2s; }
   .action-item:active { transform:scale(1.05); }
-  .action-icon {
-    width:48px; height:48px; background:rgba(255,255,255,0.15);
-    border-radius:50%; display:flex; align-items:center; justify-content:center;
-    font-size:24px; margin-bottom:6px; box-shadow:0 2px 8px var(--shadow);
-  }
+  .action-icon { width:48px; height:48px; background:rgba(255,255,255,0.15); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:24px; margin-bottom:6px; box-shadow:0 2px 8px var(--shadow); }
   .action-count { font-size:13px; font-weight:600; }
 
-  /* Heart Animation */
-  .heart-burst {
-    position:absolute; pointer-events:none; font-size:60px;
-    color:var(--primary); opacity:0; transform:scale(0);
-    animation:heartPop 0.6s ease-out forwards; z-index:10;
-  }
+  .heart-burst { position:absolute; pointer-events:none; font-size:60px; color:var(--primary); opacity:0; transform:scale(0); animation:heartPop 0.6s ease-out forwards; z-index:10; }
   @keyframes heartPop { 0% { opacity:1; transform:scale(0) translateY(0); } 50% { transform:scale(1.3); } 100% { opacity:0; transform:scale(1) translateY(-100px); } }
 
-  /* Hamburger Menu */
-  #hamburgerBtn{
-    position:fixed; top:20px; left:20px; font-size:28px;
-    color:#fff; z-index:11; background:transparent; border:0; cursor:pointer;
-  }
-  #sidePanel {
-    position:fixed; top:0; left:-250px; width:250px; height:100%;
-    background:rgba(0,0,0,0.98); color:#fff;
-    transition:left .3s; padding:70px 20px 20px; z-index:10;
-  }
+  #hamburgerBtn{ position:fixed; top:20px; left:20px; font-size:28px; color:#fff; z-index:11; background:transparent; border:0; cursor:pointer; }
+  #sidePanel { position:fixed; top:0; left:-250px; width:250px; height:100%; background:rgba(0,0,0,0.98); color:#fff; transition:left .3s; padding:70px 20px 20px; z-index:10; }
   #sidePanel.open { left:0; }
-  .menu-item {
-    padding:18px 0; font-size:18px; display:flex; align-items:center; gap:12px;
-    border-bottom:1px solid #333;
-  }
+  .menu-item { padding:18px 0; font-size:18px; display:flex; align-items:center; gap:12px; border-bottom:1px solid #333; }
   .menu-item a{ color:inherit; text-decoration:none; display:inline-flex; align-items:center; gap:12px; width:100%; }
   .menu-item a:focus{ outline:2px solid var(--primary); }
 
-  /* Loader */
-  #loader {
-    position:fixed; inset:0; background:rgba(0,0,0,0.9);
-    color:#fff; font-size:20px;
-    display:flex; align-items:center; justify-content:center;
-    flex-direction:column; gap:10px; z-index:12;
-  }
+  #loader { position:fixed; inset:0; background:rgba(0,0,0,0.9); color:#fff; font-size:20px; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px; z-index:12; }
   .spinner { width:40px; height:40px; border:4px solid #333; border-top:4px solid var(--primary); border-radius:50%; animation:spin 1s linear infinite; }
   @keyframes spin { to { transform:rotate(360deg); } }
 
-  /* Share Popup */
   #sharePopup { position:fixed; bottom:110px; right:75px; background:rgba(20,20,20,0.95); padding:15px; border-radius:12px; box-shadow:0 4px 12px var(--shadow); display:none; flex-direction:column; gap:10px; z-index:15; }
   .share-option { display:flex; align-items:center; gap:8px; color:#fff; cursor:pointer; font-size:15px; }
   .share-option i { width:20px; text-align:center; }
@@ -122,22 +60,19 @@
 
 <a class="skip-link" href="#mainContent">Skip to main content</a>
 
-<!-- Hamburger (button) -->
 <button id="hamburgerBtn" aria-controls="sidePanel" aria-expanded="false" aria-label="Open menu">
   <i class="fas fa-bars" aria-hidden="true"></i>
 </button>
 
 <nav id="sidePanel" aria-hidden="true" aria-label="Main menu">
   <div class="menu-item"><a href="https://smile-wifi.github.io/Main" target="_blank"><i class="fas fa-home" aria-hidden="true"></i> Home</a></div>
-  <div class="menu-item"><button id="refreshBtn" class="sr-only-focusable" aria-label="Refresh videos" type="button"><i class="fas fa-sync-alt" aria-hidden="true"></i> Refresh</button></div>
+  <div class="menu-item"><button id="refreshBtn" aria-label="Refresh videos" type="button"><i class="fas fa-sync-alt" aria-hidden="true"></i> Refresh</button></div>
 </nav>
 
 <main id="mainContent" tabindex="-1">
   <section id="videoContainer" aria-label="Video feed">
-    <figure style="margin:0;">
-      <video id="vid" playsinline controls preload="metadata" aria-label="Short video clip" aria-describedby="captionText"></video>
-      <figcaption id="captionText" class="sr-only">Video caption</figcaption>
-    </figure>
+    <video id="vid" playsinline controls preload="metadata" aria-label="Short video clip" aria-describedby="captionText"></video>
+    <figcaption id="captionText" class="sr-only">Video caption</figcaption>
 
     <button id="volumeBtn" aria-pressed="true" aria-label="Toggle mute">
       <i class="fas fa-volume-mute" id="volumeIcon" aria-hidden="true"></i>
@@ -171,7 +106,6 @@
     </button>
   </div>
 
-  <!-- Share Popup -->
   <div id="sharePopup" role="dialog" aria-modal="false" aria-label="Share options">
     <button class="share-option" id="fbShare" type="button" aria-label="Share on Facebook"><i class="fab fa-facebook" aria-hidden="true"></i> Facebook</button>
     <button class="share-option" id="twShare" type="button" aria-label="Share on Twitter"><i class="fab fa-x-twitter" aria-hidden="true"></i> Twitter</button>
@@ -186,13 +120,10 @@
 </div>
 
 <script>
-/* ====== Config ====== */
 const REPO = 'Smile-Wifi/musify-auto';
 const BRANCH = 'main';
 const VIDEO_EXT = ['.mp4','.webm','.mov'];
-const BASE_RAW = `https://raw.githubusercontent.com/${REPO}/${BRANCH}/`;
 
-/* ====== Elements ====== */
 const videoEl = document.getElementById('vid');
 const container = document.getElementById('videoContainer');
 const loader = document.getElementById('loader');
@@ -211,18 +142,20 @@ let videos=[], idx=0, isMuted=true;
 const usernames=['coolvibes','danceking','funnycat','travelpro','foodie','gamerlife','artistic','musiclover','fitnessguru','dreamer'];
 const captions=[ 'This is fire! #fyp #viral','Wait for it... #funny #lol','POV: You try this #challenge','Life hack you need! #tips','Morning routine #aesthetic','Just vibing #music #dance','Unbelievable! #wow','Tag a friend #friends' ];
 
-function randomUsername(){return '@'+usernames[Math.floor(Math.random()*usernames.length)]+Math.floor(Math.random()*999);}
+function randomUsername(){return '@'+usernames[Math.floor(Math.random()*usernames.length)]+Math.floor(Math.random()*999);} 
 function randomLikes(){ const n=Math.random(); if(n>0.9)return (Math.floor(Math.random()*900)+100)+'k'; if(n>0.7)return Math.floor(Math.random()*90)+10+'.'+Math.floor(Math.random()*9)+'k'; return Math.floor(Math.random()*900)+100; }
+
+function ghRaw(path){return `https://raw.githubusercontent.com/${REPO}/${BRANCH}/${path}`;}
 
 async function loadVideoList(){
   try{
-    const res = await fetch(BASE_RAW+'videos.json');
-    if(!res.ok) throw new Error();
-    const list = await res.json();
-    videos = list.filter(f=>VIDEO_EXT.some(ext=>f.toLowerCase().endsWith(ext))).map(f=>({url:BASE_RAW+f,name:f.split('/').pop()}));
+    const res=await fetch(ghRaw('videos.json'));
+    if(!res.ok)throw new Error();
+    const list=await res.json();
+    videos=list.filter(f=>VIDEO_EXT.some(ext=>f.toLowerCase().endsWith(ext))).map(f=>({url:ghRaw(f),name:f.split('/').pop()}));
   }catch{
     console.warn('No videos.json, crawling repo...');
-    videos = await crawlRepoTree('');
+    videos=await crawlRepoTree('');
   }
   if(!videos.length){ loader.style.display='none'; alert('No videos found!'); return; }
   loader.style.display='none';
@@ -230,14 +163,14 @@ async function loadVideoList(){
 }
 
 async function crawlRepoTree(path){
-  const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}?ref=${BRANCH}`);
-  if(!res.ok) throw new Error('GitHub API error');
-  const items = await res.json();
+  const res=await fetch(`https://api.github.com/repos/${REPO}/contents/${path}?ref=${BRANCH}`);
+  if(!res.ok)throw new Error('GitHub API error');
+  const items=await res.json();
   let found=[];
   for(const it of items){
-    if(it.type==='file' && VIDEO_EXT.some(ext=>it.name.toLowerCase().endsWith(ext))){
+    if(it.type==='file'&&VIDEO_EXT.some(ext=>it.name.toLowerCase().endsWith(ext))){
       found.push({url:it.download_url,name:it.name});
-    } else if(it.type==='dir'){
+    }else if(it.type==='dir'){
       found.push(...await crawlRepoTree(it.path));
     }
   }
@@ -248,9 +181,9 @@ function playIdx(i){
   if(i<0)i=videos.length-1;
   if(i>=videos.length)i=0;
   idx=i;
-  const v = videos[idx];
-  videoEl.src = v.url;
-  videoEl.muted = isMuted;
+  const v=videos[idx];
+  videoEl.src=v.url;
+  videoEl.muted=isMuted;
   usernameEl.textContent = randomUsername();
   document.getElementById('caption').textContent = captions[Math.floor(Math.random()*captions.length)];
   likeCountEl.textContent = randomLikes();
@@ -259,16 +192,12 @@ function playIdx(i){
   updateVolumeIcon();
 }
 
-function toggleMute(){ isMuted = !isMuted; videoEl.muted = isMuted; volumeBtn.setAttribute('aria-pressed', String(!isMuted)); updateVolumeIcon(); }
-function updateVolumeIcon(){ volumeIcon.className = isMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up'; volumeBtn.setAttribute('aria-label', isMuted ? 'Unmute' : 'Mute'); }
+function toggleMute(){ isMuted=!isMuted; videoEl.muted=isMuted; volumeBtn.setAttribute('aria-pressed',String(!isMuted)); updateVolumeIcon();}
+function updateVolumeIcon(){ volumeIcon.className = isMuted?'fas fa-volume-mute':'fas fa-volume-up'; volumeBtn.setAttribute('aria-label', isMuted?'Unmute':'Mute'); }
 volumeBtn.addEventListener('click', e=>{ e.stopPropagation(); toggleMute(); });
 
 let tapCount=0;
-container.addEventListener('click', e=>{
-  if(e.target.closest('#volumeBtn')) return;
-  tapCount++; setTimeout(()=>tapCount=0,300);
-  if(tapCount===2) likeVideo(e);
-});
+container.addEventListener('click', e=>{ if(e.target.closest('#volumeBtn')) return; tapCount++; setTimeout(()=>tapCount=0,300); if(tapCount===2) likeVideo(e); });
 function likeVideo(e){
   const heart=document.createElement('div');
   heart.className='heart-burst';
@@ -278,8 +207,8 @@ function likeVideo(e){
   heart.style.top=(e.clientY-rect.top-30)+'px';
   container.appendChild(heart);
   setTimeout(()=>heart.remove(),700);
-  const current = parseFloat(String(likeCountEl.textContent).replace('k',''))||0;
-  likeCountEl.textContent = (current+0.1).toFixed(1)+'k';
+  const current=parseFloat(String(likeCountEl.textContent).replace('k',''))||0;
+  likeCountEl.textContent=(current+0.1).toFixed(1)+'k';
   likeBtn.setAttribute('aria-pressed','true');
   setTimeout(()=>likeBtn.setAttribute('aria-pressed','false'),1000);
 }
@@ -295,7 +224,7 @@ hamburgerBtn.addEventListener('click', ()=>{
   const open = sidePanel.classList.toggle('open');
   hamburgerBtn.setAttribute('aria-expanded', String(open));
   sidePanel.setAttribute('aria-hidden', String(!open));
-  sidePanel.querySelectorAll('a, button').forEach(el => el.tabIndex = open ? 0 : -1);
+  sidePanel.querySelectorAll('a, button').forEach(el=>el.tabIndex=open?0:-1);
   if(open){ sidePanel.querySelector('a, button')?.focus(); } else { hamburgerBtn.focus(); }
 });
 
@@ -303,25 +232,16 @@ refreshBtn.addEventListener('click', ()=>{ sidePanel.classList.remove('open'); s
 
 loadVideoList();
 
-/* Service Worker */
-if('serviceWorker' in navigator){
-  window.addEventListener('load', ()=>{
-    navigator.serviceWorker.register('sw.js')
-      .then(()=>console.log('Service Worker registered'))
-      .catch(err=>console.warn('SW failed',err));
-  });
-}
+/* SW registration */
+if('serviceWorker' in navigator){ window.addEventListener('load', ()=>{ navigator.serviceWorker.register('sw.js').then(()=>console.log('SW registered')).catch(err=>console.warn('SW failed',err)); }); }
 
-/* Share options */
-shareBtn.addEventListener('click', ()=>{
-  const isOpen = sharePopup.style.display === 'flex';
-  sharePopup.style.display = isOpen ? 'none' : 'flex';
-  shareBtn.setAttribute('aria-expanded', String(!isOpen));
-});
-document.getElementById('fbShare').addEventListener('click', ()=>{ const v=videos[idx]; const u=encodeURIComponent(v.url); window.open(`https://www.facebook.com/sharer/sharer.php?u=${u}`,'_blank','width=600,height=500'); });
-document.getElementById('twShare').addEventListener('click', ()=>{ const v=videos[idx]; const u=encodeURIComponent(v.url); window.open(`https://twitter.com/intent/tweet?url=${u}&text=Check%20out%20this%20video!`,'_blank','width=600,height=500'); });
-document.getElementById('waShare').addEventListener('click', ()=>{ const v=videos[idx]; const u=encodeURIComponent(v.url); window.open(`https://api.whatsapp.com/send?text=Check%20out%20this%20video!%20${u}`,'_blank'); });
+/* Share buttons */
+shareBtn.addEventListener('click', ()=>{ const isOpen = sharePopup.style.display==='flex'; sharePopup.style.display = isOpen?'none':'flex'; shareBtn.setAttribute('aria-expanded', String(!isOpen)); });
+document.getElementById('fbShare').addEventListener('click', ()=>{ const v=videos[idx]; window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(v.url)}`,'_blank','width=600,height=500'); });
+document.getElementById('twShare').addEventListener('click', ()=>{ const v=videos[idx]; window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(v.url)}&text=Check%20out%20this%20video!`,'_blank','width=600,height=500'); });
+document.getElementById('waShare').addEventListener('click', ()=>{ const v=videos[idx]; window.open(`https://api.whatsapp.com/send?text=Check%20out%20this%20video!%20${encodeURIComponent(v.url)}`,'_blank'); });
 document.getElementById('copyLink').addEventListener('click', ()=>{ const v=videos[idx]; navigator.clipboard.writeText(v.url).then(()=>{ alert('Video link copied!'); }); sharePopup.style.display='none'; shareBtn.setAttribute('aria-expanded','false'); });
 </script>
+
 </body>
 </html>
