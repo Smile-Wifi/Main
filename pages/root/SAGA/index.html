@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>S.A.G.A³ — Asia’s AI Nexus</title>
-  <meta name="description" content="Join S.A.G.A³ — Powering a SGD 1T AI-driven digital economy across Asia. Governments, labs, startups, educators." />
-  <link rel="icon" href="logo.png" />
+  <meta name="description" content="Join S.A.G.A³ — Powering a SGD 1T AI-driven digital economy across Asia. Governments, labs, startups, educators."/>
+  <link rel="icon" href="logo.png"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
   <style>
     :root {
       --bg: #ffffff;
@@ -26,415 +27,110 @@
     body {
       font-family: 'Inter', sans-serif;
       line-height: 1.6;
-      color: var(--text);
+      color: #20232b;
       background: rgba(0, 40, 100, 0.7);
     }
-    .container {
-      max-width: var(--maxw);
-      margin: 0 auto;
-      padding: 0 16px;
-    }
-    /* Header - No border */
-    header {
-      padding: 20px 0;
-      position: sticky;
-      top: 0;
-      background: #5a4c5d;
-      z-index: 100;
-    }
-    .header-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .logo {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--accent);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-    }
-    .logo img {
-      width: 100px;
-      height: 40px;
-      border-radius: 8px;
-      object-fit: contain;
-    }
-    nav {
-      display: flex;
-      gap: 16px;
-    }
+    .container { max-width: var(--maxw); margin: 0 auto; padding: 0 16px; }
+
+    header { padding: 20px 0; position: sticky; top: 0; background: #5a4c5d; z-index: 100; }
+    .header-inner { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 1.5rem; font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .logo img { width: 100px; height: 40px; border-radius: 8px; object-fit: contain; }
+    nav { display: flex; gap: 16px; }
     .btn {
-      padding: 10px 16px;
-      border-radius: var(--radius);
-      text-decoration: none;
-      font-weight: 500;
-      transition: all 0.2s;
-      font-size: 0.95rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      padding: 10px 16px; border-radius: var(--radius); text-decoration: none; font-weight: 500;
+      transition: all 0.2s; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 6px;
+      border: none; cursor: pointer;
     }
-    .btn-primary {
-      background: rgba(255, 255, 255, 0.3);
-      color:  #efeef5;
-    }
+    .btn-primary { background: rgba(255, 255, 255, 0.3); color: #090810; }
     .btn-primary:hover { background: #1d4ed8; color: white; }
     .btn-ghost { background: transparent; color: #ffffff; }
     .btn-ghost:hover { background: var(--accent-light); }
-    /* Highlight Style */
+
     .highlight {
-      color: #7bf1ff;
-      font-weight: 800;
+      color: #7bf1ff; font-weight: 800;
       background: linear-gradient(90deg, #7bf1ff, #00d4ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    /* Hero with Background Image */
+
     .hero {
-      position: relative;
-      color: white;
-      text-align: center;
-      padding: 140px 0;
-      background: linear-gradient(135deg, rgba(0, 20, 60, 0.85), rgba(0, 40, 100, 0.7)),
-                  url('bg.jpg') center/cover no-repeat;
+      position: relative; color: white; text-align: center; padding: 140px 0;
+      background: linear-gradient(135deg, rgba(0, 20, 60, 0.85), rgba(0, 40, 100, 0.7)), url('bg.jpg') center/cover no-repeat;
       overflow: hidden;
     }
     .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
+      content: ''; position: absolute; inset: 0;
       background: radial-gradient(circle at 20% 80%, rgba(0, 212, 255, 0.12) 0%, transparent 50%),
                   radial-gradient(circle at 80% 20%, rgba(100, 150, 255, 0.1) 0%, transparent 50%);
-      pointer-events: none;
-      z-index: 1;
+      pointer-events: none; z-index: 1;
     }
-    .hero h1 {
-      font-size: 3.2rem;
-      font-weight: 800;
-      margin-bottom: 1rem;
-      line-height: 1.2;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      position: relative;
-      z-index: 2;
-    }
-    .hero p {
-      font-size: 1.3rem;
-      max-width: 700px;
-      margin: 0 auto 2rem;
-      opacity: 0.95;
-      font-weight: 400;
-      position: relative;
-      z-index: 2;
-    }
-    .hero-cta {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-      position: relative;
-      z-index: 2;
-    }
-    .hero .btn-primary {
-      background: white;
-      color: #003366;
-      font-weight: 700;
-      padding: 14px 28px;
-      font-size: 1.1rem;
-      box-shadow: 0 8px 25px rgba(255,255,255,0.3);
-    }
-    .hero .btn-ghost {
-      border: 2px solid white;
-      color: white;
-      padding: 12px 26px;
-      font-weight: 600;
-    }
-    /* Platform Overview */
-    .platform {
-      padding: 80px 0;
-      background: var(--card);
-    }
-    .platform h2 {
-      text-align: center;
-      font-size: 2.5rem;
-      margin-bottom: 16px;
-      color: white;
-    }
-    .platform p {
-      text-align: center;
-      color: #c9d2e5;
-      margin-bottom: 48px;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .platform-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: var(--gap);
-    }
-    .hub-card {
-      background: white;
-      padding: 24px;
-      border-radius: var(--radius);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      transition: transform 0.2s;
-    }
-    .hub-card:hover {
-      transform: translateY(-4px);
-    }
-    .hub-card h3 {
-      font-size: 1.5rem;
-      margin-bottom: 8px;
-      color: var(--accent);
-    }
-    .hub-card p {
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-    /* Integrations */
-    .integrations {
-      padding: 80px 0;
-      text-align: center;
-    }
-    .integrations h2 {
-      font-size: 2rem;
-      margin-bottom: 16px;
-      color: white;
-    }
-    .integrations p {
-      color: #c9d2e5;
-      margin-bottom: 32px;
-    }
-    .logos {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 32px;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.8rem;
-    }
-    .logo-item {
-      color: #c9d2e5;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    /* Case Studies */
-    .cases {
-      padding: 80px 0;
-      background: var(--card);
-    }
-    .cases h2 {
-      text-align: center;
-      font-size: 2.5rem;
-      margin-bottom: 16px;
-      color: white;
-    }
-    .cases > p {
-      text-align: center;
-      color: #f2f5fb;
-      margin-bottom: 48px;
-    }
-    .case-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: var(--gap);
-    }
-    .case-card {
-      background: white;
-      padding: 32px;
-      border-radius: var(--radius);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    .case-card blockquote {
-      font-style: italic;
-      margin-bottom: 24px;
-      font-size: 1.1rem;
-      line-height: 1.6;
-      color: #1f2937;
-    }
-    .case-author {
-      font-weight: 600;
-      margin-bottom: 4px;
-      color: #1f2937;
-    }
-    .case-title {
-      font-size: 0.9rem;
-      color: #6b7280;
-      margin-bottom: 16px;
-    }
-    .case-link {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 500;
-    }
-    .metrics {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 16px;
-    }
-    .metric {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 600;
-      color: var(--success);
-    }
-    /* Awards */
-    .awards {
-      padding: 80px 0;
-      text-align: center;
-    }
-    .awards h2 {
-      font-size: 2rem;
-      margin-bottom: 16px;
-      color: white;
-    }
-    .awards-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      justify-content: center;
-      align-items: center;
-    }
-    .award-badge {
-      background: var(--accent-light);
-      color: var(--accent);
-      padding: 8px 16px;
-      border-radius: var(--radius);
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-    /* Apply Section */
-    .apply {
-      padding: 80px 0;
-      background: var(--accent-light);
-      text-align: center;
-    }
-    .apply h2 {
-      font-size: 2.5rem;
-      margin-bottom: 16px;
-      color: #1f2937;
-    }
-    .apply p {
-      color: #4b5563;
-      margin-bottom: 32px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      max-width: 700px;
-      margin: 0 auto 32px;
-    }
-    input, select {
-      padding: 12px 16px;
-      border: 1px solid #d1d5db;
-      border-radius: var(--radius);
-      font-size: 1rem;
-      width: 100%;
-      background: white;
-    }
-    .form-status {
-      margin-top: 1rem;
-      font-weight: 600;
-    }
+    .hero h1 { font-size: 3.2rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.2; text-shadow: 0 2px 8px rgba(0,0,0,0.3); position: relative; z-index: 2; }
+    .hero p { font-size: 1.3rem; max-width: 700px; margin: 0 auto 2rem; opacity: 0.95; font-weight: 400; position: relative; z-index: 2; }
+    .hero-cta { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 2; }
+    .hero .btn-primary { background: white; color: #003366; font-weight: 700; padding: 14px 28px; font-size: 1.1rem; box-shadow: 0 8px 25px rgba(255,255,255,0.3); }
+    .hero .btn-ghost { border: 2px solid white; color: white; padding: 12px 26px; font-weight: 600; }
+
+    .platform { padding: 80px 0; background: var(--card); }
+    .platform h2 { text-align: center; font-size: 2.5rem; margin-bottom: 16px; color: white; }
+    .platform > p { text-align: center; color: #c9d2e5; margin-bottom: 48px; max-width: 800px; margin-left: auto; margin-right: auto; }
+    .platform-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--gap); }
+    .hub-card { background: white; padding: 24px; border-radius: var(--radius); box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: transform 0.2s; cursor: pointer; }
+    .hub-card:hover { transform: translateY(-4px); }
+    .hub-card h3 { font-size: 1.5rem; margin-bottom: 8px; color: var(--accent); }
+    .hub-card p { color: var(--muted); font-size: 0.95rem; }
+
+    .integrations { padding: 80px 0; text-align: center; }
+    .integrations h2 { font-size: 2rem; margin-bottom: 16px; color: white; }
+    .integrations p { color: #c9d2e5; margin-bottom: 32px; }
+    .logos { display: flex; flex-wrap: wrap; gap: 32px; justify-content: center; align-items: center; font-size: 1.8rem; }
+    .logo-item { color: #c9d2e5; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+
+    .cases { padding: 80px 0; background: var(--card); }
+    .cases h2 { text-align: center; font-size: 2.5rem; margin-bottom: 16px; color: white; }
+    .cases > p { text-align: center; color: #f2f5fb; margin-bottom: 48px; }
+    .case-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: var(--gap); }
+    .case-card { background: white; padding: 32px; border-radius: var(--radius); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .case-card blockquote { font-style: italic; margin-bottom: 24px; font-size: 1.1rem; line-height: 1.6; color: #1f2937; }
+    .case-author { font-weight: 600; margin-bottom: 4px; color: #1f2937; }
+    .case-title { font-size: 0.9rem; color: #6b7280; margin-bottom: 16px; }
+    .case-link { color: var(--accent); text-decoration: none; font-weight: 500; }
+    .metrics { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+    .metric { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--success); }
+
+    .awards { padding: 80px 0; text-align: center; }
+    .awards h2 { font-size: 2rem; margin-bottom: 16px; color: white; }
+    .awards-grid { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; align-items: center; }
+    .award-badge { background: var(--accent-light); color: var(--accent); padding: 8px 16px; border-radius: var(--radius); font-size: 0.9rem; font-weight: 600; }
+
+    .apply { padding: 80px 0; background: var(--accent-light); text-align: center; }
+    .apply h2 { font-size: 2.5rem; margin-bottom: 16px; color: #1f2937; }
+    .apply p { color: #4b5563; margin-bottom: 32px; max-width: 600px; margin-left: auto; margin-right: auto; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; max-width: 700px; margin: 0 auto 32px; }
+    input, select { padding: 12px 16px; border: 1px solid #d1d5db; border-radius: var(--radius); font-size: 1rem; width: 100%; background: white; }
+    .form-status { margin-top: 1rem; font-weight: 600; }
     .success { color: var(--success); }
     .error { color: #ef4444; }
-    /* Modal */
-    .modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      visibility: hidden;
-      opacity: 0;
-      transition: all 0.3s;
-    }
-    .modal.open {
-      visibility: visible;
-      opacity: 1;
-    }
-    .modal-content {
-      background: white;
-      width: 95%;
-      max-width: 900px;
-      max-height: 85vh;
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-    }
-    .modal-header {
-      padding: 1.5rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #f9fafb;
-    }
-    .modal-body {
-      padding: 2rem;
-      max-height: 60vh;
-      overflow-y: auto;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.9rem;
-    }
-    th, td {
-      padding: 12px 8px;
-      text-align: left;
-      border-bottom: 1px dashed #e5e7eb;
-    }
-    th {
-      color: #6b7280;
-      font-weight: 600;
-      text-transform: uppercase;
-      font-size: 0.75rem;
-    }
-    .delete-btn {
-      background: #fee2e2;
-      color: #dc2626;
-      border: none;
-      padding: 6px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.8rem;
-    }
-    .modal-footer {
-      padding: 1.5rem 2rem;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: flex-end;
-      gap: 1rem;
-      background: #f9fafb;
-    }
-    /* Footer */
-    footer {
-      padding: 40px 0;
-      text-align: center;
-      border-top: 1px solid var(--border);
-      color: #9ca3af;
-      font-size: 0.9rem;
-      background: #f9fafb;
-    }
-    /* Responsive */
+
+    /* modals */
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; visibility: hidden; opacity: 0; transition: all 0.3s; }
+    .modal.open { visibility: visible; opacity: 1; }
+    .modal-content { background: white; width: 95%; max-width: 900px; max-height: 85vh; border-radius: var(--radius); overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+    .modal-header { padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; background: #f9fafb; }
+    .modal-body { padding: 2rem; max-height: 60vh; overflow-y: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    th, td { padding: 12px 8px; text-align: left; border-bottom: 1px dashed #e5e7eb; }
+    th { color: #6b7280; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; }
+    .delete-btn { background: #fee2e2; color: #dc2626; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
+    .modal-footer { padding: 1.5rem 2rem; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 1rem; background: #f9fafb; }
+
+    footer { padding: 40px 0; text-align: center; border-top: 1px solid var(--border); color: #9ca3af; font-size: 0.9rem; background: #f9fafb; }
+
+    /* demo modal extra */
+    #demoModal { z-index: 2000; }
+    #demoBody pre { background: #111; color: #0f0; padding: 12px; border-radius: 6px; overflow-x: auto; }
+
     @media (max-width: 768px) {
-      .hero {
-        padding: 100px 0;
-      }
+      .hero { padding: 100px 0; }
       .hero h1 { font-size: 2.4rem; }
       .hero p { font-size: 1.1rem; }
       .hero-cta { flex-direction: column; align-items: center; }
@@ -446,13 +142,11 @@
     }
   </style>
 </head>
+
 <body>
-  <!-- Header -->
   <header class="container">
     <div class="header-inner">
-      <a href="#" class="logo">
-        <img src="logo.png" alt="S.A.G.A³ Logo">
-      </a>
+      <a href="#" class="logo"><img src="logo.png" alt="S.A.G.A³ Logo"></a>
       <nav>
         <button class="btn btn-ghost" id="openDashboard">Dashboard</button>
         <a href="#apply" class="btn btn-primary">Join Alliance</a>
@@ -460,7 +154,6 @@
     </div>
   </header>
 
-  <!-- Hero with Background Image -->
   <section class="hero container">
     <h1>S.A.G.A³<span class="highlight"></span></h1>
     <p>Unite governments, labs, startups, and educators on one <span class="highlight">AI-powered alliance platform</span> that accelerates regional growth fast.</p>
@@ -470,51 +163,71 @@
     </div>
   </section>
 
-  <!-- Platform -->
+  <!-- ========= INTERACTIVE PLATFORM ========= -->
   <section class="platform container">
     <h2>The <span class="highlight">S.A.G.A³ Alliance Platform</span></h2>
     <p>Connected resources and tools make it easier to <span class="highlight">innovate</span>, <span class="highlight">collaborate</span>, and <span class="highlight">scale AI</span> across Asia.</p>
     <div class="platform-grid">
-      <div class="hub-card">
+      <div class="hub-card" onclick="openDemo('compute')">
         <h3>Compute Hub ®</h3>
         <p>Access <span class="highlight">shared high-scale GPU</span> and storage for AI research and deployment.</p>
+        <small style="color:var(--accent)">▸ click for live demo</small>
       </div>
-      <div class="hub-card">
+      <div class="hub-card" onclick="openDemo('talent')">
         <h3>Talent Hub ®</h3>
         <p>Build pipelines with <span class="highlight">joint curricula</span>, certifications, and upskilling programs.</p>
+        <small style="color:var(--accent)">▸ click for live demo</small>
       </div>
-      <div class="hub-card">
+      <div class="hub-card" onclick="openDemo('policy')">
         <h3>Policy Hub ®</h3>
         <p>Align regulations and secure <span class="highlight">funding</span> through regional consortiums.</p>
+        <small style="color:var(--accent)">▸ click for live demo</small>
       </div>
-      <div class="hub-card">
+      <div class="hub-card" onclick="openDemo('innovation')">
         <h3>Innovation Hub ™</h3>
         <p>Accelerate startups with <span class="highlight">grants</span>, mentorship, and ecosystem integration.</p>
+        <small style="color:var(--accent)">▸ click for live demo</small>
       </div>
-      <div class="hub-card">
+      <div class="hub-card" onclick="openDemo('data')">
         <h3>Data Hub ™</h3>
         <p>Unify scattered datasets into <span class="highlight">actionable intelligence</span> for all members.</p>
+        <small style="color:var(--accent)">▸ click for live demo</small>
       </div>
-      <div class="hub-card">
+      <div class="hub-card" onclick="openDemo('impact')">
         <h3>Impact Hub ™</h3>
         <p>Track and amplify measurable outcomes in <span class="highlight">economy</span>, society, and sustainability.</p>
+        <small style="color:var(--accent)">▸ click for live demo</small>
       </div>
-      <div class="hub-card">
+      <div class="hub-card" onclick="openDemo('network')">
         <h3>Smart Network ™</h3>
         <p>Centralized <span class="highlight">member directory</span> and collaboration tools.</p>
+        <small style="color:var(--accent)">▸ click for live demo</small>
       </div>
-      <div class="hub-card">
+      <div class="hub-card" onclick="openDemo('breeze')">
         <h3>Breeze AI ™</h3>
         <p>AI agents for <span class="highlight">advisory</span>, matching, and predictive insights.</p>
+        <small style="color:var(--accent)">▸ click for live demo</small>
       </div>
-      <div class="hub-card">
+      <div class="hub-card" onclick="openDemo('bundle')">
         <h3>Starter Bundle</h3>
         <p>Entry-level access to <span class="highlight">all hubs</span> at one accessible price point.</p>
+        <small style="color:var(--accent)">▸ click for live demo</small>
       </div>
     </div>
   </section>
 
-  <!-- Integrations -->
+  <!-- demo modal -->
+  <div id="demoModal" class="modal">
+    <div class="modal-content" style="max-width:600px">
+      <div class="modal-header">
+        <h3 id="demoTitle">Hub Demo</h3>
+        <button class="btn btn-ghost" onclick="closeDemo()">Close</button>
+      </div>
+      <div class="modal-body" id="demoBody"></div>
+    </div>
+  </div>
+
+  <!-- rest of original sections -->
   <section class="integrations container">
     <h2>Works with the ecosystems you already use. <span class="highlight">500+ integrations</span>.</h2>
     <p>Seamless connections to tools powering <span class="highlight">Asia's AI landscape</span>.</p>
@@ -525,10 +238,9 @@
       <div class="logo-item"><i class="fab fa-tensorflow"></i> TensorFlow</div>
       <div class="logo-item"><i class="fab fa-python"></i> Python</div>
     </div>
-    <a href="#" style="color: var(--accent); text-decoration: none; margin-top: 16px; display: inline-block;">See all integrations</a>
+    <a href="#" style="color:var(--accent);text-decoration:none;margin-top:16px;display:inline-block">See all integrations</a>
   </section>
 
-  <!-- Case Studies -->
   <section class="cases container">
     <h2><span class="highlight">Remarkable impact</span> for every scale of organization.</h2>
     <p>Scale your AI initiatives with S.A.G.A³. The proof is in our <span class="highlight">members’ success</span>.</p>
@@ -569,7 +281,6 @@
     </div>
   </section>
 
-  <!-- Awards -->
   <section class="awards container">
     <h2><span class="highlight">Voted #1</span> in 150+ Industry Reports</h2>
     <div class="awards-grid">
@@ -582,7 +293,6 @@
     </div>
   </section>
 
-  <!-- Apply -->
   <section id="apply" class="apply container">
     <h2>Ready to Power <span class="highlight">Asia's AI Future</span>?</h2>
     <p>Join the S.A.G.A³ alliance today. Applications reviewed in <span class="highlight">48 hours</span>.</p>
@@ -599,24 +309,23 @@
           <option value="Affiliate">Affiliate</option>
         </select>
       </div>
-      <button type="submit" class="btn btn-primary" style="width: 220px; margin: 0 auto; display: block;">Submit Application</button>
+      <button type="submit" class="btn btn-primary" style="width:220px;margin:0 auto;display:block">Submit Application</button>
       <div id="formStatus" class="form-status"></div>
     </form>
   </section>
 
-  <!-- Footer -->
   <footer class="container">
     <div>S.A.G.A³ — Singapore AI Giga Assembly Academy Alliance • © <span id="year"></span></div>
-    <div style="margin-top: 8px;">Hosted on GitHub Pages • Add <code>logo.png</code> and <code>bg.jpg</code> to root</div>
+    <div style="margin-top:8px">Hosted on GitHub Pages • Add <code>logo.png</code> and <code>bg.jpg</code> to root</div>
   </footer>
 
-  <!-- Dashboard Modal -->
+  <!-- dashboard modal -->
   <div id="modal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
         <div>
           <h3>Alliance Dashboard</h3>
-          <p style="font-size:0.85rem; color:#6b7280;">Demo: Data stored in your browser</p>
+          <p style="font-size:0.85rem;color:#6b7280">Demo: Data stored in your browser</p>
         </div>
         <button class="btn btn-ghost" id="closeModal">Close</button>
       </div>
@@ -624,13 +333,7 @@
         <table id="membersTable">
           <thead>
             <tr>
-              <th>Org</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Tier</th>
-              <th>Country</th>
-              <th>Joined</th>
-              <th></th>
+              <th>Org</th><th>Name</th><th>Email</th><th>Tier</th><th>Country</th><th>Joined</th><th></th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -643,42 +346,19 @@
     </div>
   </div>
 
+  <!-- ===== JS ===== -->
   <script>
+    /* ---------- utils ---------- */
     const $ = s => document.querySelector(s);
     const $$ = s => document.querySelectorAll(s);
     $('#year').textContent = new Date().getFullYear();
     const STORAGE_KEY = 'saga3_members_v2';
     const loadMembers = () => JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    const saveMembers = (arr) => localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
-    const escapeHtml = (str) => String(str || '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m]);
-    const renderTable = () => {
-      const tbody = $('#membersTable tbody');
-      tbody.innerHTML = '';
-      const members = loadMembers();
-      members.forEach((m, i) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${escapeHtml(m.org)}</td>
-          <td>${escapeHtml(m.name)}</td>
-          <td><a href="mailto:${m.email}" style="color:var(--accent); text-decoration:none;">${escapeHtml(m.email)}</a></td>
-          <td>${escapeHtml(m.tier)}</td>
-          <td>${escapeHtml(m.country)}</td>
-          <td style="font-size:0.8rem; color:#6b7280;">${new Date(m.ts).toLocaleDateString()}</td>
-          <td><button class="delete-btn" data-id="${i}">Delete</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
-      $$('.delete-btn').forEach(btn => {
-        btn.onclick = () => {
-          const i = btn.dataset.id;
-          const arr = loadMembers();
-          arr.splice(i, 1);
-          saveMembers(arr);
-          renderTable();
-        };
-      });
-    };
-    $('#applyForm').onsubmit = (e) => {
+    const saveMembers = arr => localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+    const escapeHtml = str => String(str||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+    /* ---------- apply form ---------- */
+    $('#applyForm').onsubmit = e => {
       e.preventDefault();
       const data = {
         org: $('#org').value.trim(),
@@ -688,7 +368,7 @@
         country: $('#country').value.trim(),
         ts: Date.now()
       };
-      if (!data.org || !data.name || !data.email || !data.tier || !data.country) {
+      if(!data.org||!data.name||!data.email||!data.tier||!data.country){
         $('#formStatus').innerHTML = '<span class="error">Please fill all fields.</span>';
         return;
       }
@@ -696,37 +376,152 @@
       members.unshift(data);
       saveMembers(members);
       $('#formStatus').innerHTML = '<span class="success">Application saved! (Demo)</span>';
-      $('#org').value = $('#name').value = $('#email').value = $('#country').value = '';
-      $('#tier').value = '';
+      $('#applyForm').reset();
       setTimeout(() => $('#formStatus').innerHTML = '', 5000);
       renderTable();
     };
-    $('#openDashboard').onclick = () => {
-      $('#modal').classList.add('open');
-      renderTable();
-    };
+
+    /* ---------- dashboard ---------- */
+    function renderTable(){
+      const tbody = $('#membersTable tbody');
+      tbody.innerHTML = '';
+      loadMembers().forEach((m,i) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${escapeHtml(m.org)}</td>
+          <td>${escapeHtml(m.name)}</td>
+          <td><a href="mailto:${m.email}" style="color:var(--accent);text-decoration:none">${escapeHtml(m.email)}</a></td>
+          <td>${escapeHtml(m.tier)}</td>
+          <td>${escapeHtml(m.country)}</td>
+          <td style="font-size:0.8rem;color:#6b7280">${new Date(m.ts).toLocaleDateString()}</td>
+          <td><button class="delete-btn" data-id="${i}">Delete</button></td>`;
+        tbody.appendChild(tr);
+      });
+      $$('.delete-btn').forEach(btn => btn.onclick = () => {
+        const arr = loadMembers(); arr.splice(btn.dataset.id,1); saveMembers(arr); renderTable();
+      });
+    }
+    $('#openDashboard').onclick = () => { $('#modal').classList.add('open'); renderTable(); };
     $('#closeModal').onclick = () => $('#modal').classList.remove('open');
-    window.onclick = (e) => { if (e.target === $('#modal')) $('#modal').classList.remove('open'); };
+    window.onclick = e => { if(e.target===$('#modal')) $('#modal').classList.remove('open'); };
     $('#exportCsv').onclick = () => {
       const members = loadMembers();
-      if (!members.length) return alert('No members to export.');
+      if(!members.length) return alert('No members to export.');
       const csv = [
-        ['Org', 'Name', 'Email', 'Tier', 'Country', 'Joined'],
-        ...members.map(m => [m.org, m.name, m.email, m.tier, m.country, new Date(m.ts).toLocaleString()])
-      ].map(row => row.map(v => `"${(v+'').replace(/"/g, '""')}"`).join(',')).join('\n');
-      const blob = new Blob([csv], { type: 'text/csv' });
+        ['Org','Name','Email','Tier','Country','Joined'],
+        ...members.map(m=>[m.org,m.name,m.email,m.tier,m.country,new Date(m.ts).toLocaleString()])
+      ].map(r => r.map(v => `"${(v+'').replace(/"/g,'""')}"`).join(',')).join('\n');
+      const blob = new Blob([csv],{type:'text/csv'});
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = 'saga3_members.csv'; a.click();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      const a = document.createElement('a'); a.href=url; a.download='saga3_members.csv'; a.click();
+      setTimeout(()=>URL.revokeObjectURL(url),1000);
     };
-    $('#clearAll').onclick = () => {
-      if (confirm('Delete all member data?')) {
-        localStorage.removeItem(STORAGE_KEY);
-        renderTable();
-      }
+    $('#clearAll').onclick = () => { if(confirm('Delete all member data?')){localStorage.removeItem(STORAGE_KEY); renderTable();} };
+    $('#learnMore').onclick = () => $('.platform').scrollIntoView({behavior:'smooth'});
+
+    /* ---------- hub demos ---------- */
+    const demos = {
+      compute: { title: 'Compute Hub – GPU Quote Simulator', html: `<label>GPU hours/month: <input type="range" id="gpuh" min="0" max="10000" value="1000" style="width:100%"></label><pre id="gpuout" style="background:#111;color:#0f0;padding:12px;border-radius:6px;margin-top:12px"></pre>` },
+      talent: { title: 'Talent Hub – Nano-Course Recommender', html: `<select id="role" style="width:100%;padding:8px"><option value="">-- choose --</option><option>Data Scientist</option><option>ML Engineer</option><option>Policy Officer</option></select><ul id="path" style="margin-top:12px"></ul>` },
+      policy: { title: 'Policy Hub – Grant-Fit Checker', html: `<textarea id="idea" rows="3" style="width:100%;padding:8px" placeholder="e.g. AI for sustainable fisheries"></textarea><div id="match" style="margin-top:12px;font-weight:600"></div>` },
+      innovation: { title: 'Innovation Hub – Grant Lottery', html: `<button class="btn btn-primary" onclick="spinGrant()">Spin</button><div id="grantRes" style="margin-top:12px"></div>` },
+      data: { title: 'Data Hub – CSV Merger', html: `<textarea id="csv1" rows="3" style="width:100%" placeholder="country,gdp&#10;SG,400&#10;MY,500"></textarea><textarea id="csv2" rows="3" style="width:100%;margin-top:8px" placeholder="country,pop&#10;SG,6&#10;MY,34"></textarea><button class="btn btn-primary" style="margin-top:8px" onclick="mergeCsv()">Merge</button><pre id="merged" style="margin-top:12px;background:#f6f8fa;padding:8px;border-radius:6px"></pre>` },
+      impact: { title: 'Impact Hub – CO₂ Saved Counter', html: `<h2 id="co2" style="color:var(--success)">0 kg CO₂ saved</h2><button class="btn btn-primary" onclick="startImpact()">Start counting</button><button class="btn btn-ghost" onclick="stopImpact()">Stop</button>` },
+      network: { title: 'Smart Network – Peer Map', html: `<button class="btn btn-primary" onclick="plotPeers()">Generate map</button><div id="map" style="margin-top:12px"></div>` },
+      breeze: { title: 'Breeze AI – Regulatory Q&A', html: `<input id="breezeQ" style="width:100%;padding:8px" placeholder="e.g. Can we transfer health data from SG to VN?"><button class="btn btn-primary" style="margin-top:8px" onclick="askBreeze()">Ask</button><div id="breezeA" style="margin-top:12px;background:#f0f8ff;padding:12px;border-radius:6px"></div>` },
+      bundle: { title: 'Starter Bundle – Price Calculator', html: `<div id="bundleOpts"></div><h3 id="bundlePrice" style="margin-top:12px">SGD 0 / mo</h3>` }
     };
-    $('#learnMore').onclick = () => document.querySelector('.platform').scrollIntoView({ behavior: 'smooth' });
+    let impactInterval;
+    function openDemo(id){
+      const d = demos[id];
+      $('#demoTitle').textContent = d.title;
+      $('#demoBody').innerHTML = d.html;
+      $('#demoModal').classList.add('open');
+      if(id==='compute'){ gpuCalc(); $('#gpuh').oninput = gpuCalc; }
+      if(id==='talent'){ $('#role').onchange = genPath; }
+      if(id==='policy'){ $('#idea').oninput = grantMatch; }
+      if(id==='bundle') initBundle();
+    }
+    function closeDemo(){ $('#demoModal').classList.remove('open'); clearInterval(impactInterval); }
+    function gpuCalc(){
+      const h = +$('#gpuh').value;
+      $('#gpuout').textContent = `Approx cost: USD ${(h*2.5).toLocaleString()}  |  CO₂: ${(h*0.4).toFixed(1)} kg`;
+    }
+    function genPath(){
+      const role = $('#role').value;
+      const paths = {
+        'Data Scientist': ['Python refresh','Pandas & SQL','Model deployment'],
+        'ML Engineer': ['Docker basics','KubeFlow','CI/CD for models'],
+        'Policy Officer': ['AI ethics primer','Cross-border law','Risk framework']
+      };
+      $('#path').innerHTML = (paths[role]||[]).map(s=>`<li>${s}</li>`).join('');
+    }
+    function grantMatch(){
+      const txt = $('#idea').value.trim().toLowerCase();
+      const grants = [
+        {kw:['climate','green'],name:'GreenAI Grant',amt:'SGD 1 M'},
+        {kw:['health','medical'],name:'HealthTech Fund',amt:'SGD 2 M'},
+        {kw:['fisher','ocean'],name:'Ocean-X',amt:'SGD 500 k'}
+      ];
+      const hit = grants.find(g=>g.kw.some(k=>txt.includes(k)));
+      $('#match').textContent = hit ? `Best match: ${hit.name} – up to ${hit.amt}` : 'No strong match found – try refining keywords.';
+    }
+    function spinGrant(){
+      const ok = Math.random() > 0.5;
+      $('#grantRes').innerHTML = ok ? '<span style="color:var(--success)">🎉 Approved! SGD 50 k grant allocated.</span>' : '<span style="color:#c00">❌ Not this round – re-apply in 30 days.</span>';
+    }
+    function mergeCsv(){
+      const parse = t => t.trim().split('\n').map(r=>r.split(','));
+      const a=parse($('#csv1').value), b=parse($('#csv2').value);
+      const hd = [...new Set([a[0],b[0]].flat())];
+      const out = [hd];
+      [a.slice(1),b.slice(1)].flat().forEach(r=>{
+        const row = hd.map(h=>r[r.findIndex(c=>c===h)]||'-');
+        out.push(row);
+      });
+      $('#merged').textContent = out.map(r=>r.join('\t')).join('\n');
+    }
+    function startImpact(){
+      let kg = 0;
+      impactInterval = setInterval(()=>{
+        kg += Math.random()*1.2;
+        $('#co2').textContent = kg.toFixed(2)+' kg CO₂ saved';
+      },300);
+    }
+    function stopImpact(){ clearInterval(impactInterval); }
+    function plotPeers(){
+      const w=300,h=160;
+      const nodes = [{x:50,y:40,l:'You'}];
+      for(let i=0;i<5;i++) nodes.push({x:30+Math.random()*240,y:20+Math.random()*120,l:'Peer'+(i+1)});
+      let svg = `<svg viewBox="0 0 ${w} ${h}" style="background:#112;color:#7bf1ff;border-radius:8px">`;
+      nodes.forEach(n=>svg+=`<circle cx="${n.x}" cy="${n.y}" r="5"/><text x="${n.x+8}" y="${n.y+4}" font-size="10">${n.l}</text>`);
+      svg += '</svg>';
+      $('#map').innerHTML = svg;
+    }
+    function askBreeze(){
+      const q = $('#breezeQ').value.trim();
+      if(!q) return;
+      const ans = [
+        'Yes, provided you implement SCCs and conduct a Transfer Impact Assessment.',
+        'Not without explicit consent under PDPA 2024 amendments.',
+        'Allowed for research exemptions under the MOU framework.'
+      ];
+      $('#breezeA').textContent = ans[Math.floor(Math.random()*ans.length)];
+    }
+    function initBundle(){
+      const hubs = ['Compute','Talent','Policy','Innovation','Data','Impact','Network','BreezeAI'];
+      $('#bundleOpts').innerHTML = hubs.map(h=>`
+<label style="display:flex;align-items:center;gap:8px;margin:6px 0">
+  <input type="checkbox" class="bundlecb" value="${h}" onchange="calcBundle()"> ${h}
+</label>`).join('');
+      calcBundle();
+    }
+    function calcBundle(){
+      const selected = [...$$('.bundlecb')].filter(c=>c.checked).length;
+      $('#bundlePrice').textContent = `SGD ${(selected*950).toLocaleString()} / mo`;
+    }
+
+    /* init */
     renderTable();
   </script>
 </body>
