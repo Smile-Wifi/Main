@@ -1,12 +1,11 @@
 {
-  "name": "Musify",
+  "name": "Musify — TikTok Style Feed",
   "short_name": "Musify",
-  "description": "TikTok-style video feed using raw GitHub videos.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#ff0050",
-  "orientation": "portrait",
+  "description": "Watch short music videos in a TikTok-style feed, hosted via GitHub Pages.",
   "icons": [
     {
       "src": "https://cdn-icons-png.flaticon.com/512/3046/3046127.png",
