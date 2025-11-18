@@ -134,17 +134,14 @@
 
 <main id="mainContent" tabindex="-1">
   <section id="videoContainer" aria-label="Video feed">
-
-    <!-- Video: added controls and accessible name + description -->
     <figure style="margin:0;">
-      <video id="vid" playsinline controls preload="metadata" poster="poster.jpg" aria-label="Short video clip" aria-describedby="captionText"></video>
+      <video id="vid" playsinline controls preload="metadata" aria-label="Short video clip" aria-describedby="captionText"></video>
       <figcaption id="captionText" class="sr-only">Video caption</figcaption>
     </figure>
 
     <button id="volumeBtn" aria-pressed="true" aria-label="Toggle mute">
       <i class="fas fa-volume-mute" id="volumeIcon" aria-hidden="true"></i>
     </button>
-
   </section>
 
   <aside id="infoPanel" aria-live="polite">
@@ -193,6 +190,7 @@
 const REPO = 'Smile-Wifi/musify-auto';
 const BRANCH = 'main';
 const VIDEO_EXT = ['.mp4','.webm','.mov'];
+const BASE_RAW = `https://raw.githubusercontent.com/${REPO}/${BRANCH}/`;
 
 /* ====== Elements ====== */
 const videoEl = document.getElementById('vid');
@@ -210,25 +208,21 @@ const shareBtn = document.getElementById('shareBtn');
 const refreshBtn = document.getElementById('refreshBtn');
 
 let videos=[], idx=0, isMuted=true;
-
-/* Random Data */
 const usernames=['coolvibes','danceking','funnycat','travelpro','foodie','gamerlife','artistic','musiclover','fitnessguru','dreamer'];
 const captions=[ 'This is fire! #fyp #viral','Wait for it... #funny #lol','POV: You try this #challenge','Life hack you need! #tips','Morning routine #aesthetic','Just vibing #music #dance','Unbelievable! #wow','Tag a friend #friends' ];
 
-function randomUsername(){return '@'+usernames[Math.floor(Math.random()*usernames.length)]+Math.floor(Math.random()*999);} 
+function randomUsername(){return '@'+usernames[Math.floor(Math.random()*usernames.length)]+Math.floor(Math.random()*999);}
 function randomLikes(){ const n=Math.random(); if(n>0.9)return (Math.floor(Math.random()*900)+100)+'k'; if(n>0.7)return Math.floor(Math.random()*90)+10+'.'+Math.floor(Math.random()*9)+'k'; return Math.floor(Math.random()*900)+100; }
-
-function ghRaw(path){return `https://raw.githubusercontent.com/${REPO}/${BRANCH}/${path}`;}
 
 async function loadVideoList(){
   try{
-    const res=await fetch(ghRaw('videos.json'));
-    if(!res.ok)throw new Error();
-    const list=await res.json();
-    videos=list.filter(f=>VIDEO_EXT.some(ext=>f.toLowerCase().endsWith(ext))).map(f=>({url:ghRaw(f),name:f.split('/').pop()}));
+    const res = await fetch(BASE_RAW+'videos.json');
+    if(!res.ok) throw new Error();
+    const list = await res.json();
+    videos = list.filter(f=>VIDEO_EXT.some(ext=>f.toLowerCase().endsWith(ext))).map(f=>({url:BASE_RAW+f,name:f.split('/').pop()}));
   }catch{
     console.warn('No videos.json, crawling repo...');
-    videos=await crawlRepoTree('');
+    videos = await crawlRepoTree('');
   }
   if(!videos.length){ loader.style.display='none'; alert('No videos found!'); return; }
   loader.style.display='none';
@@ -236,14 +230,14 @@ async function loadVideoList(){
 }
 
 async function crawlRepoTree(path){
-  const res=await fetch(`https://api.github.com/repos/${REPO}/contents/${path}?ref=${BRANCH}`);
-  if(!res.ok)throw new Error('GitHub API error');
-  const items=await res.json();
+  const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}?ref=${BRANCH}`);
+  if(!res.ok) throw new Error('GitHub API error');
+  const items = await res.json();
   let found=[];
   for(const it of items){
-    if(it.type==='file'&&VIDEO_EXT.some(ext=>it.name.toLowerCase().endsWith(ext))){
+    if(it.type==='file' && VIDEO_EXT.some(ext=>it.name.toLowerCase().endsWith(ext))){
       found.push({url:it.download_url,name:it.name});
-    }else if(it.type==='dir'){
+    } else if(it.type==='dir'){
       found.push(...await crawlRepoTree(it.path));
     }
   }
@@ -254,10 +248,9 @@ function playIdx(i){
   if(i<0)i=videos.length-1;
   if(i>=videos.length)i=0;
   idx=i;
-  const v=videos[idx];
-  videoEl.src=v.url;
-  videoEl.muted=isMuted;
-  // update accessible text
+  const v = videos[idx];
+  videoEl.src = v.url;
+  videoEl.muted = isMuted;
   usernameEl.textContent = randomUsername();
   document.getElementById('caption').textContent = captions[Math.floor(Math.random()*captions.length)];
   likeCountEl.textContent = randomLikes();
@@ -270,7 +263,6 @@ function toggleMute(){ isMuted = !isMuted; videoEl.muted = isMuted; volumeBtn.se
 function updateVolumeIcon(){ volumeIcon.className = isMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up'; volumeBtn.setAttribute('aria-label', isMuted ? 'Unmute' : 'Mute'); }
 volumeBtn.addEventListener('click', e=>{ e.stopPropagation(); toggleMute(); });
 
-/* Double-tap / double-click to like (keyboard accessible via like button) */
 let tapCount=0;
 container.addEventListener('click', e=>{
   if(e.target.closest('#volumeBtn')) return;
@@ -286,28 +278,23 @@ function likeVideo(e){
   heart.style.top=(e.clientY-rect.top-30)+'px';
   container.appendChild(heart);
   setTimeout(()=>heart.remove(),700);
-  // update like count in an accessible way
   const current = parseFloat(String(likeCountEl.textContent).replace('k',''))||0;
   likeCountEl.textContent = (current+0.1).toFixed(1)+'k';
   likeBtn.setAttribute('aria-pressed','true');
   setTimeout(()=>likeBtn.setAttribute('aria-pressed','false'),1000);
 }
-
 likeBtn.addEventListener('click', ()=>{ likeVideo({clientX: window.innerWidth/2, clientY: window.innerHeight/2}); });
 
-/* Swipe / wheel navigation */
 let touchStartY=0; const minSwipe=80;
 container.addEventListener('touchstart', e=>{ touchStartY=e.changedTouches[0].screenY; },{passive:true});
 container.addEventListener('touchend', e=>{ const delta=touchStartY-e.changedTouches[0].screenY; if(Math.abs(delta)<minSwipe) return; playIdx(idx+(delta>0?1:-1)); },{passive:true});
 container.addEventListener('wheel', e=>{ if(e.deltaY>30) playIdx(idx+1); else if(e.deltaY<-30) playIdx(idx-1); },{passive:true});
 videoEl.addEventListener('ended', ()=>playIdx(idx+1));
 
-/* Side panel open/close with ARIA and focus management */
 hamburgerBtn.addEventListener('click', ()=>{
   const open = sidePanel.classList.toggle('open');
   hamburgerBtn.setAttribute('aria-expanded', String(open));
   sidePanel.setAttribute('aria-hidden', String(!open));
-  // toggle focusability of links inside panel
   sidePanel.querySelectorAll('a, button').forEach(el => el.tabIndex = open ? 0 : -1);
   if(open){ sidePanel.querySelector('a, button')?.focus(); } else { hamburgerBtn.focus(); }
 });
@@ -316,8 +303,14 @@ refreshBtn.addEventListener('click', ()=>{ sidePanel.classList.remove('open'); s
 
 loadVideoList();
 
-/* Service Worker registration (unchanged) */
-if('serviceWorker' in navigator){ window.addEventListener('load', ()=>{ navigator.serviceWorker.register('sw.js').then(()=>console.log('Service Worker registered')).catch(err=>console.warn('SW failed',err)); }); }
+/* Service Worker */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js')
+      .then(()=>console.log('Service Worker registered'))
+      .catch(err=>console.warn('SW failed',err));
+  });
+}
 
 /* Share options */
 shareBtn.addEventListener('click', ()=>{
@@ -325,11 +318,9 @@ shareBtn.addEventListener('click', ()=>{
   sharePopup.style.display = isOpen ? 'none' : 'flex';
   shareBtn.setAttribute('aria-expanded', String(!isOpen));
 });
-
 document.getElementById('fbShare').addEventListener('click', ()=>{ const v=videos[idx]; const u=encodeURIComponent(v.url); window.open(`https://www.facebook.com/sharer/sharer.php?u=${u}`,'_blank','width=600,height=500'); });
 document.getElementById('twShare').addEventListener('click', ()=>{ const v=videos[idx]; const u=encodeURIComponent(v.url); window.open(`https://twitter.com/intent/tweet?url=${u}&text=Check%20out%20this%20video!`,'_blank','width=600,height=500'); });
 document.getElementById('waShare').addEventListener('click', ()=>{ const v=videos[idx]; const u=encodeURIComponent(v.url); window.open(`https://api.whatsapp.com/send?text=Check%20out%20this%20video!%20${u}`,'_blank'); });
-
 document.getElementById('copyLink').addEventListener('click', ()=>{ const v=videos[idx]; navigator.clipboard.writeText(v.url).then(()=>{ alert('Video link copied!'); }); sharePopup.style.display='none'; shareBtn.setAttribute('aria-expanded','false'); });
 </script>
 </body>
