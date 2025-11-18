@@ -1,84 +1,57 @@
-// ✅ Musify Service Worker (GitHub Pages compatible)
-
 const CACHE_NAME = 'musify-cache-v1';
-const OFFLINE_URLS = [
-  './',
-  './index.html',
-  './manifest.json',
-  './sw.js'
-];
+const OFFLINE_URL = 'index.html';
 
-// INSTALL — cache local files only
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(OFFLINE_URLS))
-      .catch(err => console.warn('SW Install failed (likely CORS):', err))
-  );
+self.addEventListener('install', (event) => {
+  // Skip waiting and activate immediately
   self.skipWaiting();
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll([OFFLINE_URL]);
+    })
+  );
 });
 
-// ACTIVATE — remove old caches
-self.addEventListener('activate', event => {
+self.addEventListener('activate', (event) => {
+  // Clean up old caches
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+    caches.keys().then((keys) =>
+      Promise.all(
+        keys
+          .filter((key) => key !== CACHE_NAME)
+          .map((key) => caches.delete(key))
+      )
     )
   );
   self.clients.claim();
 });
 
-// FETCH — dynamic caching for videos, cache-first for other local files
-self.addEventListener('fetch', event => {
-  const req = event.request;
-  const url = new URL(req.url);
+self.addEventListener('fetch', (event) => {
+  const requestURL = new URL(event.request.url);
 
-  // skip external APIs or social shares
-  if (url.hostname.includes('api.github.com') ||
-      url.hostname.includes('facebook.com') ||
-      url.hostname.includes('twitter.com') ||
-      url.hostname.includes('whatsapp.com')) {
-    return;
-  }
-
-  // navigation requests — network first
-  if (req.mode === 'navigate' || req.destination === 'document') {
+  // Only cache your raw GitHub videos & videos.json
+  if (
+    requestURL.hostname === 'raw.githubusercontent.com' &&
+    requestURL.pathname.includes('/Smile-Wifi/musify-auto/')
+  ) {
     event.respondWith(
-      fetch(req)
-        .then(res => {
-          const resClone = res.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(req, resClone));
-          return res;
-        })
-        .catch(() => caches.match(req).then(res => res || caches.match('./index.html')))
+      caches.open(CACHE_NAME).then(async (cache) => {
+        try {
+          const response = await fetch(event.request);
+          cache.put(event.request, response.clone());
+          return response;
+        } catch (err) {
+          const cached = await cache.match(event.request);
+          if (cached) return cached;
+          return new Response('Offline', { status: 503 });
+        }
+      })
     );
-    return;
-  }
-
-  // video files (raw GitHub) — cache dynamically
-  if (req.url.endsWith('.mp4') || req.url.endsWith('.webm') || req.url.endsWith('.mov')) {
+  } else {
+    // Default fetch: network first, then cache fallback
     event.respondWith(
-      caches.match(req).then(cached =>
-        cached || fetch(req).then(res => {
-          const resClone = res.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(req, resClone));
-          return res;
-        }).catch(()=>console.warn('Video fetch failed:', req.url))
-      )
-    );
-    return;
-  }
-
-  // CSS, JS, images — cache first
-  if (req.destination === 'style' || req.destination === 'script' || req.destination === 'image') {
-    event.respondWith(
-      caches.match(req).then(cached =>
-        cached || fetch(req).then(res => {
-          const resClone = res.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(req, resClone));
-          return res;
-        }).catch(()=>console.warn('Resource fetch failed:', req.url))
-      )
+      fetch(event.request)
+        .then((res) => res)
+        .catch(() => caches.match(event.request))
     );
   }
 });
