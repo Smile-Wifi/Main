@@ -1,7 +1,7 @@
 {
   "name": "Musify",
   "short_name": "Musify",
-  "description": "TikTok style video feed hosted on GitHub Pages",
+  "description": "TikTok-style video feed using raw GitHub videos.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#000000",
