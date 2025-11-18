@@ -4,7 +4,11 @@
 <meta charset="UTF-8">
 <title>TikTok Style Feed</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Icon (external, safe even without local icons) -->
 <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3046/3046127.png">
+
+<!-- FontAwesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <!-- PWA -->
@@ -210,6 +214,11 @@ document.getElementById("copyLink").onclick=()=>{navigator.clipboard.writeText(v
 // Sidebar
 document.getElementById("hamburger").onclick=()=>document.getElementById("sidePanel").classList.toggle("open");
 document.getElementById("refreshBtn").onclick=()=>location.reload();
+
+// Register Service Worker (GitHub Pages safe)
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js");
+}
 </script>
 
 </body>
