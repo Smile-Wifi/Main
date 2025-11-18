@@ -1,242 +1,215 @@
 <!DOCTYPE html>
-<html lang="en" xml:lang="en">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Musify — TikTok Style Feed</title>
+<title>TikTok Style Feed</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3046/3046127.png" />
+<link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3046/3046127.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<!-- PWA Meta -->
+<!-- PWA -->
 <meta name="theme-color" content="#000000">
 <link rel="manifest" href="manifest.json">
 
 <style>
-  :root { --primary: #ff0050; --bg: #000; --text: #fff; --shadow: rgba(0,0,0,0.6); }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  html, body { height:100%; overflow:hidden; background:var(--bg); font-family:'Segoe UI',sans-serif; color:var(--text); }
+  :root { --primary:#ff0050; --bg:#000; --text:#fff; --shadow:rgba(0,0,0,0.6); }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body,html{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:'Segoe UI',sans-serif;}
 
-  .sr-only{ position:absolute!important; width:1px!important; height:1px!important; padding:0!important; margin:-1px!important; overflow:hidden!important; clip:rect(0,0,0,0)!important; white-space:nowrap!important; border:0!important; }
-  .skip-link{ position:absolute; left:8px; top:8px; background:#fff; color:#000; padding:8px 12px; z-index:9999; border-radius:6px; transform:translateY(-120%); transition:transform .15s; }
-  .skip-link:focus{ transform:none; }
+  #videoContainer{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    background:#000;overflow:hidden;
+  }
+  iframe{
+    width:100vw;height:100vh;border:0;position:absolute;top:0;left:0;
+  }
 
-  #videoContainer { position:absolute; top:0; left:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; background: linear-gradient(135deg, #1a1a1a, #000); }
-  video { max-height:100vh; max-width:100vw; object-fit:contain; background:#000; }
+  #volumeBtn{
+    position:absolute;top:20px;right:20px;width:44px;height:44px;
+    background:rgba(0,0,0,0.5);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;font-size:20px;color:#fff;z-index:10;backdrop-filter:blur(8px);
+  }
 
-  #volumeBtn { position:absolute; top:20px; right:20px; width:44px; height:44px; background:rgba(0,0,0,0.5); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; color:#fff; cursor:pointer; z-index:10; transition:all .2s; backdrop-filter:blur(8px); border:0; }
-  #volumeBtn:active { transform:scale(0.9); }
+  #hamburger{position:fixed;top:20px;left:20px;font-size:28px;color:#fff;cursor:pointer;z-index:11;}
+  #sidePanel{
+    position:fixed;top:0;left:-250px;width:250px;height:100%;
+    background:rgba(0,0,0,0.98);color:#fff;padding:70px 20px 20px;
+    transition:left .3s;z-index:20;
+  }
+  #sidePanel.open{left:0;}
 
-  #infoPanel { position:absolute; bottom:80px; left:20px; right:80px; color:#fff; text-shadow:0 1px 3px var(--shadow); pointer-events:none; }
-  #username { font-weight:700; font-size:18px; margin-bottom:4px; }
-  #caption { font-size:14px; opacity:0.95; }
+  #infoPanel{position:absolute;bottom:80px;left:20px;right:80px;text-shadow:0 1px 3px var(--shadow);}
+  #username{font-size:18px;font-weight:700;}
+  #caption{font-size:14px;margin-top:4px;opacity:0.9;}
 
-  #actionBar { position:absolute; right:15px; bottom:90px; display:flex; flex-direction:column; gap:20px; align-items:center; z-index:5; }
-  .action-item { text-align:center; color:#fff; transition:transform .2s; }
-  .action-item:active { transform:scale(1.05); }
-  .action-icon { width:48px; height:48px; background:rgba(255,255,255,0.15); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:24px; margin-bottom:6px; box-shadow:0 2px 8px var(--shadow); }
-  .action-count { font-size:13px; font-weight:600; }
+  #actionBar{
+    position:absolute;right:15px;bottom:90px;display:flex;flex-direction:column;
+    align-items:center;gap:20px;z-index:10;
+  }
+  .action-item{text-align:center;color:#fff;cursor:pointer;}
+  .action-icon{
+    width:48px;height:48px;border-radius:50%;
+    background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;
+    font-size:24px;margin-bottom:6px;
+  }
 
-  .heart-burst { position:absolute; pointer-events:none; font-size:60px; color:var(--primary); opacity:0; transform:scale(0); animation:heartPop 0.6s ease-out forwards; z-index:10; }
-  @keyframes heartPop { 0% { opacity:1; transform:scale(0) translateY(0); } 50% { transform:scale(1.3); } 100% { opacity:0; transform:scale(1) translateY(-100px); } }
+  #loader{
+    position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+    background:#000;color:#fff;flex-direction:column;font-size:20px;z-index:100;
+  }
+  .spinner{width:40px;height:40px;border:4px solid #333;border-top:4px solid var(--primary);
+    border-radius:50%;animation:spin 1s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
 
-  #hamburgerBtn{ position:fixed; top:20px; left:20px; font-size:28px; color:#fff; z-index:11; background:transparent; border:0; cursor:pointer; }
-  #sidePanel { position:fixed; top:0; left:-250px; width:250px; height:100%; background:rgba(0,0,0,0.98); color:#fff; transition:left .3s; padding:70px 20px 20px; z-index:10; }
-  #sidePanel.open { left:0; }
-  .menu-item { padding:18px 0; font-size:18px; display:flex; align-items:center; gap:12px; border-bottom:1px solid #333; }
-  .menu-item a{ color:inherit; text-decoration:none; display:inline-flex; align-items:center; gap:12px; width:100%; }
-  .menu-item a:focus{ outline:2px solid var(--primary); }
-
-  #loader { position:fixed; inset:0; background:rgba(0,0,0,0.9); color:#fff; font-size:20px; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px; z-index:12; }
-  .spinner { width:40px; height:40px; border:4px solid #333; border-top:4px solid var(--primary); border-radius:50%; animation:spin 1s linear infinite; }
-  @keyframes spin { to { transform:rotate(360deg); } }
-
-  #sharePopup { position:fixed; bottom:110px; right:75px; background:rgba(20,20,20,0.95); padding:15px; border-radius:12px; box-shadow:0 4px 12px var(--shadow); display:none; flex-direction:column; gap:10px; z-index:15; }
-  .share-option { display:flex; align-items:center; gap:8px; color:#fff; cursor:pointer; font-size:15px; }
-  .share-option i { width:20px; text-align:center; }
-  .share-option:focus{ outline:2px solid var(--primary); }
+  #sharePopup{
+    position:fixed;bottom:110px;right:75px;background:#222;padding:15px;
+    border-radius:12px;display:none;flex-direction:column;gap:10px;z-index:20;
+  }
+  .share-option{display:flex;align-items:center;gap:8px;cursor:pointer;}
+  .share-option:hover{color:var(--primary);}
 </style>
 </head>
 <body>
 
-<a class="skip-link" href="#mainContent">Skip to main content</a>
+<div id="hamburger"><i class="fas fa-bars"></i></div>
 
-<button id="hamburgerBtn" aria-controls="sidePanel" aria-expanded="false" aria-label="Open menu">
-  <i class="fas fa-bars" aria-hidden="true"></i>
-</button>
-
-<nav id="sidePanel" aria-hidden="true" aria-label="Main menu">
-  <div class="menu-item"><a href="https://smile-wifi.github.io/Main" target="_blank"><i class="fas fa-home" aria-hidden="true"></i> Home</a></div>
-  <div class="menu-item"><button id="refreshBtn" aria-label="Refresh videos" type="button"><i class="fas fa-sync-alt" aria-hidden="true"></i> Refresh</button></div>
+<nav id="sidePanel">
+  <a class="menu-item" href="https://smile-wifi.github.io/Main" target="_blank" style="color:white;text-decoration:none;display:block;padding:15px 0;border-bottom:1px solid #333;">
+    <i class="fas fa-home"></i> Home
+  </a>
+  <div class="menu-item" id="refreshBtn" style="padding:15px 0;border-bottom:1px solid #333;cursor:pointer;">
+    <i class="fas fa-sync-alt"></i> Refresh
+  </div>
 </nav>
 
-<main id="mainContent" tabindex="-1">
-  <section id="videoContainer" aria-label="Video feed">
-    <video id="vid" playsinline controls preload="metadata" aria-label="Short video clip" aria-describedby="captionText"></video>
-    <figcaption id="captionText" class="sr-only">Video caption</figcaption>
+<div id="videoContainer">
+  <iframe id="frame" allow="autoplay; fullscreen"></iframe>
 
-    <button id="volumeBtn" aria-pressed="true" aria-label="Toggle mute">
-      <i class="fas fa-volume-mute" id="volumeIcon" aria-hidden="true"></i>
-    </button>
-  </section>
+  <div id="volumeBtn"><i class="fas fa-volume-mute" id="volumeIcon"></i></div>
+</div>
 
-  <aside id="infoPanel" aria-live="polite">
-    <div id="username" aria-hidden="false">@user123</div>
-    <div id="caption">Check out this amazing clip! #fyp #viral</div>
-  </aside>
+<div id="infoPanel">
+  <div id="username">@user123</div>
+  <div id="caption">Check out this clip!</div>
+</div>
 
-  <div id="actionBar" role="toolbar" aria-label="Post actions">
-    <button class="action-item" id="likeBtn" aria-pressed="false" aria-label="Like video">
-      <span class="action-icon" aria-hidden="true"><i class="far fa-heart" aria-hidden="true"></i></span>
-      <span class="action-count" id="likeCount">12.4k</span>
-    </button>
-
-    <button class="action-item" aria-label="Comment" type="button">
-      <span class="action-icon" aria-hidden="true"><i class="far fa-comment" aria-hidden="true"></i></span>
-      <span class="action-count">342</span>
-    </button>
-
-    <button class="action-item" aria-label="Save" type="button">
-      <span class="action-icon" aria-hidden="true"><i class="far fa-bookmark" aria-hidden="true"></i></span>
-      <span class="action-count">89</span>
-    </button>
-
-    <button class="action-item" id="shareBtn" aria-haspopup="true" aria-expanded="false" aria-controls="sharePopup" aria-label="Share this video">
-      <span class="action-icon" aria-hidden="true"><i class="fas fa-share" aria-hidden="true"></i></span>
-      <span class="action-count">Share</span>
-    </button>
+<div id="actionBar">
+  <div class="action-item" id="likeBtn">
+    <div class="action-icon"><i class="far fa-heart"></i></div>
+    <div id="likeCount">12.4k</div>
   </div>
+  <div class="action-item"><div class="action-icon"><i class="far fa-comment"></i></div>342</div>
+  <div class="action-item"><div class="action-icon"><i class="far fa-bookmark"></i></div>89</div>
+  <div class="action-item" id="shareBtn"><div class="action-icon"><i class="fas fa-share"></i></div>Share</div>
+</div>
 
-  <div id="sharePopup" role="dialog" aria-modal="false" aria-label="Share options">
-    <button class="share-option" id="fbShare" type="button" aria-label="Share on Facebook"><i class="fab fa-facebook" aria-hidden="true"></i> Facebook</button>
-    <button class="share-option" id="twShare" type="button" aria-label="Share on Twitter"><i class="fab fa-x-twitter" aria-hidden="true"></i> Twitter</button>
-    <button class="share-option" id="waShare" type="button" aria-label="Share on WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i> WhatsApp</button>
-    <button class="share-option" id="copyLink" type="button" aria-label="Copy video link"><i class="fas fa-link" aria-hidden="true"></i> Copy Link</button>
-  </div>
-</main>
+<div id="sharePopup">
+  <div class="share-option" id="fbShare"><i class="fab fa-facebook"></i> Facebook</div>
+  <div class="share-option" id="twShare"><i class="fab fa-x-twitter"></i> Twitter</div>
+  <div class="share-option" id="waShare"><i class="fab fa-whatsapp"></i> WhatsApp</div>
+  <div class="share-option" id="copyLink"><i class="fas fa-link"></i> Copy Link</div>
+</div>
 
-<div id="loader" role="status" aria-live="polite">
-  <div class="spinner" aria-hidden="true"></div>
-  <div>Loading videos...</div>
+<div id="loader">
+  <div class="spinner"></div>
+  Loading videos...
 </div>
 
 <script>
-const VIDEOS_JSON_URL = 'https://raw.githubusercontent.com/Smile-Wifi/musify-auto/main/videos.json';
-const VIDEO_EXT = ['.mp4','.webm','.mov'];
+// --- Vimeo Videos (Your URLs) ---
+const videos = [
+  "https://player.vimeo.com/video/1137951830?h=ec",
+  "https://player.vimeo.com/video/1137951814?h=ec",
+  "https://player.vimeo.com/video/1137951788?h=ec"
+];
 
-const videoEl = document.getElementById('vid');
-const container = document.getElementById('videoContainer');
-const loader = document.getElementById('loader');
-const sidePanel = document.getElementById('sidePanel');
-const hamburgerBtn = document.getElementById('hamburgerBtn');
-const usernameEl = document.getElementById('username');
-const likeCountEl = document.getElementById('likeCount');
-const likeBtn = document.getElementById('likeBtn');
-const volumeBtn = document.getElementById('volumeBtn');
-const volumeIcon = document.getElementById('volumeIcon');
-const sharePopup = document.getElementById('sharePopup');
-const shareBtn = document.getElementById('shareBtn');
-const refreshBtn = document.getElementById('refreshBtn');
+let idx = 0;
+let muted = true;
 
-let videos=[], idx=0, isMuted=true;
-const usernames=['coolvibes','danceking','funnycat','travelpro','foodie','gamerlife','artistic','musiclover','fitnessguru','dreamer'];
-const captions=[ 'This is fire! #fyp #viral','Wait for it... #funny #lol','POV: You try this #challenge','Life hack you need! #tips','Morning routine #aesthetic','Just vibing #music #dance','Unbelievable! #wow','Tag a friend #friends' ];
+const frame = document.getElementById("frame");
+const loader = document.getElementById("loader");
+const usernameEl = document.getElementById("username");
+const captionEl = document.getElementById("caption");
+const likeCountEl = document.getElementById("likeCount");
+const volumeIcon = document.getElementById("volumeIcon");
 
-function randomUsername(){return '@'+usernames[Math.floor(Math.random()*usernames.length)]+Math.floor(Math.random()*999);} 
-function randomLikes(){ const n=Math.random(); if(n>0.9)return (Math.floor(Math.random()*900)+100)+'k'; if(n>0.7)return Math.floor(Math.random()*90)+10+'.'+Math.floor(Math.random()*9)+'k'; return Math.floor(Math.random()*900)+100; }
+// Random names & captions
+const usernames=["coolvibes","danceking","funnycat","travelpro","foodie","gamer","artist","dreamer"];
+const captions=[
+  "This is fire!", "Wait for it...", "POV: Challenge time!",
+  "Life hack!", "Morning vibes", "Just vibing!",
+  "Unbelievable!", "Tag someone!"
+];
 
-async function loadVideoList() {
-  try {
-    const res = await fetch(VIDEOS_JSON_URL);
-    if(!res.ok) throw new Error('Failed to fetch videos.json');
-    const list = await res.json();
-    videos = list.filter(f => VIDEO_EXT.some(ext => f.toLowerCase().endsWith(ext)))
-                 .map(f => ({ url:`https://raw.githubusercontent.com/Smile-Wifi/musify-auto/main/${encodeURIComponent(f)}`, name:f }));
-  } catch(err) {
-    console.error('Error loading videos.json', err);
-    alert('Failed to load videos.');
-    return;
-  }
-
-  if(!videos.length){ alert('No videos found!'); return; }
-  loader.style.display='none';
-  playIdx(0);
+function randomUsername(){ return "@"+usernames[Math.floor(Math.random()*usernames.length)] + Math.floor(Math.random()*999); }
+function randomCaption(){ return captions[Math.floor(Math.random()*captions.length)]; }
+function randomLikes(){
+  const n=Math.random();
+  if(n>0.9)return (100+Math.floor(Math.random()*900))+"k";
+  return Math.floor(Math.random()*900)+100;
 }
 
-function playIdx(i){
-  if(i<0) i=videos.length-1;
-  if(i>=videos.length) i=0;
-  idx=i;
-  const v=videos[idx];
-  videoEl.src=v.url;
-  videoEl.muted=isMuted;
+// Load a video
+function play(i){
+  if(i<0) i = videos.length-1;
+  if(i>=videos.length) i = 0;
+  idx = i;
+
+  frame.src = videos[idx] + (muted ? "&muted=1&autoplay=1" : "&autoplay=1");
+
   usernameEl.textContent = randomUsername();
-  document.getElementById('caption').textContent = captions[Math.floor(Math.random()*captions.length)];
+  captionEl.textContent = randomCaption();
   likeCountEl.textContent = randomLikes();
-  videoEl.load();
-  videoEl.play().catch(()=>{});
-  updateVolumeIcon();
+
+  loader.style.display="none";
 }
 
-function toggleMute(){ isMuted=!isMuted; videoEl.muted=isMuted; volumeBtn.setAttribute('aria-pressed',String(!isMuted)); updateVolumeIcon(); }
-function updateVolumeIcon(){ volumeIcon.className=isMuted?'fas fa-volume-mute':'fas fa-volume-up'; volumeBtn.setAttribute('aria-label',isMuted?'Unmute':'Mute'); }
-volumeBtn.addEventListener('click', e=>{ e.stopPropagation(); toggleMute(); });
+play(0);
 
-let tapCount=0;
-container.addEventListener('click', e=>{ if(e.target.closest('#volumeBtn')) return; tapCount++; setTimeout(()=>tapCount=0,300); if(tapCount===2) likeVideo(e); });
-function likeVideo(e){
-  const heart=document.createElement('div');
-  heart.className='heart-burst';
-  heart.innerHTML='<i class="fas fa-heart" aria-hidden="true"></i>';
-  const rect=container.getBoundingClientRect();
-  heart.style.left=(e.clientX-rect.left-30)+'px';
-  heart.style.top=(e.clientY-rect.top-30)+'px';
-  container.appendChild(heart);
-  setTimeout(()=>heart.remove(),700);
-  const current=parseFloat(String(likeCountEl.textContent).replace('k',''))||0;
-  likeCountEl.textContent=(current+0.1).toFixed(1)+'k';
-  likeBtn.setAttribute('aria-pressed','true');
-  setTimeout(()=>likeBtn.setAttribute('aria-pressed','false'),1000);
-}
-likeBtn.addEventListener('click', ()=>{ likeVideo({clientX: window.innerWidth/2, clientY: window.innerHeight/2}); });
-
-let touchStartY=0; const minSwipe=80;
-container.addEventListener('touchstart', e=>{ touchStartY=e.changedTouches[0].screenY; },{passive:true});
-container.addEventListener('touchend', e=>{ const delta=touchStartY-e.changedTouches[0].screenY; if(Math.abs(delta)<minSwipe) return; playIdx(idx+(delta>0?1:-1)); },{passive:true});
-container.addEventListener('wheel', e=>{ if(e.deltaY>30) playIdx(idx+1); else if(e.deltaY<-30) playIdx(idx-1); },{passive:true});
-videoEl.addEventListener('ended', ()=>playIdx(idx+1));
-
-hamburgerBtn.addEventListener('click', ()=>{
-  const open = sidePanel.classList.toggle('open');
-  hamburgerBtn.setAttribute('aria-expanded', String(open));
-  sidePanel.setAttribute('aria-hidden', String(!open));
-  sidePanel.querySelectorAll('a, button').forEach(el=>el.tabIndex=open?0:-1);
-  if(open){ sidePanel.querySelector('a, button')?.focus(); } else { hamburgerBtn.focus(); }
+// Swipe controls
+let startY=0;
+document.body.addEventListener("touchstart",e=>startY=e.changedTouches[0].screenY);
+document.body.addEventListener("touchend",e=>{
+  let dy = startY - e.changedTouches[0].screenY;
+  if(Math.abs(dy)>80) play(idx + (dy>0?1:-1));
 });
 
-refreshBtn.addEventListener('click', ()=>{
-  sidePanel.classList.remove('open'); sidePanel.setAttribute('aria-hidden','true'); hamburgerBtn.setAttribute('aria-expanded','false');
-  loader.style.display='flex'; videos=[]; idx=0; loadVideoList();
+// Scroll controls
+document.body.addEventListener("wheel",e=>{
+  if(e.deltaY>30) play(idx+1);
+  else if(e.deltaY<-30) play(idx-1);
 });
 
-loadVideoList();
+// Volume toggle
+document.getElementById("volumeBtn").onclick=()=>{
+  muted=!muted;
+  volumeIcon.className = muted ? "fas fa-volume-mute" : "fas fa-volume-up";
+  play(idx);
+};
 
-/* SW registration */
-if('serviceWorker' in navigator){
-  window.addEventListener('load', ()=>{
-    navigator.serviceWorker.register('sw.js').then(()=>console.log('SW registered')).catch(err=>console.warn('SW failed',err));
-  });
-}
+// Like animation
+document.getElementById("likeBtn").onclick=()=>{
+  likeCountEl.textContent = randomLikes();
+  document.querySelector("#likeBtn i").className="fas fa-heart";
+  setTimeout(()=>document.querySelector("#likeBtn i").className="far fa-heart",800);
+};
 
-/* Share buttons */
-shareBtn.addEventListener('click', ()=>{
-  const isOpen = sharePopup.style.display==='flex';
-  sharePopup.style.display = isOpen?'none':'flex';
-  shareBtn.setAttribute('aria-expanded', String(!isOpen));
-});
-document.getElementById('fbShare').addEventListener('click', ()=>{ const v=videos[idx]; window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(v.url)}`,'_blank','width=600,height=500'); });
-document.getElementById('twShare').addEventListener('click', ()=>{ const v=videos[idx]; window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(v.url)}&text=Check%20out%20this%20video!`,'_blank','width=600,height=500'); });
-document.getElementById('waShare').addEventListener('click', ()=>{ const v=videos[idx]; window.open(`https://api.whatsapp.com/send?text=Check%20out%20this%20video!%20${encodeURIComponent(v.url)}`,'_blank'); });
-document.getElementById('copyLink').addEventListener('click', ()=>{ const v=videos[idx]; navigator.clipboard.writeText(v.url).then(()=>{ alert('Video link copied!'); }); sharePopup.style.display='none'; shareBtn.setAttribute('aria-expanded','false'); });
+// Share popup
+document.getElementById("shareBtn").onclick=()=>{
+  const box=document.getElementById("sharePopup");
+  box.style.display = box.style.display==="flex"?"none":"flex";
+};
+
+// Sharing
+document.getElementById("fbShare").onclick=()=>window.open("https://facebook.com/sharer/sharer.php?u="+encodeURIComponent(videos[idx]));
+document.getElementById("twShare").onclick=()=>window.open("https://twitter.com/intent/tweet?url="+encodeURIComponent(videos[idx]));
+document.getElementById("waShare").onclick=()=>window.open("https://api.whatsapp.com/send?text="+encodeURIComponent(videos[idx]));
+document.getElementById("copyLink").onclick=()=>{navigator.clipboard.writeText(videos[idx]);alert("Copied!");};
+
+// Sidebar
+document.getElementById("hamburger").onclick=()=>document.getElementById("sidePanel").classList.toggle("open");
+document.getElementById("refreshBtn").onclick=()=>location.reload();
 </script>
 
 </body>
