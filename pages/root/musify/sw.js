@@ -1,26 +1,24 @@
-// ✅ Musify Service Worker — caches GitHub raw assets
-const CACHE_NAME = 'musify-cache-v4';
+// ✅ Musify Service Worker (GitHub Pages compatible)
+
+const CACHE_NAME = 'musify-cache-v1';
 const OFFLINE_URLS = [
   './',
   './index.html',
   './manifest.json',
-  './style.css',
-  './app.js',
-  './sw.js',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css'
+  './sw.js'
 ];
 
-// 🧩 INSTALL — Cache core assets
+// INSTALL — cache local files only
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => cache.addAll(OFFLINE_URLS))
-      .catch(err => console.warn('SW Install failed:', err))
+      .catch(err => console.warn('SW Install failed (likely CORS):', err))
   );
   self.skipWaiting();
 });
 
-// ♻️ ACTIVATE — Remove old caches
+// ACTIVATE — remove old caches
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -30,16 +28,20 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-// ⚡ FETCH — Network first for navigation, cache first for static assets
+// FETCH — dynamic caching for videos, cache-first for other local files
 self.addEventListener('fetch', event => {
   const req = event.request;
   const url = new URL(req.url);
 
-  // Skip caching external APIs
-  if (url.hostname.includes('api.github.com') || url.hostname.includes('facebook.com') ||
-      url.hostname.includes('twitter.com') || url.hostname.includes('whatsapp.com')) return;
+  // skip external APIs or social shares
+  if (url.hostname.includes('api.github.com') ||
+      url.hostname.includes('facebook.com') ||
+      url.hostname.includes('twitter.com') ||
+      url.hostname.includes('whatsapp.com')) {
+    return;
+  }
 
-  // Navigation requests → Network first
+  // navigation requests — network first
   if (req.mode === 'navigate' || req.destination === 'document') {
     event.respondWith(
       fetch(req)
@@ -53,16 +55,29 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Static assets → Cache first
-  if (req.destination === 'style' || req.destination === 'script' || req.destination === 'image' ||
-      req.url.endsWith('.mp4') || req.url.endsWith('.webm') || req.url.endsWith('.mov')) {
+  // video files (raw GitHub) — cache dynamically
+  if (req.url.endsWith('.mp4') || req.url.endsWith('.webm') || req.url.endsWith('.mov')) {
     event.respondWith(
-      caches.match(req).then(
-        cached => cached || fetch(req).then(res => {
+      caches.match(req).then(cached =>
+        cached || fetch(req).then(res => {
           const resClone = res.clone();
           caches.open(CACHE_NAME).then(cache => cache.put(req, resClone));
           return res;
-        })
+        }).catch(()=>console.warn('Video fetch failed:', req.url))
+      )
+    );
+    return;
+  }
+
+  // CSS, JS, images — cache first
+  if (req.destination === 'style' || req.destination === 'script' || req.destination === 'image') {
+    event.respondWith(
+      caches.match(req).then(cached =>
+        cached || fetch(req).then(res => {
+          const resClone = res.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(req, resClone));
+          return res;
+        }).catch(()=>console.warn('Resource fetch failed:', req.url))
       )
     );
   }
