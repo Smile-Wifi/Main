@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocalMarket - Discover Local Businesses</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3B82F6;
+            --secondary-color: #10B981;
+            --accent-color: #F59E0B;
+        }
+
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .parallax-hero {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .parallax-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-size: cover;
+            background-position: center;
+            will-change: transform;
+            z-index: -1;
+        }
+
+        .business-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .business-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .parallax-hero {
+                height: 70vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loader" id="loader">
+        <div class="text-center">
+            <i class="fas fa-store text-6xl text-blue-500 animate-pulse"></i>
+            <p class="mt-4 text-lg font-semibold">Loading LocalMarket...</p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white shadow-lg z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-store text-2xl text-blue-500"></i>
+                    <span class="text-2xl font-bold text-gray-800">LocalMarket</span>
+                </div>
+
+                <div class="flex items-center space-x-6">
+                    <a href="#businesses" class="nav-link hover:text-blue-500 transition">Businesses</a>
+                    <button onclick="showLoginModal()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Login
+                    </button>
+                    <div class="cart-icon" onclick="showCart()">
+                        <i class="fas fa-shopping-cart text-2xl text-gray-700"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="parallax-hero">
+        <div class="parallax-bg" id="parallaxBg"></div>
+        <div class="text-center text-white z-10">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6">Discover Local Businesses</h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto">
+                Support your community by shopping from local stores and artisans
+            </p>
+            <button class="bg-green-500 text-white px-8 py-4 rounded-lg text-lg hover:bg-green-600 transition" onclick="scrollToBusinesses()">
+                Explore Now <i class="fas fa-arrow-down ml-2"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- Businesses Section -->
+    <section id="businesses" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-4">Featured Local Businesses</h2>
+            <p class="text-center text-gray-600 mb-12">Click on any store to visit their individual page</p>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6" id="businessesGrid">
+                <!-- Business cards will be dynamically generated -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold">Login to Your Account</h3>
+                <button onclick="hideLoginModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2">Email</label>
+                <input type="email" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" id="loginEmail" placeholder="Enter your email">
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-sm font-medium mb-2">Password</label>
+                <input type="password" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" id="loginPassword" placeholder="Enter your password">
+            </div>
+            
+            <button onclick="performLogin()" class="bg-blue-500 text-white px-4 py-2 rounded-lg w-full hover:bg-blue-600 transition">
+                Login
+            </button>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold">Shopping Cart</h3>
+                <button onclick="hideCart()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div id="cartItems">
+                <!-- Cart items will be dynamically generated -->
+            </div>
+            
+            <div class="border-t pt-4 mt-4">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-xl font-semibold">Total: $<span id="cartTotal">0.00</span></span>
+                </div>
+                <button onclick="checkout()" class="bg-blue-500 text-white px-4 py-2 rounded-lg w-full hover:bg-blue-600 transition">
+                    Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global Variables
+        let cart = [];
+        let currentUser = null;
+
+        // Sample Businesses Data
+        const businesses = [
+            {
+                id: 1,
+                name: "Artisan Bakery",
+                category: "Food & Beverages",
+                description: "Freshly baked bread and pastries daily",
+                image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400",
+                owner: "john@bakery.com",
+                rating: 4.8,
+                products: [1, 2, 3],
+                page: "bakery.html"
+            },
+            {
+                id: 2,
+                name: "Green Thumb Nursery",
+                category: "Home & Garden",
+                description: "Plants, flowers, and gardening supplies",
+                image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400",
+                owner: "sarah@nursery.com",
+                rating: 4.6,
+                products: [4, 5, 6],
+                page: "nursery.html"
+            },
+            {
+                id: 3,
+                name: "Tech Haven",
+                category: "Electronics",
+                description: "Latest gadgets and tech accessories",
+                image: "https://images.unsplash.com/photo-1550009158-94ae795ab42f?w=400",
+                owner: "mike@tech.com",
+                rating: 4.7,
+                products: [7, 8, 9],
+                page: "tech.html"
+            },
+            {
+                id: 4,
+                name: "Vintage Threads",
+                category: "Clothing",
+                description: "Unique vintage and retro clothing",
+                image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400",
+                owner: "emma@vintage.com",
+                rating: 4.9,
+                products: [10, 11, 12],
+                page: "vintage.html"
+            }
+        ];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide loader
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 1000);
+
+            renderBusinesses();
+            setupParallax();
+            checkUserSession();
+        });
+
+        function renderBusinesses() {
+            const grid = document.getElementById('businessesGrid');
+            grid.innerHTML = businesses.map(business => `
+                <div class="business-card bg-white rounded-lg shadow-md overflow-hidden" onclick="visitStore('${business.page}')">
+                    <img src="${business.image}" alt="${business.name}" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">${business.name}</h3>
+                        <p class="text-gray-600 mb-2">${business.category}</p>
+                        <p class="text-sm text-gray-500 mb-4">${business.description}</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <i class="fas fa-star text-yellow-500 mr-1"></i>
+                                <span class="text-sm font-semibold">${business.rating}</span>
+                            </div>
+                            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition text-sm">
+                                Visit Store
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function visitStore(storePage) {
+            window.location.href = storePage;
+        }
+
+        function setupParallax() {
+            window.addEventListener('scroll', function() {
+                const scrolled = window.pageYOffset;
+                const parallaxBg = document.getElementById('parallaxBg');
+                if (parallaxBg) {
+                    parallaxBg.style.transform = `translateY(${scrolled * 0.5}px)`;
+                }
+            });
+        }
+
+        function scrollToBusinesses() {
+            document.getElementById('businesses').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Modal Functions
+        function showLoginModal() {
+            document.getElementById('loginModal').classList.add('active');
+        }
+
+        function hideLoginModal() {
+            document.getElementById('loginModal').classList.remove('active');
+        }
+
+        function showCart() {
+            document.getElementById('cartModal').classList.add('active');
+        }
+
+        function hideCart() {
+            document.getElementById('cartModal').classList.remove('active');
+        }
+
+        // Authentication
+        function performLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Check if it's a business owner
+            const business = businesses.find(b => b.owner === email);
+            if (business) {
+                currentUser = { email, type: 'owner', businessId: business.id };
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                window.location.href = business.page;
+            } else {
+                currentUser = { email, type: 'customer' };
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                alert('Customer login successful!');
+                hideLoginModal();
+            }
+        }
+
+        function checkUserSession() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+            }
+        }
+
+        // Cart Functions
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cartCount').textContent = count;
+        }
+
+        function checkout() {
+            alert('Checkout functionality would be implemented here');
+            hideCart();
+        }
+    </script>
+</body>
+</html>
