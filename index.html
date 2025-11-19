@@ -5,27 +5,25 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Smile Wifi</title>
 
-  <!-- Remove heavy preloading -->
-  <link rel="icon" href="media/icons/nest.png" type="image/png">
+  <!-- ICON / META -->
+  <link rel="icon" href="media/icons/nest.png" type="image/png" loading="lazy">
   <link rel="manifest" href="manifest.json">
 
   <meta name="theme-color" content="#00d1ff">
   <meta name="description" content="Smile Wifi — your offline local portal for apps, media, weather, and fun.">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
   <link rel="stylesheet" href="css/style.css">
 
-  <!-- Vimeo Player API (async) -->
+  <!-- Vimeo Player API -->
   <script defer src="https://player.vimeo.com/api/player.js"></script>
 
   <style>
-    /* Fast responsive Vimeo player */
     .player-box {
       position: relative;
       width: 100%;
-      padding-top: 56.25%; /* 16:9 */
+      padding-top: 56.25%;
       border-radius: 12px;
       overflow: hidden;
     }
@@ -41,8 +39,8 @@
 
 <body>
 
-  <!-- Background Video (keep same) -->
-  <video autoplay muted loop playsinline preload="metadata" id="bg-video">
+  <!-- Lightweight background video -->
+  <video autoplay muted loop playsinline preload="metadata" id="bg-video" loading="lazy">
     <source src="media/background/bg.webm" type="video/webm">
     <source src="media/background/bg.mp4" type="video/mp4">
   </video>
@@ -50,81 +48,89 @@
   <nav class="navbar">
     <button id="nav-toggle" class="hamburger">Menu</button>
     <div id="side-nav" class="side-nav">
-      <a class="nav-link" href="earthquake-alert/login.php"><img src="media/icons/login.png" class="nav-icon"> Earthquake Login</a>
-      <a class="nav-link" href="pages/root/games/index.html"><img src="media/icons/games.png" class="nav-icon"> Games</a>
-      <a class="nav-link" href="https://www.3dlogolab.io/"><img src="media/icons/advertising.png" class="nav-icon"> Advertising</a>
-      <a class="nav-link" href="weather.html"><img src="media/icons/weather.png" class="nav-icon"> Weather</a>
-      <a class="nav-link" href="about.html"><img src="media/icons/about.jpg" class="nav-icon"> About</a>
-      <a class="nav-link" href="https://github.com/Smile-Wifi/Main/releases/download/v5/Smile-Wifi.V5.apk" target="_blank"><img src="media/icons/download.png" class="nav-icon"> Download App</a>
+
+      <!-- ALL IMAGES LAZY -->
+      <a class="nav-link" href="earthquake-alert/login.php"><img loading="lazy" src="media/icons/login.png" class="nav-icon"> Earthquake Login</a>
+      <a class="nav-link" href="pages/root/games/index.html"><img loading="lazy" src="media/icons/games.png" class="nav-icon"> Games</a>
+      <a class="nav-link" href="https://www.3dlogolab.io/"><img loading="lazy" src="media/icons/advertising.png" class="nav-icon"> Advertising</a>
+      <a class="nav-link" href="weather.html"><img loading="lazy" src="media/icons/weather.png" class="nav-icon"> Weather</a>
+      <a class="nav-link" href="about.html"><img loading="lazy" src="media/icons/about.jpg" class="nav-icon"> About</a>
+
+      <a class="nav-link" href="https://github.com/Smile-Wifi/Main/releases/download/v5/Smile-Wifi.V5.apk" target="_blank">
+        <img loading="lazy" src="media/icons/download.png" class="nav-icon"> Download App
+      </a>
+
       <hr style="border:0;border-top:1px solid rgba(255,255,255,.12);margin:8px 0;">
-      <a class="nav-link" href="fm/admin/login.php"><img src="media/icons/dashboard.png" class="nav-icon"> Admin Panel</a>
+
+      <a class="nav-link" href="fm/admin/login.php"><img loading="lazy" src="media/icons/dashboard.png" class="nav-icon"> Admin Panel</a>
     </div>
   </nav>
 
   <main>
 
-    <!-- ⭐ FAST VIMEO PLAYER ⭐ -->
+    <!-- LAZY VIMEO -->
     <section class="local-player">
-      <div class="player-box" id="vimeoContainer">
-        <iframe
+      <div class="player-box">
+        <iframe 
           class="vimeo-player"
           src="https://player.vimeo.com/video/1138463009?background=0&autoplay=1&loop=1&muted=1&byline=0&title=0&portrait=0"
           loading="lazy"
-          allow="autoplay; fullscreen"
-        ></iframe>
+          allow="autoplay; fullscreen">
+        </iframe>
       </div>
     </section>
 
+    <!-- SEARCH -->
     <section class="search-section">
       <a href="index.html">
-        <img src="media/icons/crible.png" alt="Nest Logo" class="logo-img">
+        <img src="media/icons/crible.png" loading="lazy" alt="Nest Logo" class="logo-img">
         <p>Cached response on Intranet based bandwidth linked ecosystem</p>
       </a>
       <input type="search" class="search-box" placeholder="Search..." id="searchInput">
     </section>
 
-    <!-- ICON GRID — unchanged -->
+    <!-- ICON GRID — ALL IMAGES LAZY -->
     <section class="icon-section">
       <div class="icon-wrapper" id="iconWrapper">
 
         <!-- Slide 1 -->
         <div class="icon-grid">
-          <div class="icon-item"><a href="pages/root/campusDC/index.html"><img src="media/icons/CampusDC.png"><p>CampusDC</p></a></div>
-          <div class="icon-item"><a href="pages/root/netify/index.html"><img src="media/icons/smileflex.png"><p>SmileFlix</p></a></div>
-          <div class="icon-item"><a href="pages/root/documents/index.html"><img src="media/icons/wecantilan.png"><p>PublicDoc</p></a></div>
-          <div class="icon-item"><a href="pages/root/Spotify/index.html"><img src="media/icons/band.png"><p>Blayne&Bandits</p></a></div>
-          <div class="icon-item"><a href="pages/root/karaoke/index.html"><img src="media/icons/videoke.png"><p>Karaoke</p></a></div>
-          <div class="icon-item"><a href="pages/root/musify/index.html"><img src="media/icons/musify.png"><p>Musify</p></a></div>
+          <div class="icon-item"><a href="pages/root/campusDC/index.html"><img loading="lazy" src="media/icons/CampusDC.png"><p>CampusDC</p></a></div>
+          <div class="icon-item"><a href="pages/root/netify/index.html"><img loading="lazy" src="media/icons/smileflex.png"><p>SmileFlix</p></a></div>
+          <div class="icon-item"><a href="pages/root/documents/index.html"><img loading="lazy" src="media/icons/wecantilan.png"><p>PublicDoc</p></a></div>
+          <div class="icon-item"><a href="pages/root/Spotify/index.html"><img loading="lazy" src="media/icons/band.png"><p>Blayne&Bandits</p></a></div>
+          <div class="icon-item"><a href="pages/root/karaoke/index.html"><img loading="lazy" src="media/icons/videoke.png"><p>Karaoke</p></a></div>
+          <div class="icon-item"><a href="pages/root/musify/index.html"><img loading="lazy" src="media/icons/musify.png"><p>Musify</p></a></div>
         </div>
 
         <!-- Slide 2 -->
         <div class="icon-grid">
-          <div class="icon-item"><a href="pages/root/reeltalk/index.html"><img src="media/icons/reeltalk.png"><p>ReelTalk</p></a></div>
-          <div class="icon-item"><a href="pages/root/sports/index.html"><img src="media/icons/sports.png"><p>Sports</p></a></div>
-          <div class="icon-item"><a href="pages/root/jollibee/index.html"><img src="media/icons/jollibee.png"><p>Jollibee</p></a></div>
-          <div class="icon-item"><a href="pages/root/NSPYR/index.html"><img src="media/icons/NSPYR.png"><p>Inspire</p></a></div>
-          <div class="icon-item"><a href="pages/root/smiletools/index.html"><img src="media/icons/tools.png"><p>SmileTools</p></a></div>
-          <div class="icon-item"><a href="pages/root/shopme/index.html"><img src="media/icons/smileshop.png"><p>Smile Shop</p></a></div>
+          <div class="icon-item"><a href="pages/root/reeltalk/index.html"><img loading="lazy" src="media/icons/reeltalk.png"><p>ReelTalk</p></a></div>
+          <div class="icon-item"><a href="pages/root/sports/index.html"><img loading="lazy" src="media/icons/sports.png"><p>Sports</p></a></div>
+          <div class="icon-item"><a href="pages/root/jollibee/index.html"><img loading="lazy" src="media/icons/jollibee.png"><p>Jollibee</p></a></div>
+          <div class="icon-item"><a href="pages/root/NSPYR/index.html"><img loading="lazy" src="media/icons/NSPYR.png"><p>Inspire</p></a></div>
+          <div class="icon-item"><a href="pages/root/smiletools/index.html"><img loading="lazy" src="media/icons/tools.png"><p>SmileTools</p></a></div>
+          <div class="icon-item"><a href="pages/root/shopme/index.html"><img loading="lazy" src="media/icons/smileshop.png"><p>Smile Shop</p></a></div>
         </div>
 
         <!-- Slide 3 -->
         <div class="icon-grid">
-          <div class="icon-item"><a href="pages/root/freedom/index.html"><img src="media/icons/freedom.png"><p>Freedom</p></a></div>
-          <div class="icon-item"><a href="https://en.wikipedia.org/" target="_blank"><img src="media/icons/wikipedia.png"><p>Wikipedia</p></a></div>
-          <div class="icon-item"><a href="pages/root/shop/index.html"><img src="media/icons/shop2.png"><p>LocalBiz</p></a></div>
-          <div class="icon-item"><a href="pages/root/AWDT/index.html"><img src="media/icons/AWDT.png"><p>AWDT</p></a></div>
-          <div class="icon-item"><a href="pages/root/politics/index.html"><img src="media/icons/politics.png"><p>Politics</p></a></div>
-          <div class="icon-item"><a href="pages/root/emergency/index.html"><img src="media/icons/emergency.png"><p>Emergency</p></a></div>
+          <div class="icon-item"><a href="pages/root/freedom/index.html"><img loading="lazy" src="media/icons/freedom.png"><p>Freedom</p></a></div>
+          <div class="icon-item"><a href="https://en.wikipedia.org/" target="_blank"><img loading="lazy" src="media/icons/wikipedia.png"><p>Wikipedia</p></a></div>
+          <div class="icon-item"><a href="pages/root/shop/index.html"><img loading="lazy" src="media/icons/shop2.png"><p>LocalBiz</p></a></div>
+          <div class="icon-item"><a href="pages/root/AWDT/index.html"><img loading="lazy" src="media/icons/AWDT.png"><p>AWDT</p></a></div>
+          <div class="icon-item"><a href="pages/root/politics/index.html"><img loading="lazy" src="media/icons/politics.png"><p>Politics</p></a></div>
+          <div class="icon-item"><a href="pages/root/emergency/index.html"><img loading="lazy" src="media/icons/emergency.png"><p>Emergency</p></a></div>
         </div>
 
         <!-- Slide 4 -->
         <div class="icon-grid">
-          <div class="icon-item"><a href="pages/root/HBO/index.html"><img src="media/icons/hbo.png"><p>Smile_Movies</p></a></div>
-          <div class="icon-item"><a href="news/index.html"><img src="media/icons/news.png"><p>SmileNews</p></a></div>
-          <div class="icon-item"><a href="https://www.youtube.com/" target="_blank"><img src="media/icons/youtube.png"><p>YouTube</p></a></div>
-          <div class="icon-item"><a href="https://www.netflix.com/" target="_blank"><img src="media/icons/netflex.png"><p>Netflix</p></a></div>
-          <div class="icon-item"><a href="pages/root/e-commerce/index.html"><img src="media/icons/e-commerce.png"><p>Local-Store</p></a></div>
-          <div class="icon-item"><a href="pages/root/SAGA/index.html"><img src="media/icons/saga.png"><p>S.A.G.A</p></a></div>
+          <div class="icon-item"><a href="pages/root/HBO/index.html"><img loading="lazy" src="media/icons/hbo.png"><p>Smile_Movies</p></a></div>
+          <div class="icon-item"><a href="news/index.html"><img loading="lazy" src="media/icons/news.png"><p>SmileNews</p></a></div>
+          <div class="icon-item"><a href="https://www.youtube.com/" target="_blank"><img loading="lazy" src="media/icons/youtube.png"><p>YouTube</p></a></div>
+          <div class="icon-item"><a href="https://www.netflix.com/" target="_blank"><img loading="lazy" src="media/icons/netflex.png"><p>Netflix</p></a></div>
+          <div class="icon-item"><a href="pages/root/e-commerce/index.html"><img loading="lazy" src="media/icons/e-commerce.png"><p>Local-Store</p></a></div>
+          <div class="icon-item"><a href="pages/root/SAGA/index.html"><img loading="lazy" src="media/icons/saga.png"><p>S.A.G.A</p></a></div>
         </div>
 
       </div>
@@ -139,17 +145,21 @@
 
   </main>
 
+  <!-- OVERLAY -->
   <div id="allAppsOverlay">
     <button class="close-overlay" id="closeOverlay" aria-label="Close overlay">&times;</button>
     <div id="allAppsGrid"></div>
   </div>
 
+  <!-- FOOTER CAROUSEL (LAZY IMAGES) -->
   <section class="carousel">
-    <div class="carousel-item"><a href="http://google.com"><img src="media/GIF/earth.gif"></a></div>
-    <div class="carousel-item" id="homeBtn"><img src="media/icons/Home.png"></div>
-    <div class="carousel-item"><a href="cribble.html"><img src="media/GIF/Mars.gif"></a></div>
+    <div class="carousel-item"><a href="http://google.com"><img loading="lazy" src="media/GIF/earth.gif"></a></div>
+    <div class="carousel-item" id="homeBtn"><img loading="lazy" src="media/icons/Home.png"></div>
+    <div class="carousel-item"><a href="cribble.html"><img loading="lazy" src="media/GIF/Mars.gif"></a></div>
   </section>
 
-  <script src="js/script.js"></script>
+  <!-- DEFER SCRIPT -->
+  <script defer src="js/script.js"></script>
+
 </body>
 </html>
