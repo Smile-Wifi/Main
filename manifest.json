@@ -1,0 +1,12 @@
+{
+  "name": "Smile Wifi",
+  "short_name": "SmileWifi",
+  "description": "Smile Wifi — your offline local portal for apps, media, weather, and fun.",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#00d1ff",
+  "orientation": "portrait",
+  "icons": []
+}
