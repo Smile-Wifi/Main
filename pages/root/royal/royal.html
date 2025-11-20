@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Ahoy — Demo</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6f7fb;
+    --card:#ffffff;
+    --muted:#757b86;
+    --accent:#0b86ff;
+    --blue:#1280ff;
+    --radius:14px;
+    --safe-bottom:80px; /* space for bottom nav */
+  }
+
+  html,body{height:100%;}
+  body{
+    margin:0;
+    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background:var(--bg);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    color:#0b1220;
+  }
+
+  /* Container and card widths tuned for mobile */
+  .app {
+    max-width:420px;
+    margin:0 auto;
+    padding:18px;
+    padding-bottom: calc(var(--safe-bottom) + 24px);
+  }
+
+  /* Hero / header */
+  .hero{
+    position:relative;
+    border-radius:18px;
+    overflow:hidden;
+    height:220px;
+    background-color:#ddd;
+    background-image: linear-gradient(180deg, rgba(3,11,29,0.25), rgba(3,11,29,0.25)), var(--hero-image);
+    background-size:cover;
+    background-position:center;
+    box-shadow: 0 6px 18px rgba(6,12,28,0.12);
+  }
+
+  /* --hero-image is set inline on body for convenience */
+  .hero .toprow{
+    position:absolute;
+    top:12px;
+    left:12px;
+    right:12px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .logo {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:#fff;
+    font-weight:700;
+    text-shadow:0 2px 6px rgba(0,0,0,0.45);
+  }
+  .sign-btn{
+    background:rgba(255,255,255,0.95);
+    border-radius:20px;
+    padding:6px 12px;
+    font-weight:600;
+    font-size:14px;
+    color:#0b1220;
+    box-shadow:0 2px 6px rgba(2,6,15,0.12);
+  }
+
+  .hero .greeting{
+    position:absolute;
+    left:18px;
+    bottom:68px;
+    color:#fff;
+  }
+  .hero h1{
+    margin:0;
+    font-size:30px;
+    line-height:1;
+    color:#fff;
+    text-shadow:0 6px 18px rgba(2,6,15,0.45);
+  }
+  .hero p{
+    margin:8px 0 0 0;
+    color: rgba(255,255,255,0.92);
+    font-weight:500;
+    font-size:14px;
+  }
+
+  /* Loyalty card */
+  .loyalty{
+    margin-top:-36px; /* overlapping effect */
+    background:linear-gradient(90deg,#1ea1ff,#0b63d6);
+    color:#fff;
+    padding:16px;
+    border-radius:14px;
+    display:flex;
+    gap:12px;
+    align-items:center;
+    box-shadow:0 10px 20px rgba(11,60,136,0.12);
+  }
+  .loyalty .badge{
+    min-width:56px;
+    min-height:56px;
+    border-radius:10px;
+    background:rgba(255,255,255,0.15);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    font-size:13px;
+  }
+  .loyalty .text{
+    flex:1;
+  }
+  .loyalty .text h3{
+    margin:0;
+    font-size:16px;
+    font-weight:700;
+  }
+  .loyalty .text p{margin:6px 0 0 0;font-size:13px;opacity:0.95}
+  .loyalty .cta{font-weight:700;font-size:13px;opacity:0.95}
+
+  /* Section title */
+  .section{
+    margin-top:18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .section h4{margin:0;font-size:16px}
+  .viewall{color:var(--muted);font-size:13px;font-weight:600}
+
+  /* Video cards */
+  .cards{
+    margin-top:12px;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:10px;
+  }
+  .card{
+    background:var(--card);
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 6px 14px rgba(15,22,32,0.06);
+    cursor:pointer;
+  }
+  .card .thumb{
+    height:96px;
+    background:#cfd9ff;
+    background-size:cover;
+    background-position:center;
+  }
+  .card .meta{
+    padding:8px 10px;
+    font-size:13px;
+    font-weight:600;
+    color:#111827;
+  }
+
+  /* bigger horizontal promo card */
+  .promo{
+    margin-top:12px;
+    background:var(--card);
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 8px 20px rgba(10,18,34,0.06);
+    height:120px;
+    display:flex;
+    align-items:center;
+  }
+  .promo .map{
+    flex:1;
+    height:100%;
+    background:#e6f4ff;
+    background-size:cover;
+    background-position:center;
+  }
+
+  /* Bottom navigation */
+  .bottom-nav{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:12px;
+    display:flex;
+    justify-content:center;
+    pointer-events:none; /* container non clickable except nav */
+  }
+  .nav-inner{
+    pointer-events:auto;
+    width:420px;
+    max-width:420px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,252,0.98));
+    border-radius:14px;
+    padding:8px 12px;
+    display:flex;
+    justify-content:space-between;
+    box-shadow:0 12px 30px rgba(12,18,40,0.08);
+    margin:0 12px;
+  }
+  .nav-item{
+    flex:1;
+    text-align:center;
+    font-size:12px;
+    color:#6b7280;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    padding:6px 4px;
+  }
+  .nav-item.active{ color:var(--blue); font-weight:700;}
+  .nav-item svg{width:22px;height:22px;display:block;opacity:0.95}
+
+  /* Small screens */
+  @media (min-width:420px){
+    .app{padding-left:20px;padding-right:20px}
+  }
+</style>
+</head>
+<body>
+
+<!-- Set hero background image via inline style for easy swapping -->
+<div class="app" style="--hero-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=60');">
+  <header class="hero" role="banner" aria-label="Hero header with cruise image">
+    <div class="toprow">
+      <div class="logo" aria-hidden="true">
+        <!-- small ship icon -->
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3))">
+          <rect width="24" height="24" rx="6" fill="rgba(255,255,255,0.06)"></rect>
+          <path d="M3 12s4-4 9-4 9 4 9 4-1 5-9 5S3 12 3 12z" fill="#fff" opacity="0.95"/>
+        </svg>
+        <span style="font-size:14px">WeOwn</span>
+      </div>
+      <button class="sign-btn" aria-label="Sign in">Sign in</button>
+    </div>
+
+    <div class="greeting">
+      <h1>Smile Phillipines</h1>
+      <p>Don't have an account? <a href="#" style="color:#bfe1ff;text-decoration:underline;font-weight:700">Create an account</a></p>
+    </div>
+  </header>
+
+  <div class="loyalty" role="region" aria-label="Loyal to Royal loyalty card">
+    <div class="badge">C & A</div>
+    <div class="text">
+      <h3>Loyal to Royal</h3>
+      <p>Explore the greatest loyalty program at sea.</p>
+    </div>
+    <div class="cta">Get started &gt;</div>
+  </div>
+
+  <div class="section">
+    <h4>Videos</h4>
+    <a class="viewall" href="#">View all ›</a>
+  </div>
+
+  <div class="cards" aria-live="polite">
+    <div class="card" role="button" tabindex="0" aria-label="Royal Beach Club: Book Now">
+      <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=60');"></div>
+      <div class="meta">Royal Beach Club: Book Now</div>
+    </div>
+
+    <div class="card" role="button" tabindex="0" aria-label="STAR Insider">
+      <div class="thumb" style="background-image: url('https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=crop&w=800&q=60');"></div>
+      <div class="meta">STAR Insider</div>
+    </div>
+  </div>
+
+  <div class="promo" role="region" aria-label="Ship overview">
+    <div class="map" style="background-image:url('https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&w=1200&q=60')"></div>
+  </div>
+
+</div>
+
+<!-- Bottom navigation -->
+<nav class="bottom-nav" aria-label="Main navigation">
+  <div class="nav-inner" role="navigation">
+    <div class="nav-item active" aria-current="page">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 11.5L12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V11.5z" fill="currentColor"/></svg>
+      <div>Home</div>
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24"><path d="M6 2h12v4H6zM3 8h18v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8z" fill="currentColor"/></svg>
+      <div>Book</div>
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24"><path d="M12 5a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM6 20a6 6 0 0 1 12 0H6z" fill="currentColor"/></svg>
+      <div>My Trips</div>
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zM4 20a8 8 0 0 1 16 0H4z" fill="currentColor"/></svg>
+      <div>Profile</div>
+    </div>
+  </div>
+</nav>
+
+</body>
+</html>
