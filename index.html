@@ -16,23 +16,23 @@
 
   <link rel="stylesheet" href="css/style.css">
 
-  <!-- Vimeo Player API -->
-  <script defer src="https://player.vimeo.com/api/player.js"></script>
-
   <style>
     .player-box {
       position: relative;
       width: 100%;
-      padding-top: 56.25%;
+      padding-top: 56.25%; /* 16:9 aspect ratio */
       border-radius: 12px;
       overflow: hidden;
+      background: #000;
     }
-    .vimeo-player {
+    .local-player-video {
       position: absolute;
       top: 0; left: 0;
       width: 100%;
       height: 100%;
+      object-fit: cover;
       border: none;
+      border-radius: 12px;
     }
   </style>
 </head>
@@ -67,16 +67,24 @@
   </nav>
 
   <main>
-
-    <!-- LAZY VIMEO -->
+    <!-- === LOCAL VIDEO PLAYER (REPLACES VIMEO) === -->
     <section class="local-player">
       <div class="player-box">
-        <iframe 
-          class="vimeo-player"
-          src="https://player.vimeo.com/video/1138463009?background=0&autoplay=1&loop=1&muted=1&byline=0&title=0&portrait=0"
-          loading="lazy"
-          allow="autoplay; fullscreen">
-        </iframe>
+        <video
+          class="local-player-video"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="auto"
+          poster="media/poster/local-player-fallback.jpg"> <!-- optional fallback image -->
+
+          <!-- Put your local video files here -->
+          <source src="media/videos/main-feature.webm" type="video/webm">
+          <source src="media/video-player/smile.mp4" type="video/mp4">
+
+          Your browser does not support HTML5 video.
+        </video>
       </div>
     </section>
 
