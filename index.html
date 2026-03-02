@@ -1,173 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Smile Wifi</title>
-
-  <!-- ICON / META -->
-  <link rel="icon" href="media/icons/nest.png" type="image/png" loading="lazy">
-  <link rel="manifest" href="manifest.json">
-
-  <meta name="theme-color" content="#00d1ff">
-  <meta name="description" content="Smile Wifi — your offline local portal for apps, media, weather, and fun.">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-
-  <link rel="stylesheet" href="css/style.css">
-
-  <style>
-    .player-box {
-      position: relative;
-      width: 100%;
-      padding-top: 56.25%; /* 16:9 aspect ratio */
-      border-radius: 12px;
-      overflow: hidden;
-      background: #000;
-    }
-    .local-player-video {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border: none;
-      border-radius: 12px;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>2D Stealth Prototype</title>
+<style>
+  body { margin: 0; overflow: hidden; background: #111; }
+  canvas { display: block; background: #222; margin: auto; }
+</style>
 </head>
-
 <body>
+<canvas id="game" width="800" height="600"></canvas>
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
 
-  <!-- Lightweight background video -->
-  <video autoplay muted loop playsinline preload="metadata" id="bg-video" loading="lazy">
-    <source src="media/background/bg.webm" type="video/webm">
-    <source src="media/background/bg.mp4" type="video/mp4">
-  </video>
+const TILE_SIZE = 40;
+const PLAYER_SIZE = 30;
 
-  <nav class="navbar">
-    <button id="nav-toggle" class="hamburger">Menu</button>
-    <div id="side-nav" class="side-nav">
+// Game objects
+let player = { x: 60, y: 60, speed: 3, color: 'lime' };
+let keysCollected = 0;
 
-      <!-- ALL IMAGES LAZY -->
-      <a class="nav-link" href="earthquake-alert/login.php"><img loading="lazy" src="media/icons/login.png" class="nav-icon"> Earthquake Login</a>
-      <a class="nav-link" href="pages/root/games/index.html"><img loading="lazy" src="media/icons/games.png" class="nav-icon"> Games</a>
-      <a class="nav-link" href="https://www.3dlogolab.io/"><img loading="lazy" src="media/icons/advertising.png" class="nav-icon"> Advertising</a>
-      <a class="nav-link" href="weather.html"><img loading="lazy" src="media/icons/weather.png" class="nav-icon"> Weather</a>
-      <a class="nav-link" href="about.html"><img loading="lazy" src="media/icons/about.jpg" class="nav-icon"> About</a>
+// Door
+let door = { x: 700, y: 500, width: TILE_SIZE, height: TILE_SIZE, color: 'red', requiredKeys: 1 };
 
-      <a class="nav-link" href="https://github.com/Smile-Wifi/Main/releases/download/v5/Smile-Wifi.V5.apk" target="_blank">
-        <img loading="lazy" src="media/icons/download.png" class="nav-icon"> Download App
-      </a>
+// Key
+let key = { x: 400, y: 300, width: TILE_SIZE/2, height: TILE_SIZE/2, color: 'yellow', collected: false };
 
-      <hr style="border:0;border-top:1px solid rgba(255,255,255,.12);margin:8px 0;">
+// Enemies (patrolling)
+let enemies = [
+    { x: 200, y: 100, width: 30, height: 30, color: 'orange', dir: 1, range: [100, 300], speed: 2 }
+];
 
-      <a class="nav-link" href="fm/admin/login.php"><img loading="lazy" src="media/icons/dashboard.png" class="nav-icon"> Admin Panel</a>
-    </div>
-  </nav>
+// Walls
+let walls = [
+    { x: 100, y: 200, width: 400, height: 20 },
+    { x: 300, y: 400, width: 20, height: 200 },
+    { x: 500, y: 100, width: 20, height: 400 }
+];
 
-  <main>
-    <!-- === LOCAL VIDEO PLAYER (REPLACES VIMEO) === -->
-    <section class="local-player">
-      <div class="player-box">
-        <video
-          class="local-player-video"
-          autoplay
-          muted
-          loop
-          playsinline
-          preload="auto"
-          poster="media/poster/local-player-fallback.jpg"> <!-- optional fallback image -->
+// Controls
+let keys = {};
+window.addEventListener("keydown", e => keys[e.key] = true);
+window.addEventListener("keyup", e => keys[e.key] = false);
 
-          <!-- Put your local video files here -->
-          <source src="media/videos/main-feature.webm" type="video/webm">
-          <source src="media/video-player/smile.mp4" type="video/mp4">
+// Collision detection
+function rectCollision(a, b){
+    return a.x < b.x + b.width && a.x + PLAYER_SIZE > b.x &&
+           a.y < b.y + b.height && a.y + PLAYER_SIZE > b.y;
+}
 
-          Your browser does not support HTML5 video.
-        </video>
-      </div>
-    </section>
+// Game loop
+function update(){
+    // Player movement
+    let dx = 0, dy = 0;
+    if(keys['ArrowUp']) dy -= player.speed;
+    if(keys['ArrowDown']) dy += player.speed;
+    if(keys['ArrowLeft']) dx -= player.speed;
+    if(keys['ArrowRight']) dx += player.speed;
 
-    <!-- SEARCH -->
-    <section class="search-section">
-      <a href="index.html">
-        <img src="media/icons/crible.png" loading="lazy" alt="Nest Logo" class="logo-img">
-        <p>Cached response on Intranet based bandwidth linked ecosystem</p>
-      </a>
-      <input type="search" class="search-box" placeholder="Search..." id="searchInput">
-    </section>
+    let nextX = player.x + dx;
+    let nextY = player.y + dy;
 
-    <!-- ICON GRID — ALL IMAGES LAZY -->
-    <section class="icon-section">
-      <div class="icon-wrapper" id="iconWrapper">
+    // Check wall collisions
+    let tempPlayer = {x: nextX, y: nextY, width: PLAYER_SIZE, height: PLAYER_SIZE};
+    if(!walls.some(w => rectCollision(tempPlayer, w))){
+        player.x = nextX;
+        player.y = nextY;
+    }
 
-        <!-- Slide 1 -->
-        <div class="icon-grid">
-          <div class="icon-item"><a href="pages/root/campusDC/index.html"><img loading="lazy" src="media/icons/CampusDC.png"><p>CampusDC</p></a></div>
-          <div class="icon-item"><a href="pages/root/netify/index.html"><img loading="lazy" src="media/icons/smileflex.png"><p>SmileFlix</p></a></div>
-          <div class="icon-item"><a href="pages/root/documents/index.html"><img loading="lazy" src="media/icons/wecantilan.png"><p>PublicDoc</p></a></div>
-          <div class="icon-item"><a href="pages/root/Spotify/index.html"><img loading="lazy" src="media/icons/band.png"><p>Blayne&Bandits</p></a></div>
-          <div class="icon-item"><a href="pages/root/karaoke/index.html"><img loading="lazy" src="media/icons/videoke.png"><p>Karaoke</p></a></div>
-          <div class="icon-item"><a href="pages/root/musify/index.html"><img loading="lazy" src="media/icons/musify.png"><p>Musify</p></a></div>
-        </div>
+    // Enemy patrol
+    enemies.forEach(e => {
+        e.x += e.speed * e.dir;
+        if(e.x < e.range[0] || e.x + e.width > e.range[1]) e.dir *= -1;
 
-        <!-- Slide 2 -->
-        <div class="icon-grid">
-          <div class="icon-item"><a href="pages/root/reeltalk/index.html"><img loading="lazy" src="media/icons/reeltalk.png"><p>ReelTalk</p></a></div>
-          <div class="icon-item"><a href="pages/root/sports/index.html"><img loading="lazy" src="media/icons/sports.png"><p>Sports</p></a></div>
-          <div class="icon-item"><a href="pages/root/jollibee/index.html"><img loading="lazy" src="media/icons/jollibee.png"><p>Jollibee</p></a></div>
-          <div class="icon-item"><a href="pages/root/NSPYR/index.html"><img loading="lazy" src="media/icons/NSPYR.png"><p>Inspire</p></a></div>
-          <div class="icon-item"><a href="pages/root/smiletools/index.html"><img loading="lazy" src="media/icons/tools.png"><p>SmileTools</p></a></div>
-          <div class="icon-item"><a href="https://smile-wifi.github.io/Ai-Hub/"><img loading="lazy" src="media/icons/ai.png"><p>Ai_Hub</p></a></div>
-        </div>
+        if(rectCollision(player, e)){
+            alert("Caught by enemy! Game Over.");
+            window.location.reload();
+        }
+    });
 
-        <!-- Slide 3 -->
-        <div class="icon-grid">
-          <div class="icon-item"><a href="pages/root/freedom/index.html"><img loading="lazy" src="media/icons/freedom.png"><p>Freedom</p></a></div>
-          <div class="icon-item"><a href="https://smile-wifi.github.io/OrangeAi/" target="_blank"><img loading="lazy" src="media/icons/orangeware.png"><p>Orange_Ai</p></a></div>
-          <div class="icon-item"><a href="pages/root/royal/index.html"><img loading="lazy" src="media/icons/royal.png"><p>Phillippines</p></a></div>
-          <div class="icon-item"><a href="pages/root/AWDT/index.html"><img loading="lazy" src="media/icons/AWDT.png"><p>AWDT</p></a></div>
-          <div class="icon-item"><a href="pages/root/politics/index.html"><img loading="lazy" src="media/icons/politics.png"><p>Politics</p></a></div>
-          <div class="icon-item"><a href="pages/root/emergency/index.html"><img loading="lazy" src="media/icons/emergency.png"><p>Emergency</p></a></div>
-        </div>
+    // Key collection
+    if(!key.collected && rectCollision(player, key)){
+        key.collected = true;
+        keysCollected++;
+        console.log("Key collected!");
+    }
 
-        <!-- Slide 4 -->
-        <div class="icon-grid">
-          <div class="icon-item"><a href="pages/root/HBO/index.html"><img loading="lazy" src="media/icons/hbo.png"><p>Smile_Movies</p></a></div>
-          <div class="icon-item"><a href="news/index.html"><img loading="lazy" src="media/icons/news.png"><p>SmileNews</p></a></div>
-          <div class="icon-item"><a href="https://www.youtube.com/" target="_blank"><img loading="lazy" src="media/icons/youtube.png"><p>YouTube</p></a></div>
-          <div class="icon-item"><a href="https://www.netflix.com/" target="_blank"><img loading="lazy" src="media/icons/netflex.png"><p>Netflix</p></a></div>
-          <div class="icon-item"><a href="pages/root/e-commerce/index.html"><img loading="lazy" src="media/icons/e-commerce.png"><p>Local-Store</p></a></div>
-          <div class="icon-item"><a href="pages/root/SAGA/index.html"><img loading="lazy" src="media/icons/saga.png"><p>S.A.G.A</p></a></div>
-        </div>
+    // Door
+    if(rectCollision(player, door) && keysCollected >= door.requiredKeys){
+        alert("You escaped! You win!");
+        window.location.reload();
+    }
+}
 
-      </div>
+function draw(){
+    ctx.clearRect(0,0,canvas.width, canvas.height);
 
-      <div class="dots" id="slideDots">
-        <button class="dot active" data-index="0"></button>
-        <button class="dot" data-index="1"></button>
-        <button class="dot" data-index="2"></button>
-        <button class="dot" data-index="3"></button>
-      </div>
-    </section>
+    // Draw walls
+    ctx.fillStyle = "#555";
+    walls.forEach(w => ctx.fillRect(w.x, w.y, w.width, w.height));
 
-  </main>
+    // Draw player
+    ctx.fillStyle = player.color;
+    ctx.fillRect(player.x, player.y, PLAYER_SIZE, PLAYER_SIZE);
 
-  <!-- OVERLAY -->
-  <div id="allAppsOverlay">
-    <button class="close-overlay" id="closeOverlay" aria-label="Close overlay">&times;</button>
-    <div id="allAppsGrid"></div>
-  </div>
+    // Draw key
+    if(!key.collected){
+        ctx.fillStyle = key.color;
+        ctx.fillRect(key.x, key.y, key.width, key.height);
+    }
 
-  <!-- FOOTER CAROUSEL (LAZY IMAGES) -->
-  <section class="carousel">
-    <div class="carousel-item"><a href="http://google.com"><img loading="lazy" src="media/GIF/earth.gif"></a></div>
-    <div class="carousel-item" id="homeBtn"><img loading="lazy" src="media/icons/Home.png"></div>
-    <div class="carousel-item"><a href="cribble.html"><img loading="lazy" src="media/GIF/Mars.gif"></a></div>
-  </section>
+    // Draw door
+    ctx.fillStyle = door.color;
+    ctx.fillRect(door.x, door.y, door.width, door.height);
 
-  <!-- DEFER SCRIPT -->
-  <script defer src="js/script.js"></script>
+    // Draw enemies
+    enemies.forEach(e => {
+        ctx.fillStyle = e.color;
+        ctx.fillRect(e.x, e.y, e.width, e.height);
+    });
 
+    // HUD
+    ctx.fillStyle = "white";
+    ctx.font = "20px Arial";
+    ctx.fillText("Keys: " + keysCollected + "/" + door.requiredKeys, 10, 30);
+}
+
+function gameLoop(){
+    update();
+    draw();
+    requestAnimationFrame(gameLoop);
+}
+
+gameLoop();
+</script>
 </body>
 </html>
